@@ -15,13 +15,7 @@
   },
   "customizations": {
     "vscode": {
-      "extensions": [
-        "ms-azuretools.vscode-docker",
-        "ms-python.python",
-        "ms-python.vscode-pylance",
-        "dbaeumer.vscode-eslint",
-        "esbenp.prettier-vscode"
-      ],
+      "extensions": [],
       "settings": {
         "terminal.integrated.defaultProfile.linux": "bash",
         "files.eol": "\n"
