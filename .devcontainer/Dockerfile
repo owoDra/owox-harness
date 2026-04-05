@@ -1,8 +1,9 @@
 FROM mcr.microsoft.com/devcontainers/base:ubuntu-24.04
 
-ARG NODE_MAJOR=22
+ARG NODE_MAJOR=24
 ENV DEBIAN_FRONTEND=noninteractive
 
+# ---------- System packages ----------
 RUN apt-get update && apt-get install -y --no-install-recommends \
   ca-certificates \
   curl \
@@ -30,6 +31,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   pipx \
   && rm -rf /var/lib/apt/lists/*
 
+# ---------- JavaScript/TypeScript Dev Environment ----------
 RUN mkdir -p /etc/apt/keyrings \
   && curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key \
   | gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg \
@@ -41,8 +43,10 @@ RUN mkdir -p /etc/apt/keyrings \
   && corepack enable \
   && corepack prepare pnpm@latest --activate
 
+# ---------- Python Dev Environment ----------
 RUN curl -LsSf https://astral.sh/uv/install.sh | env UV_INSTALL_DIR=/usr/local/bin sh
 
+# ---------- Codex ----------
 RUN npm install -g @openai/codex
 
 RUN mkdir -p \

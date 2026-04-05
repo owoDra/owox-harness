@@ -10,8 +10,6 @@ services:
     init: true
     command: sleep infinity
     network_mode: host
-    env_file:
-      - ./.env
     environment:
       TZ: ${TZ:-Asia/Tokyo}
       COMPOSE_FILE: /workspace/.devcontainer/compose.yml
@@ -25,7 +23,8 @@ services:
       PIPX_BIN_DIR: /home/vscode/.local/bin
       PATH: /home/vscode/.npm-global/bin:/home/vscode/.local/bin:/home/vscode/.local/share/pnpm:${PATH}
     volumes:
-      - ..:/workspace:Z
+      - ..:/workspace:cached
+      - ${HOME}/.ssh:/root/.ssh:ro
       - codex-home:/home/vscode/.codex
       - npm-global:/home/vscode/.npm-global
       - user-local:/home/vscode/.local

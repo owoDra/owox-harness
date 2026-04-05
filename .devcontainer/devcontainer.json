@@ -1,5 +1,5 @@
 {
-  "name": "monorepo-dev",
+  "name": "owox-harness-dev",
   "dockerComposeFile": "compose.yml",
   "service": "dev",
   "runServices": [
