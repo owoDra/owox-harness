@@ -1,0 +1,34 @@
+id: CONTRACT-API-EXAMPLE-001
+type: http_api
+related_requirements:
+  - REQ-EXAMPLE-001
+related_specs:
+  - SPEC-EXAMPLE-FLOW-001
+test_hints:
+  happy_path:
+    - valid request returns success response
+  error_cases:
+    - malformed input returns validation error
+request:
+  method: POST
+  path: /example
+  body:
+    type: object
+    required:
+      - input
+    properties:
+      input:
+        type: string
+response:
+  success:
+    type: object
+    required:
+      - result
+    properties:
+      result:
+        type: string
+invariants:
+  - success response never omits result
+compatibility:
+  backward_compatible_fields:
+    - result
