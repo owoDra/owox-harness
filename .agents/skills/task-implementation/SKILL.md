@@ -15,8 +15,10 @@ argument-hint: "goal=<何を実装するか> mode=<agent-led|collab-led>"
 - `.agents/architecture.md` があれば参照して普遍ルールを確認する
 - `.agents/project.yaml` があれば読みプロジェクト、チーム、サブプロジェクト、外部依存を把握する
 - `.agents/requirements/`, `.agents/specs/`, `.agents/adr/`, `.agents/validation.md`, `.agents/tech-stack.md` のうち関連する正本を参照する
+- `.agents/templates/trace-tags.md` を参照して、コードやテストに付与するトレースタグの種類を把握する
 - 該当チームの `.agents/teams/<team>-guide.md` があれば参照する
 - `./references/best-practices.md` を参照して implementation の進め方を把握する
+- `./references/comment-best-practices.md` を参照して言語やフレームワークに依存しないコメントの原則を把握する
 
 ## 前提知識
 
@@ -52,6 +54,10 @@ argument-hint: "goal=<何を実装するか> mode=<agent-led|collab-led>"
    - 停止条件
 6. 正本、既存コード、テストを確認し、実装計画を立てる
 7. 実装する
+   - 変更したコードには、対応するハーネス資料と関連コードへの参照をトレースタグとして残す
+   - トレースタグは `./references/trace-tags.md` の形式に従い、その言語で標準的に使われる適切なドキュメンテーションコメントに記載する
+   - 少なくとも requirement、spec、ADR、関連テストまたは検証経路、必要なら不変条件と変更理由を追跡できるようにする
+   - トレースタグは関数、クラス、モジュール、主要な設定、重要な分岐など、後から変更理由を追いやすい単位に付ける
 8. 関連するテスト、検証、整合確認を実行する
 9. 変更に応じて正本更新要否を確認する
    - requirement の変更が必要なら `docs-update-requirement`
@@ -70,6 +76,9 @@ argument-hint: "goal=<何を実装するか> mode=<agent-led|collab-led>"
 - 変更理由が説明できない変更を混ぜない
 - テストや検証を後回しにしない
 - 影響がある資料更新を放置しない
+- 重要なコード変更には、言語に対応した適切なドキュメンテーションコメントでトレースタグを残す
+- トレースタグはハーネス資料だけでなく、必要に応じて関連コードや関連テストへの参照も残す
+- コメントは処理をなぞる説明ではなく、意図、不変条件、境界条件、根拠の記録に使う
 - 高リスク変更、破壊的変更、機密に関わる変更は確認を挟む
 - ユーザー判断が必要な確認は必ず `request_user_input` ツールを使う
 
@@ -79,4 +88,5 @@ argument-hint: "goal=<何を実装するか> mode=<agent-led|collab-led>"
 - 実装対象、対象外、不変条件、停止条件が明文化されている
 - 必要なテストまたは検証を実行している
 - 正本更新の要否を確認している
+- 重要な変更箇所にトレースタグ付きのドキュメンテーションコメントを残している
 - `tasks/task-*.md` の進捗が更新されている
