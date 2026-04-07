@@ -1,26 +1,25 @@
 ---
 id: REQ-<CATEGORY>-<NNN>
 title: <title>
-status: draft
+status: <draft|proposed|accepted|deprecated|superseded>
 category: <category>
 priority: medium
 primary_owner_team: <team>
 supporting_teams: []
 affected_subprojects: []
 related_specs: []
-related_contracts: []
 related_tests: []
 review_required_from: []
 ---
 
-# Goal
+# 目標
 
-# Problem
+# 問題
 
-# Success Criteria
+# 成功条件
 
-# Non-Goals
+# やらないこと
 
-# Constraints
+# 制約
 
-# Acceptance Intent
+# 受け入れ条件
