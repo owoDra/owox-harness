@@ -1,6 +1,6 @@
 ---
 name: harness-create-skill
-description: ハーネスのためのスキルを新たに作成するときに使用する
+description: ハーネスにスキルを新たに追加するときに使用する
 ---
 
 ## 目的
