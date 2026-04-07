@@ -1,0 +1,17 @@
+project:
+  name: プロジェクト名
+  description: プロジェクトの説明
+  kind: <simple|monorepo>
+  lang: 日本語
+  teams:
+    - design: UI/UXを設計・製作するチーム
+    - system: アーキテクチャ設計・処理実装するチーム
+  integrations:
+    - external-api: 外部の専用API
+  subprojects:
+    - subproject-1:
+        name: プロジェクト名
+        description: プロジェクトの説明
+    - subproject-2:
+        name: プロジェクト名
+        description: プロジェクトの説明

@@ -29,6 +29,7 @@ argument-hint: "team=<team> role=<役割> scope=<担当範囲>"
 - Team Guide はチーム固有の作法と観点の正本であり、共通不変条件は architecture に書く
 - 1 ガイドは 1 チームを対象にする
 - 役割、担当範囲、ルール、知識は分けて書く
+- 新規チームを追加した場合は `project.yaml` の `project.teams` も更新する
 
 ## やること
 
@@ -40,6 +41,7 @@ argument-hint: "team=<team> role=<役割> scope=<担当範囲>"
 6. ルールには、そのチームが守る作法、レビュー観点、禁止事項を書く
 7. 知識には、そのチームだけが優先的に把握すべき前提、外部依存、運用知識を書く
 8. `.agents/teams/index.md` に対象チームの索引を追加または更新する
+9. 新規チームを追加した場合は `docs-update-project-yaml` を使って `project.teams` を更新する
 
 ## ルール
 
@@ -52,5 +54,6 @@ argument-hint: "team=<team> role=<役割> scope=<担当範囲>"
 
 - `request_user_input` または同等の確認で対象チームと責務を確認した
 - `project.teams` と guide の記述が矛盾していない
+- 新規チームの場合は `project.yaml` も更新した
 - 役割 / どこまで担当するか / ルール / 知識 が埋まっている
 - `.agents/teams/index.md` と整合している
