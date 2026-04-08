@@ -8,18 +8,29 @@ primary_owner_team: <team>
 supporting_teams: []
 affected_subprojects: []
 related_specs: []
+related_adrs: []
+related_metrics: []
 related_tests: []
 review_required_from: []
+last_reviewed_at: YYYY-MM-DD
 ---
 
 # 目標
 
-# 問題
+# ユーザー / 事業ニーズ
 
-# 成功条件
+# 根拠
 
-# やらないこと
+# 対象範囲
 
-# 制約
+# 対象外
 
-# 受け入れ条件
+# 成功指標
+
+# 制約 / 品質特性
+
+# 前提 / 依存関係 / リスク
+
+# 受け入れシグナル
+
+# 備考

@@ -1,6 +1,6 @@
 ---
 name: docs-update-tech-stack
-description: ハーネス用の技術スタック資料を追加・更新・正規化するときに使用する
+description: プロジェクトで使用される技術スタックを追加・更新・正規化するときに使用する
 argument-hint: "category=<技術名> stack=<採用スタック> version=<バージョン> adr=<ADR参照>"
 ---
 

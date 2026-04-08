@@ -1,6 +1,6 @@
 ---
 name: docs-update-adr
-description: ハーネス用の ADR を追加・更新・改訂するときに使用する
+description: 技術決定など行った際の記録を追加・更新・改訂するときに使用する
 argument-hint: "decision=<判断内容> scope=<対象範囲> status=<proposed|accepted|rejected|deprecated|superseded>"
 ---
 

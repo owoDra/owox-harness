@@ -14,7 +14,7 @@ argument-hint: "goal=<何をレビューするか> mode=<agent-led|collab-led>"
 - `.agents/glossary.md` を参照して用語と命名を統一する
 - `.agents/architecture.md` があれば参照して普遍ルールを確認する
 - `.agents/project.yaml` があれば読みプロジェクト、チーム、サブプロジェクト、外部依存を把握する
-- レビュー対象に関連する requirement、spec、ADR、validation、code、test、docs を参照する
+- レビュー対象に関連する requirement、pattern、spec、ADR、validation、code、test、docs を参照する
 - 該当チームの `.agents/teams/<team>-guide.md` があれば参照する
 - `./references/best-practices.md` を参照して review の進め方を把握する
 
@@ -55,6 +55,7 @@ argument-hint: "goal=<何をレビューするか> mode=<agent-led|collab-led>"
    - どの正本、コード、テストと関係するか
    - どの程度の重大度か
    - 修正が必要か
+   - 既存 pattern からの逸脱か、pattern 化不足か
 8. 判断ゲートで停止して確認する
    - `agent-led`: 指摘採否に大きく影響する前提差異、高リスク懸念、レビュー対象の認識違いがある場合のみ `request_user_input` ツールで確認する
    - `collab-led`: 優先観点確定後、主要 finding 整理後、次アクション提案前に `request_user_input` ツールで確認する
@@ -69,6 +70,7 @@ argument-hint: "goal=<何をレビューするか> mode=<agent-led|collab-led>"
 - 指摘事項を重大度順に整理する
 - 根拠のない推測を断定しない
 - 問題がない場合も残留リスクや検証上の不足を明示する
+- 既存 pattern に従っているか、pattern 化できる重複がないかを確認する
 - ユーザー判断が必要な確認は必ず `request_user_input` ツールを使う
 
 ## 確認事項
@@ -76,5 +78,6 @@ argument-hint: "goal=<何をレビューするか> mode=<agent-led|collab-led>"
 - `goal` と `execution_mode` の確認に `request_user_input` ツールを使っている
 - 対象、対象外、優先観点、停止条件が明文化されている
 - 指摘事項が根拠と重大度つきで整理されている
+- pattern 逸脱または pattern 化不足の有無を確認している
 - 問題なしの場合も残留リスクまたは検証上の不足を明示している
 - `tasks/task-*.md` の進捗が更新されている

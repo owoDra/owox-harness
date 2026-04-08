@@ -1,6 +1,6 @@
 ---
 name: docs-update-glossary
-description: ハーネス用の用語集に用語を追加・統合・正規化するときに使用する
+description: プロジェクトで共通の用語集に用語を追加・統合・正規化するときに使用する
 argument-hint: "term=<用語> definition=<定義> aliases=<別名>"
 ---
 

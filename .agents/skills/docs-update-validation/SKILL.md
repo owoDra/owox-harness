@@ -1,6 +1,6 @@
 ---
 name: docs-update-validation
-description: ハーネス用の validation.md を追加・更新・改訂するときに使用する
+description: ハーネスに品質担保のためなどに検証事項を追加・更新・改訂するときに使用する
 argument-hint: "check=<確認項目> trigger=<変更理由>"
 ---
 

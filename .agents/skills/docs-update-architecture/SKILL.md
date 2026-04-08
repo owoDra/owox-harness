@@ -1,6 +1,6 @@
 ---
 name: docs-update-architecture
-description: ハーネス用の architecture.md を追加・更新・改訂するときに使用する
+description: プロジェクトの不変条件や方針・ディレクトリ構造を追加・更新・改訂するときに使用する
 argument-hint: "topic=<変更対象> rationale=<理由>"
 ---
 

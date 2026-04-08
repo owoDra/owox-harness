@@ -1,6 +1,6 @@
 ---
 name: docs-update-integrations
-description: ハーネス用の外部API・サービス資料を追加・更新・正規化するときに使用する
+description: プロジェクトで利用する外部API・サービス資料を追加・更新・正規化するときに使用する
 argument-hint: "integration=<name> kind=<api|service|platform|tool> owner=<team>"
 ---
 

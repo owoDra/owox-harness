@@ -1,6 +1,6 @@
 ---
 name: docs-update-team-guide
-description: ハーネス用のチーム別 guide を追加・更新・正規化するときに使用する
+description: ハーネス用のチーム別ごとのルールや方針を追加・更新・正規化するときに使用する
 argument-hint: "team=<team> role=<役割> scope=<担当範囲>"
 ---
 
