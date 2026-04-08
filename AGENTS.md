@@ -1,57 +1,81 @@
-このリポジトリの正本は `.agents/` にある
-`.agents/` はハーネスであり、全てのAIと人間はこのハーネスに従って作業を進める
+## 目標
 
-## 前提知識
+- `.agents/` がハーネスの正本であり、AI は必ずこのハーネスに従って作業する。
+- `docs/project/` がプロジェクト資料の正本であり、要件、設計、チームルール、外部連携、検証方針はここに置く。
+- エージェントは必要最低限の文脈だけを読み、不要な全文走査を避ける
 
-このプロジェクトで作業する際には必ず `.agents/project.yaml` が存在することを確認する
-`.agents/project.yaml` が存在しない場合は `herness-init` スキルを実行してプロジェクトの初期化を行う
+## 最初に読むもの
 
-### ハーネスの主要ディレクト・ファイル
+1. `.agents/project.yaml`
+2. 作業中の `.agents/tasks/task-*.md`
+3. 必要に応じて `docs/project/index.md`
+4. 対象 task に必要なプロジェクト資料
 
-- `.agents/requirements/`: 何を実現するかを把握する際に参照。
-- `.agents/specs/`: どう振る舞うべきかを把握する際に参照
-- `.agents/patterns/`: コード実装、データ構造・設計、UI/UX 設計を含む共通パターンを把握し、一貫性を保つ際に参照
-- `.agents/adr/`: なぜその判断にしたかを把握する際に参照
-- `.agents/teams/`: チーム別のルール・方針を把握する際に参照
-- `.agents/tasks/`: 現在進行中のタスクについて把握する際に参照
-- `.agents/integrations/`: このプロジェクトに関連する外部API・サービスなどについて把握する際に参照
-- `.agents/tech-stack.md`: プロジェクトの採用技術スタックについて把握する際に参照
-- `.agents/glossary.md`: 共通用語について把握する際に参照
-- `.agents/architecture.md`: 普遍的なルール・指針を把握する際に参照
-- `.agents/validation.md`: プロジェクトの品質担保のために確認・実行すべき内容について把握する際に参照
+## 責務の境界
 
-### タスクの進め方
+- `.agents/`: エージェントの制約、作業手順
+- `docs/project/`: プロジェクトの用語、設計方針、要件、仕様、パターン、ADR、チームガイド、外部連携、技術スタック、検証方針
+- `AGENTS.md`: 入口だけを持つ。詳細な手順やプロジェクト設計はここに重ねない
+
+## 主要ファイル
+
+- `.agents/project.yaml`: ハーネスが参照するプロジェクトの最小情報
+- `.agents/skills/`: 作業種別ごとの進め方
+- `.agents/tasks/`: 進行中または完了済みの task 記録
+- `.agents/scripts/`: ハーネス運用用の補助スクリプト
+- `docs/project/index.md`: プロジェクト資料の入口
+
+## 作業ルール
 
 - 必ず最初に `task-prepare` スキルを使用して進める
 - `request_user_input` ツールが使えない場合は通常メッセージで確認し、確認結果を task に転記する
-- 参照したいファイルの場所がわからない場合は該当ディレクトリの `index.md` を参照する
-- spec の作成・更新時は、共通化できる設計・振る舞い・契約がないかを確認し、必要なら `docs-update-patterns` で pattern を作成・更新する
-- 実装タスク時は、再利用可能な設計・実装方針が現れたら pattern 化候補として整理し、必要なら `docs-update-patterns` で正本化する
-- review 時は、既存 pattern に従っているか、共通化できるのに局所実装で重複していないかを確認する
-
----
-
-## ルール
-
-- 1 requirement = 1 file
-- 1 pattern = 1 file
-- pattern のファイル名はカテゴリ別プレフィックス付きで命名する
-  - 実装系: `impl-`
-  - データ系: `data-`
-  - UI 系: `ui-`
-  - UX 系: `ux-`
-  - API 系: `api-`
-  - テスト系: `test-`
-  - 運用系: `ops-`
-- docs は共有用・納品用の生成物
-- tool 名はできるだけ明示的に指定する
-- 全ての作業はスキルを使用して行う
+- 実装、修正、調査、レビュー、検証のいずれでも、先に task 記録を作成または更新する
+- 全ての作業は対応するスキルを使用して進める
 - 各作業は対応するチームのルールに従う
-- 用語集の命名を優先する。存在せず今後多用する場合は追加する
-- ハーネス資料が未整備の場合は不足を明示し、必要なら `harness-init` または docs-update 系スキルへ戻す
-- spec や実装で繰り返し現れる判断は、コード、データ構造・設計、UI/UX を含めて局所最適で閉じず pattern 化できないかを確認する
+- 参照したいファイルの場所がわからない場合は該当ディレクトリの `index.md` を参照する
+- 用語は `docs/project/glossary.md`、共通方針は `docs/project/architecture.md` を優先する
+- spec や実装で繰り返し現れる判断は pattern 化候補として整理し、必要なら `docs-update-patterns` で正本化する
+- `docs-update-*` でプロジェクト資料を更新する際は、`.agents/` と `AGENTS.md` のハーネス制約をプロジェクト資料に持ち込まない
 
-### 禁止事項
+## タスク別の最小参照ルール
+
+### 調査
+
+- `.agents/project.yaml`
+- `docs/project/index.md`
+- `docs/project/glossary.md`
+- `docs/project/architecture.md`
+- 対象カテゴリの `index.md`
+
+### 実装・修正
+
+- `.agents/project.yaml`
+- `docs/project/glossary.md`
+- `docs/project/architecture.md`
+- 対象 requirement / spec
+- 必要な pattern / ADR / team guide / validation
+
+### レビュー
+
+- `.agents/project.yaml`
+- `docs/project/architecture.md`
+- レビュー対象に対応する requirement / spec / pattern / ADR
+- 必要な team guide / validation
+
+### 検証
+
+- `.agents/project.yaml`
+- `docs/project/validation.md`
+- 対象 requirement / spec / ADR
+- 必要な team guide
+
+### 文書更新
+
+- 更新対象文書
+- 同カテゴリの `index.md`
+- 必要な glossary / architecture / ADR
+
+## 禁止事項
 
 - すべての設計意図をコードだけに押し込むこと
 - すべての資料を人手で二重管理すること

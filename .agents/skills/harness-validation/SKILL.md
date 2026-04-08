@@ -1,20 +1,20 @@
 ---
 name: harness-validation
-description: ハーネス資料の一貫性・整合性・配置ルール順守を確認するときに使用する
+description: ハーネスとプロジェクト資料の一貫性・整合性・配置ルール順守を確認するときに使用する
 argument-hint: "scope=<all|requirements|specs|patterns|adr|tasks|skills> mode=<agent-led|collab-led>"
 ---
 
 ## 目的
 
-`.agents/` 配下のハーネス資料について、存在、配置、命名、索引、相互参照、責務分離、project 設定との整合を確認し、不整合を後続で修正できる状態に整理する。
+`.agents/` 配下のハーネス資料と `docs/project/` 配下のプロジェクト資料について、存在、配置、命名、索引、相互参照、責務分離、project 設定との整合を確認し、不整合を後続で修正できる状態に整理する。
 
 ## 前提資料
 
 - `.agents/project.yaml` があれば読み、`project.kind`、`project.teams`、`project.integrations`、`project.subprojects` を把握する
-- `.agents/glossary.md` を参照して用語と命名の正本を把握する
-- `.agents/architecture.md` があれば参照して普遍ルールを把握する
-- `.agents/requirements/index.md`、`.agents/specs/index.md`、`.agents/patterns/index.md`、`.agents/adr/index.md`、`.agents/integrations/index.md`、`.agents/teams/index.md` を参照して索引と配置ルールを把握する
-- `.agents/validation.md`、`.agents/tech-stack.md`、`.agents/skills/` のうち対象範囲に関係する資料を参照する
+- `docs/project/glossary.md` を参照して用語と命名の正本を把握する
+- `docs/project/architecture.md` があれば参照して普遍ルールを把握する
+- `docs/project/requirements/index.md`、`docs/project/specs/index.md`、`docs/project/patterns/index.md`、`docs/project/adr/index.md`、`docs/project/integrations/index.md`、`docs/project/teams/index.md` を参照して索引と配置ルールを把握する
+- `docs/project/validation.md`、`docs/project/tech-stack.md`、`.agents/skills/` のうち対象範囲に関係する資料を参照する
 - `./references/best-practices.md` を参照して確認観点と結果整理の粒度を把握する
 
 ## 前提知識
@@ -69,6 +69,10 @@ argument-hint: "scope=<all|requirements|specs|patterns|adr|tasks|skills> mode=<a
 - `scope` と完了条件を確認した
 - 必須資料の存在確認を行った
 - 配置ルール、索引、命名、front matter、相互参照、責務分離を確認した
-- `project.yaml` とハーネス資料の整合を確認した
+- `project.yaml` とハーネス資料 /プロジェクト資料の整合を確認した
 - 不整合を修正案と分けて整理した
 - 推奨する次タスク種別まで整理した
+- `AGENTS.md` が `.agents/` と `docs/project/` の境界を明示している
+- `.agents/project.yaml` が存在し、最小情報を保持している
+- `docs/project/index.md` と主要カテゴリが存在する
+- skills がプロジェクト資料を `docs/project/` から参照している

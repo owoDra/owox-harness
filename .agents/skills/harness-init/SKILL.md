@@ -3,70 +3,77 @@ name: harness-init
 description: プロジェクトにエージェントハーネスを初期化する際に使用
 ---
 
+# 目的
+
+`.agents/project.yaml` が存在しない状態で、ハーネス初期化に必要なアンケートを漏れなく回収し、必要最小限のハーネス資料とプロジェクト資料を作成する。
+
 # 前提
 
-プロジェクトに `.agents/project.yaml` が存在しない
-既に存在する場合は `request_user_input` ツールで現在のハーネス設定をすべて削除して初期化しなおすかを確認
+- プロジェクトに `.agents/project.yaml` が存在しない
+- 既に存在する場合は `request_user_input` ツールで現在のハーネス設定をすべて削除して初期化しなおすかを確認する
+- `request_user_input` ツールが使えない場合は通常メッセージで同じ質問を順番に行い、回答を task に転記する
 
 # 前提知識
 
-- `./references/project.example.yaml` を参照して `project.yaml` のフォーマットを把握
-- 現在のリポジトリにある `.agents/` 以外のファイル・ディレクトリ構成・内容
+- `./references/init-questionnaire.md` を参照して固定アンケートと回答状態の管理方法を把握する
+- 現在のリポジトリにある `.agents/` 以外のファイル・ディレクトリ構成・内容を確認し、質問時の提案候補に使う
+- 初期化時は既存の `.agents/` と `AGENTS.md` に書かれた内容を根拠にしない
+- リポジトリから読み取れた内容は推定であり、ユーザー確認前に確定情報として扱わない
 
 # やること
 
-1. 以下について `request_user_input` ツールで質問して `docs-update-project-yaml` スキルで `.agents/project.yaml` を作成または更新
-  - プロジェクト名は何か? -> `project.name` に記載
-  - 何を作るプロジェクトか? -> `project.description` に記載
-  - プロジェクトの共有言語は何か? (例: 日本語) -> `project.lang` に記載
-  - 単一プロジェクトかサブプロジェクトが含まれるか? -> `project.kind` と `project.subprojects` に記載
-  - どんなチームが存在して何を担当するか? -> `project.teams` に記載
-  - 外部依存はあるか? -> `project.integrations` に記載
-2. 以下について `request_user_input` ツールで質問して `docs-update-glossary` スキルで `.agents/glossary.md` に用語を登録
-  - 現状のリポジトリから追加したほうが用語を提案
-  - その他追加したい用語はあるか?
-3. 以下について `request_user_input` ツールで質問して `docs-update-tech-stack` スキルで `.agents/tech-stack.md` を更新
-  - 現状のリポジトリから使用技術スタックを提案
-  - その他確定している技術スタックはあるか?
-4. 以下について `request_user_input` ツールで質問して `docs-update-integrations` スキルで `.agents/integrations/` を作成または更新
-  - どんな外部 API・サービスを使うか?
-  - それぞれ何のために使うか?
-  - どのチームが責任を持つか?
-  - 認証・権限・レート制限などで記録すべき制約はあるか?
-  - 障害時や停止時の扱いで決めておくべきことはあるか?
-5. 以下について `request_user_input` ツールで質問して `docs-update-architecture` スキルで `.agents/architecture.md` を作成または更新
-  - 不変条件として何を置くか?
-  - 責務分離をどう定義するか?
-  - 設計理念として何を重視するか?
-  - ディレクトリ構造はどうしたいか?
-  - 変更が必要な spec / 実装コード / テスト用コード / validation は何か?
-  - 重要判断として ADR に残すべきものはあるか?
-6. 以下について `request_user_input` ツールで質問して `docs-update-validation` スキルで `.agents/validation.md` を作成または更新
-  - 共通候補としてどの確認項目を採用するか?
-  - 各候補を何で検証するか?
-  - それぞれいつ行うか?
-  - それぞれ求める結果は何か?
-  - 問題があった際にどうするか?
-  - 更新に伴って変更すべきテストコードは何か?
-  - 必要に応じて ADR や技術スタックも更新すべきか?
-7. 以下についてチームごとに `request_user_input` ツールで質問して `docs-update-team-guide` スキルで `.agents/teams/<team>-guide.md` を作成または更新
-  - どんな役割を担うのか?
-  - どこまでが担当範囲なのか?
-  - ルールや決め事はあるか?
-  - このチームだけが知るべき知識はあるか?
-8. その他現状のリポジトリ状態から作成できそうなハーネス資料があれば `request_user_input` ツールで確認の上、対応するスキルを使用して更新
+1. `./references/init-questionnaire.md` をコピーして `tasks/task-harness-init.md` を作成して必須質問台帳を作業メモとして使い、各項目を `unasked` `confirmed` `none` `tbd` のいずれかで管理する
+2. Phase 1 として `project.yaml` の必須項目を確認し、`harness-update-project-yaml` スキルで `.agents/project.yaml` を作成または更新する
+   - `project.name`
+   - `project.description`
+   - `project.lang`
+   - `project.kind`
+   - `project.subprojects`
+   - `project.teams`
+   - `project.integrations`
+3. Phase 2 として glossary と tech stack の初期化に必要な項目を確認し、必要に応じて以下を更新する
+   - `docs/project/glossary.md`
+   - `docs/project/tech-stack.md`
+4. Phase 3 として integration の詳細を確認し、`docs-update-integrations` スキルで `docs/project/integrations/` を作成または更新する
+5. Phase 4 として architecture と validation の初期化に必要な項目を確認し、必要に応じて以下を更新する
+   - `docs/project/architecture.md`
+   - `docs/project/validation.md`
+6. Phase 5 として team guide の初期化に必要な項目をチームごとに確認し、`docs-update-team-guide` スキルで `docs/project/teams/<team>-guide.md` を作成または更新する
+7. 各 Phase の最後に以下を必ず確認する
+   - 確定した回答
+   - `none` として扱う回答
+   - `tbd` として保留する回答
+   - まだ `unasked` のまま残っていないか
+8. `unasked` が 1 件でも残っている間は次の Phase に進まない
+9. 文書生成前に、必須項目すべてに回答または保留理由があることを確認する
+10. 初期化完了後に、必要なら `task-prepare` 相当の確認を行い、後続 task に進める状態へ整理する
+
+# 質問ルール
+
+- 必須質問は固定アンケート順に行い、自由に省略しない
+- 1 回の質問で複数項目を聞く場合でも、回答状態は項目単位で管理する
+- `なし` と `未定` を区別する
+- リポジトリから推定した候補は「提案」として示し、採用可否を確認する
+- Phase の終了時に要約を提示し、認識違いがないか確認する
+- 通常メッセージで確認した場合も、`request_user_input` を使った場合と同じ粒度で回答を task に残す
 
 # 出力
+
 - `.agents/project.yaml`
-- `.agents/glossary.md`
-- `.agents/tech-stack.md`
-- `.agents/integrations/`
-- `.agents/validation.md`
-- `.agents/architecture.md`
-- `.agents/teams/<team>-guide.md`
+- `docs/project/glossary.md`
+- `docs/project/tech-stack.md`
+- `docs/project/integrations/`
+- `docs/project/validation.md`
+- `docs/project/architecture.md`
+- `docs/project/teams/<team>-guide.md`
 - その他更新したドキュメント
 
 # 確認事項
-- 作成したハーネス資料に漏れがないか?
-- 作成したハーネス資料のフォーマットが正しいか?
-- 作成したハーネス資料の内容が明確でわかりやすく誤りがないか?
+
+- 固定アンケートの必須項目に `unasked` が残っていないか
+- 各回答が `confirmed` `none` `tbd` のどれかに整理されているか
+- `none` と `tbd` を混同していないか
+- 作成したハーネス資料とプロジェクト資料に漏れがないか
+- 作成したハーネス資料とプロジェクト資料のフォーマットが正しいか
+- 作成したハーネス資料とプロジェクト資料の内容が明確でわかりやすく誤りがないか
+- 初期化根拠として既存の `.agents/` と `AGENTS.md` の記述を使っていないか

@@ -10,16 +10,9 @@ argument-hint: "category=<impl|data|ui|ux|api|test|ops|architecture> title=<titl
 
 ## 前提資料
 
-- `.agents/project.yaml` を読み以下を把握する
-  - `project.name`: pattern が属するプロジェクト名
-  - `project.description`: パターンが使われる対象ドメイン
-  - `project.kind`: `simple` か `monorepo` か
-  - `project.lang`: pattern 本文で使う言語
-  - `project.teams`: `primary_owner_team` と関係チームの候補
-  - `project.integrations`: 外部依存に関するパターンの有無
-  - `project.subprojects`: モノレポ時の影響範囲
-- `.agents/glossary.md` を参照して用語、命名、カテゴリ名を統一する
-- `.agents/patterns/index.md` を参照して既存 pattern を把握する
+- `docs/project/index.md` と関連資料を参照して、対象ドメイン、利用言語、責任チーム、外部依存、影響範囲を把握する
+- `docs/project/glossary.md` を参照して用語、命名、カテゴリ名を統一する
+- `docs/project/patterns/index.md` を参照して既存 pattern を把握する
 - `./references/pattern.template.md` を参照して基本フォーマットを把握する
 - `./references/best-practices.md` を参照して pattern の粒度と書き方を把握する
 - 関連する requirement / spec / ADR / architecture / validation / 実装コード / テストコードを参照して背景と制約を確認する
@@ -36,8 +29,8 @@ argument-hint: "category=<impl|data|ui|ux|api|test|ops|architecture> title=<titl
 ## やること
 
 1. `request_user_input` で、pattern の目的、適用範囲、適用したい文脈、避けたい重複、責任チーム、非目標を確認する
-2. 既存の `.agents/patterns/` と `.agents/patterns/index.md` を確認し、重複 pattern や近い共通化方針を調べる
-3. 関連する `.agents/requirements/`、`.agents/specs/`、`.agents/adr/`、`.agents/validation.md`、実装コード、テストコードを確認し、既存 pattern と矛盾する方針がないかを調べる
+2. 既存の `docs/project/patterns/` と `docs/project/patterns/index.md` を確認し、重複 pattern や近い共通化方針を調べる
+3. 関連する `docs/project/requirements/`、`docs/project/specs/`、`docs/project/adr/`、`docs/project/validation.md`、実装コード、テストコードを確認し、既存 pattern と矛盾する方針がないかを調べる
 4. pattern として独立させるべき粒度か判断する
    - 複数の spec や実装で再利用する見込みがあるか
    - 特定機能固有ではなく、横断的な判断基準として残す価値があるか
@@ -50,7 +43,7 @@ argument-hint: "category=<impl|data|ui|ux|api|test|ops|architecture> title=<titl
 6. 次の ID を決め、`PAT-<CATEGORY>-<NNN>` 形式で採番する
 7. カテゴリに対応するプレフィックスを決め、`<prefix><slug>.md` 形式でファイル名を決める
 8. フォーマットに従って pattern を追加または更新する
-9. `.agents/patterns/index.md` に索引を追加または更新する
+9. `docs/project/patterns/index.md` に索引を追加または更新する
 10. pattern 追加・変更に伴って spec、implementation、review、validation、ADR の追従更新要否を確認する
 
 ## ルール
@@ -69,5 +62,5 @@ argument-hint: "category=<impl|data|ui|ux|api|test|ops|architecture> title=<titl
 - 既存 requirement、spec、ADR、validation、実装との矛盾有無を確認した
 - カテゴリとファイル名プレフィックスが規則に従っている
 - front matter と本文構成がテンプレートに従っている
-- `.agents/patterns/index.md` と整合している
+- `docs/project/patterns/index.md` と整合している
 - 関連する spec / implementation / review / validation / ADR への追従要否を確認した

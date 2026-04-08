@@ -1,4 +1,4 @@
-# project.yaml 更新のベストプラクティス
+# harness project.yaml 更新のベストプラクティス
 
 ## 何を書くか
 
@@ -16,7 +16,7 @@
 
 ## 良い project.yaml の条件
 
-- ハーネス全体の前提が一目でわかる
+- ハーネスが参照する最小情報が一目でわかる
 - team / integration / subproject 名称が他資料と一致している
 - 役割説明が短く明確である
 

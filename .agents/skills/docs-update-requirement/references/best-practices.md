@@ -29,7 +29,7 @@
 ## 更新時の作法
 
 - requirement を最初の更新点にする
-- `project.kind` を確認し、`simple` は `.agents/requirements/` 直下、`monorepo` は `.agents/requirements/shared/` または `.agents/requirements/<subproject>/` に配置する
+- `project.kind` を確認し、`simple` は `docs/project/requirements/` 直下、`monorepo` は `docs/project/requirements/shared/` または `docs/project/requirements/<subproject>/` に配置する
 - 重複要求は統合を検討する
 - 既存 requirement、spec、ADR、validation と照合し、重複や矛盾がないか確認する
 - 要求変更後に必要な spec / ADR / テスト追従を確認する

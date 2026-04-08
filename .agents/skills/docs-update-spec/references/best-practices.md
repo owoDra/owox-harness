@@ -30,7 +30,7 @@
 ## 更新時の作法
 
 - 関連 requirement を明示する
-- `project.kind` を確認し、`simple` は `.agents/specs/` 直下、`monorepo` は `.agents/specs/shared/` または `.agents/specs/<subproject>/` に配置する
+- `project.kind` を確認し、`simple` は `docs/project/specs/` 直下、`monorepo` は `docs/project/specs/shared/` または `docs/project/specs/<subproject>/` に配置する
 - 既存 pattern を確認し、局所 spec に閉じるより pattern 化した方がよい共通要素がないか確認する
 - 既存 spec、requirement、ADR、validation、実装コード、テストコードと照合し、重複や矛盾がないか確認する
 - 実装コードとテストコードの見直しをセットにする

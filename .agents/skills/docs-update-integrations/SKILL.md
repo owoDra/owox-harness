@@ -10,16 +10,9 @@ argument-hint: "integration=<name> kind=<api|service|platform|tool> owner=<team>
 
 ## 前提資料
 
-- `.agents/project.yaml` を読み以下を把握する
-  - `project.name`: integration が属するプロジェクト名
-  - `project.description`: 外部依存が使われる文脈
-  - `project.kind`: `simple` か `monorepo` か
-  - `project.lang`: integration 資料本文で使う言語
-  - `project.teams`: 担当チームと責務境界
-  - `project.integrations`: 既知の外部 API・サービス一覧
-  - `project.subprojects`: モノレポ時の影響サブプロジェクト
-- `.agents/glossary.md` を参照して integration 名、接続用語、責務名を統一する
-- `.agents/integrations/index.md` を参照して索引形式を把握する
+- `docs/project/index.md` と関連資料を参照して、外部依存が使われる文脈、利用言語、担当チーム、既存 integration、影響範囲を把握する
+- `docs/project/glossary.md` を参照して integration 名、接続用語、責務名を統一する
+- `docs/project/integrations/index.md` を参照して索引形式を把握する
 - `./references/integration.example.md` を参照して基本フォーマットを把握する
 - `./references/best-practices.md` を参照して integration 資料の粒度と記載方針を把握する
 - 関連する requirement / spec / ADR / architecture / validation / tech-stack / 実装コードを参照して接続境界と制約を確認する
@@ -29,20 +22,20 @@ argument-hint: "integration=<name> kind=<api|service|platform|tool> owner=<team>
 - integration 資料は、外部依存の役割と接続境界の正本である
 - 認証方式、失敗時の扱い、レート制限、責務チームなどの運用に効く情報を優先して残す
 - 機密値そのものは書かず、どこで管理するかだけを書く
-- 新規 integration を追加した場合は `project.yaml` の `project.integrations` も更新する
+- 新規 integration を追加した場合は `harness-update-project-yaml` の更新要否も確認する
 
 ## やること
 
 1. `request_user_input` で、対象 integration 名、役割、接続目的、担当チーム、影響サブプロジェクト、認証の有無、運用上の制約を確認する
-2. 既存の `.agents/integrations/` と `.agents/integrations/index.md` を確認し、同じ integration の個票や類似資料がないか調べる
+2. 既存の `docs/project/integrations/` と `docs/project/integrations/index.md` を確認し、同じ integration の個票や類似資料がないか調べる
 3. integration として独立管理すべき粒度か判断する
    - 外部 API・サービスとして継続利用するか
    - 認証、制限、障害時対応など固有の運用知識があるか
    - requirement / spec / validation にまたがって参照されるか
-4. `kebab-case` のファイル名を決めて `.agents/integrations/<integration>.md` を追加または更新する
+4. `kebab-case` のファイル名を決めて `docs/project/integrations/<integration>.md` を追加または更新する
 5. フォーマットに従って `<integration>.md` を作成または更新
-6. `.agents/integrations/index.md` に索引を追加または更新する
-7. 新規 integration を追加した場合は `docs-update-project-yaml` を使って `project.integrations` を更新する
+6. `docs/project/integrations/index.md` に索引を追加または更新する
+7. 新規 integration を追加した場合は `harness-update-project-yaml` を使って `project.integrations` を更新する
 8. integration の追加・変更に伴って requirement / spec / validation の更新が必要なら対応するスキルで更新する
 9. 重要な設計判断や制約変更を含む場合は `docs-update-adr` を使って ADR を作成または更新する
 10. 採用サービスや SDK の記録が必要なら `docs-update-tech-stack` も更新する
@@ -58,6 +51,6 @@ argument-hint: "integration=<name> kind=<api|service|platform|tool> owner=<team>
 
 - `request_user_input` または同等の確認で integration の役割と責務チームを確認した
 - 既存 integration 資料との重複を確認した
-- 新規 integration の場合は `project.yaml` も更新した
-- `.agents/integrations/index.md` と整合している
+- 新規 integration の場合は `harness-update-project-yaml` の更新要否も確認した
+- `docs/project/integrations/index.md` と整合している
 - requirement / spec / validation / ADR / tech-stack への追従要否を確認した

@@ -6,20 +6,13 @@ argument-hint: "term=<用語> definition=<定義> aliases=<別名>"
 
 ## 目的
 
-ハーネス資料で使う用語の意味を一箇所に集約し、同義語の乱立や曖昧な命名を防ぐ。
+プロジェクト資料で使う用語の意味を一箇所に集約し、同義語の乱立や曖昧な命名を防ぐ。
 
 ## 前提資料
 
-- `.agents/project.yaml` を読み以下を把握する
-  - `project.name`: 用語を適用するプロジェクト名
-  - `project.description`: 用語が使われる業務・技術文脈
-  - `project.kind`: `simple` か `monorepo` か
-  - `project.lang`: 定義文で使う言語
-  - `project.teams`: どのチーム視点の用語かを判断する材料
-  - `project.integrations`: 外部サービス由来の用語かを判断する材料
-  - `project.subprojects`: サブプロジェクト固有語か共通語かを判断する材料
-- `.agents/glossary.md` を参照して既存の用語、命名、書式を把握する
-- `.agents/architecture.md` を参照して用語集の責務境界を把握する
+- `docs/project/index.md` と関連資料を参照して、用語が使われる文脈、利用言語、責務チーム、外部依存、影響範囲を把握する
+- `docs/project/glossary.md` を参照して既存の用語、命名、書式を把握する
+- `docs/project/architecture.md` を参照して用語集の責務境界を把握する
 - `./references/best-practices.md` を参照して定義の作り方と採録基準を把握する
 - 依頼のきっかけになった requirement / spec / ADR / task / code comment を参照して用語の実使用を確認する
 
@@ -32,7 +25,7 @@ argument-hint: "term=<用語> definition=<定義> aliases=<別名>"
 ## やること
 
 1. `request_user_input` で、追加または更新したい用語、背景、想定読者、別名の有無を確認する
-2. `rg` で `.agents/` と必要なら実装側を検索し、既存の表記揺れ・類義語・略称を洗い出す
+2. `rg` で `docs/project/` と必要なら実装側を検索し、既存の表記揺れ・類義語・略称を洗い出す
 3. その用語を用語集に入れるべきかを判断する
    - このプロジェクトで繰り返し使う
    - 一般語でもこのプロジェクト固有の意味を持つ
@@ -43,11 +36,11 @@ argument-hint: "term=<用語> definition=<定義> aliases=<別名>"
    - 先頭文で「それが何か」を短く定義する
    - 必要なときだけ 2 文目以降で境界・対比・使い分けを書く
    - 未定義の専門語や循環参照を避ける
-6. `.agents/glossary.md` を更新する
+6. `docs/project/glossary.md` を更新する
    - 基本形は `## 用語名` とその直下の簡潔な定義
    - 別名や略称を残す必要がある場合は、正規名称の定義文中で明示する
    - 既存ファイルの体裁を大きく崩さず、差分は最小限に保つ
-7. 用語の正規化が必要なら、関係するハーネス資料の表記揺れ修正を提案または実施する
+7. 用語の正規化が必要なら、関係するプロジェクト資料の表記揺れ修正を提案または実施する
 
 ## ルール
 

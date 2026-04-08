@@ -1,6 +1,6 @@
 ---
 name: docs-update-validation
-description: ハーネスに品質担保のためなどに検証事項を追加・更新・改訂するときに使用する
+description: プロジェクトの品質担保のための検証事項を追加・更新・改訂するときに使用する
 argument-hint: "check=<確認項目> trigger=<変更理由>"
 ---
 
@@ -10,16 +10,9 @@ argument-hint: "check=<確認項目> trigger=<変更理由>"
 
 ## 前提資料
 
-- `.agents/project.yaml` を読み以下を把握する
-  - `project.name`: validation が属するプロジェクト名
-  - `project.description`: 検証対象の文脈
-  - `project.kind`: `simple` か `monorepo` か
-  - `project.lang`: 本文で使う言語
-  - `project.teams`: 検証責務を持つチーム
-  - `project.integrations`: 外部依存の検証項目の有無
-  - `project.subprojects`: モノレポ時の検証対象範囲
-- `.agents/glossary.md` を参照して品質項目、検証用語、命名を統一する
-- `.agents/validation.md` を参照して既存の確認項目と粒度を把握する
+- `docs/project/index.md` と関連資料を参照して、検証対象の文脈、利用言語、責務チーム、外部依存、影響範囲を把握する
+- `docs/project/glossary.md` を参照して品質項目、検証用語、命名を統一する
+- `docs/project/validation.md` を参照して既存の確認項目と粒度を把握する
 - `./references/best-practices.md` を参照して validation 更新時の追従ルールを把握する
 - `./references/shared-check-candidates.md` を参照してプロダクト種別にかかわらず共有して検証すべき候補項目を把握する
 - `./references/validation.example.md` を参照して基本フォーマットを把握する
@@ -40,7 +33,7 @@ argument-hint: "check=<確認項目> trigger=<変更理由>"
    - 何で検証するか
    - 求める結果
    - 問題があった際にどうするか
-4. フォーマットに従って `.agents/validation.md` を追加または更新する
+4. フォーマットに従って `docs/project/validation.md` を追加または更新する
 5. validation 変更後に、関連するテストコードをすべて変更する
 6. validation 変更後に、対応する spec と実装コードへの影響を見直す
 7. 検証方針の根拠変更がある場合は `docs-update-adr` を使って ADR を作成または更新する
@@ -57,6 +50,6 @@ argument-hint: "check=<確認項目> trigger=<変更理由>"
 ## 確認事項
 
 - `request_user_input` または同等の確認で変更理由、対象範囲、候補項目ごとの検証手段を確認した
-- `.agents/validation.md` の確認項目が更新されている
+- `docs/project/validation.md` の確認項目が更新されている
 - 関連するテストコードをすべて変更した
 - spec / 実装コード / ADR / tech-stack の更新要否も確認した

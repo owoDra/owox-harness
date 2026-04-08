@@ -25,9 +25,9 @@ ADR にしないほうがよい例:
 
 - ID は連番で採番する
 - ファイル名は `ADR-<NNN>-<short-title>.md` のように検索しやすくする
-- `simple` では `.agents/adr/` 直下に置く
-- `monorepo` では `.agents/adr/<subproject>/` を作り、その中に置く
-- サブプロジェクト共通の判断だけを `.agents/adr/` 直下に置く
+- `simple` では `docs/project/adr/` 直下に置く
+- `monorepo` では `docs/project/adr/<subproject>/` を作り、その中に置く
+- サブプロジェクト共通の判断だけを `docs/project/adr/` 直下に置く
 - 過去判断をひっくり返す場合は、旧 ADR を黙って書き換えるより新 ADR で supersede 関係を示す
 - index は ADR 作成と同時に更新する
 

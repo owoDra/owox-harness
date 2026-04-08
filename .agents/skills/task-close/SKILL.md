@@ -11,11 +11,11 @@ argument-hint: "goal=<何を閉じるか> mode=<agent-led|collab-led>"
 ## 前提資料
 
 - `../task-prepare/references/task.example.md` を参照して `tasks/task-*.md` の基本フォーマットを把握する
-- `.agents/glossary.md` を参照して用語と命名を統一する
-- `.agents/architecture.md` があれば参照して普遍ルールを確認する
+- `docs/project/glossary.md` を参照して用語と命名を統一する
+- `docs/project/architecture.md` があれば参照して普遍ルールを確認する
 - `.agents/project.yaml` があれば読みプロジェクト、チーム、サブプロジェクト、外部依存を把握する
 - 対象 task に関連する requirement、spec、ADR、validation、code、test、docs、`tasks/task-*.md` を参照する
-- 該当チームの `.agents/teams/<team>-guide.md` があれば参照する
+- 該当チームの `docs/project/teams/<team>-guide.md` があれば参照する
 - `./references/best-practices.md` を参照して close の進め方を把握する
 
 ## 前提知識

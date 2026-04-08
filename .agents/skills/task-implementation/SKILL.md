@@ -11,13 +11,13 @@ argument-hint: "goal=<何を実装するか> mode=<agent-led|collab-led>"
 ## 前提資料
 
 - `../task-prepare/references/task.example.md` を参照して `tasks/task-*.md` の基本フォーマットを把握する
-- `.agents/glossary.md` を参照して用語と命名を統一する
-- `.agents/architecture.md` があれば参照して普遍ルールを確認する
+- `docs/project/glossary.md` を参照して用語と命名を統一する
+- `docs/project/architecture.md` があれば参照して普遍ルールを確認する
 - `.agents/project.yaml` があれば読みプロジェクト、チーム、サブプロジェクト、外部依存を把握する
-- `.agents/requirements/`, `.agents/specs/`, `.agents/adr/`, `.agents/validation.md`, `.agents/tech-stack.md` のうち関連する正本を参照する
-- `.agents/patterns/index.md` があれば参照して、適用すべき既存 pattern の有無を確認する
+- `docs/project/requirements/`, `docs/project/specs/`, `docs/project/adr/`, `docs/project/validation.md`, `docs/project/tech-stack.md` のうち関連する正本を参照する
+- `docs/project/patterns/index.md` があれば参照して、適用すべき既存 pattern の有無を確認する
 - `./references/trace-tags.md` を参照して、コードやテストに付与するトレースタグの種類を把握する
-- 該当チームの `.agents/teams/<team>-guide.md` があれば参照する
+- 該当チームの `docs/project/teams/<team>-guide.md` があれば参照する
 - `./references/best-practices.md` を参照して implementation の進め方を把握する
 
 ## 前提知識
@@ -62,7 +62,7 @@ argument-hint: "goal=<何を実装するか> mode=<agent-led|collab-led>"
    - 必要なテスト、静的検証、監視、ログ、メトリクス更新を決める
    - 既存 pattern を適用すべき箇所と、新たに pattern 化すべき候補があるかを整理する
 8. 実装する
-   - 変更したコードには、対応するハーネス資料と関連コードへの参照をトレースタグとして残す
+   - 変更したコードには、対応するプロジェクト資料と関連コードへの参照をトレースタグとして残す
    - トレースタグは `./references/trace-tags.md` の形式に従い、その言語で標準的に使われる適切なドキュメンテーションコメントに記載する
    - 少なくとも requirement、spec、ADR、関連テストまたは検証経路、必要なら不変条件と変更理由を追跡できるようにする
    - トレースタグは関数、クラス、モジュール、主要な設定、重要な分岐など、後から変更理由を追いやすい単位に付ける
@@ -90,7 +90,7 @@ argument-hint: "goal=<何を実装するか> mode=<agent-led|collab-led>"
 - テストや検証を後回しにしない
 - 影響がある資料更新を放置しない
 - 重要なコード変更には、言語に対応した適切なドキュメンテーションコメントでトレースタグを残す
-- トレースタグはハーネス資料だけでなく、必要に応じて関連コードや関連テストへの参照も残す
+- トレースタグはプロジェクト資料だけでなく、必要に応じて関連コードや関連テストへの参照も残す
 - コメントは処理をなぞる説明ではなく、意図、不変条件、境界条件、根拠の記録に使う
 - 共通化できる実装方針を新規ローカル流儀として増やさず、既存 pattern の適用または pattern 化を検討する
 - 互換性、データ移行、外部公開契約、セキュリティ、性能への影響を見落とさない

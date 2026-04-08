@@ -10,16 +10,9 @@ argument-hint: "topic=<変更対象> rationale=<理由>"
 
 ## 前提資料
 
-- `.agents/project.yaml` を読み以下を把握する
-  - `project.name`: architecture が属するプロジェクト名
-  - `project.description`: 設計対象の文脈
-  - `project.kind`: `simple` か `monorepo` か
-  - `project.lang`: 本文で使う言語
-  - `project.teams`: 責務分離に関わるチーム
-  - `project.integrations`: 外部依存に関する不変条件の有無
-  - `project.subprojects`: モノレポ時に共通原則と個別原則をどう扱うか
-- `.agents/glossary.md` を参照して用語と命名を統一する
-- `.agents/architecture.md` を参照して既存の不変条件、責務分離、設計理念を把握する
+- `docs/project/index.md` と関連資料を参照して、設計対象の文脈、利用言語、構成、責務チーム、外部依存、影響範囲を把握する
+- `docs/project/glossary.md` を参照して用語と命名を統一する
+- `docs/project/architecture.md` を参照して既存の不変条件、責務分離、設計理念を把握する
 - `./references/best-practices.md` を参照して architecture 更新時の粒度と影響範囲を把握する
 - `./references/architecture.example.md` を参照して基本フォーマットを把握する
 - 関連する requirement / spec / ADR / validation / 実装コード / テストコードを参照して現状との整合を確認する
@@ -38,11 +31,11 @@ argument-hint: "topic=<変更対象> rationale=<理由>"
    - 責務分離の原則か
    - プロジェクト全体の設計理念か
 3. 重要判断を伴う場合は `docs-update-adr` を使って対応する ADR を作成または更新する
-4. `.agents/architecture.md` を追加または更新する
+4. `docs/project/architecture.md` を追加または更新する
 5. architecture 変更後に、関連する specs をすべて見直し、必要な修正を行う
 6. architecture 変更後に、関連する実装コードをすべて見直し、必要な修正を行う
 7. architecture 変更後に、関連するテスト用コードをすべて見直し、必要な修正を行う
-8. architecture 変更後に、`.agents/validation.md` を見直し、必要なら `docs-update-validation` を使って更新する
+8. architecture 変更後に、`docs/project/validation.md` を見直し、必要なら `docs-update-validation` を使って更新する
 9. 変更に伴って技術選定の前提が変わる場合は `docs-update-tech-stack` も見直す
 
 ## ルール
