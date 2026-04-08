@@ -25,6 +25,8 @@ services:
       - ..:/workspace:cached
       - ${HOME}/.ssh:/home/vscode/.ssh:ro
       - opencode-config:/home/vscode/.config/opencode
+      - opencode-data:/home/vscode/.local/share/opencode
+      - opencode-cache:/home/vscode/.cache/opencode
       - npm-global:/home/vscode/.npm-global
       - user-local:/home/vscode/.local
       - user-cache:/home/vscode/.cache
@@ -34,6 +36,8 @@ services:
 
 volumes:
   opencode-config:
+  opencode-data:
+  opencode-cache:
   npm-global:
   user-local:
   user-cache:

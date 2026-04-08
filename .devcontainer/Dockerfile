@@ -51,6 +51,8 @@ RUN npm install -g opencode-ai
 
 RUN mkdir -p \
   /home/vscode/.config/opencode \
+  /home/vscode/.local/share/opencode \
+  /home/vscode/.cache/opencode \
   /home/vscode/.npm-global \
   /home/vscode/.local/bin \
   /home/vscode/.local/share/pnpm \
