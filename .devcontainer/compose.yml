@@ -5,7 +5,7 @@ services:
       dockerfile: .devcontainer/Dockerfile
       args:
         NODE_MAJOR: ${NODE_MAJOR:-22}
-    image: ${COMPOSE_PROJECT_NAME:-monorepo}-devcontainer:local
+    image: ${COMPOSE_PROJECT_NAME:-monorepo}-opencode-devcontainer:local
     working_dir: /workspace
     init: true
     command: sleep infinity
@@ -13,7 +13,6 @@ services:
     environment:
       TZ: ${TZ:-Asia/Tokyo}
       COMPOSE_FILE: /workspace/.devcontainer/compose.yml
-      CODEX_HOME: /home/vscode/.codex
       NPM_CONFIG_PREFIX: /home/vscode/.npm-global
       PNPM_HOME: /home/vscode/.local/share/pnpm
       PNPM_STORE_DIR: /pnpm/store
@@ -24,8 +23,8 @@ services:
       PATH: /home/vscode/.npm-global/bin:/home/vscode/.local/bin:/home/vscode/.local/share/pnpm:${PATH}
     volumes:
       - ..:/workspace:cached
-      - ${HOME}/.ssh:/root/.ssh:ro
-      - codex-home:/home/vscode/.codex
+      - ${HOME}/.ssh:/home/vscode/.ssh:ro
+      - opencode-config:/home/vscode/.config/opencode
       - npm-global:/home/vscode/.npm-global
       - user-local:/home/vscode/.local
       - user-cache:/home/vscode/.cache
@@ -34,7 +33,7 @@ services:
       - host.docker.internal:host-gateway
 
 volumes:
-  codex-home:
+  opencode-config:
   npm-global:
   user-local:
   user-cache:
