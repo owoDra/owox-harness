@@ -12,7 +12,7 @@ DRY_RUN=0
 usage() {
   cat <<'USAGE'
 Usage:
-  restore_agent_porter.sh [--root PATH] [--snapshot NAME] [--dry-run]
+  restore_agent.sh [--root PATH] [--snapshot NAME] [--dry-run]
 USAGE
 }
 

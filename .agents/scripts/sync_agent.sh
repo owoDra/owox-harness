@@ -18,7 +18,7 @@ SNAPSHOT_NAME=""
 usage() {
   cat <<'USAGE'
 Usage:
-  agent_porter.sh <target> [--root PATH] [--dry-run] [--force] [--snapshot-name NAME]
+  sync_agent.sh <target> [--root PATH] [--dry-run] [--force] [--snapshot-name NAME]
 
 Targets:
   claude | copilot | cursor | opencode | crush | gemini | aider | kiro
