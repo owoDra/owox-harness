@@ -22,7 +22,8 @@ argument-hint: "team=<team> role=<役割> scope=<担当範囲>"
 1. 必要なら `request_user_input` で対象 team、役割、担当範囲、固有ルール、固有知識を確認する
 2. 既存 guide と関連資料を確認し、名称と責務境界をそろえる
 3. `<team>-guide.md` を作成または更新する
-4. 新規 team の場合は `.agents/project.md` 更新要否を確認する
+4. `docs/project/teams/index.md` の参照リスト更新要否を確認する
+5. 新規 team の場合は `.agents/project.md` 更新要否を確認する
 
 ## ルール
 
@@ -33,5 +34,6 @@ argument-hint: "team=<team> role=<役割> scope=<担当範囲>"
 ## 確認事項
 
 - 役割、担当範囲、ルール、固有知識が分かれている
+- `docs/project/teams/index.md` の更新要否を確認した
 - `.agents/project.md` 更新要否を確認した
 - architecture との境界が崩れていない

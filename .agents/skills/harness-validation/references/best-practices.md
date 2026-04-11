@@ -33,6 +33,7 @@
 - ID 重複と status 値
 - active / archive の誤配置
 - Markdown 相対リンクの破損
+- index の参照リストと実ファイルの不一致
 
 ## 人手で補うべき確認
 

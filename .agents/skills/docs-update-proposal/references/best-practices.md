@@ -44,3 +44,4 @@
 - 採用済みで役目を終えたものは archive へ移す
 - active と archive を混在させない
 - 採用に必要な判断材料が不足している場合は research を先に補う
+- `docs/project/proposals/index.md` の参照リストに active / archive と個票を反映する

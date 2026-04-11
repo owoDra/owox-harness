@@ -130,6 +130,74 @@ check_required_layout() {
   require_dir "docs/project/adr/archive"
 }
 
+extract_index_refs() {
+  local file="$1"
+  sed -nE 's/^- `([^`]+)`:.*$/\1/p' "$file"
+}
+
+check_index_reference_lists() {
+  local index dir
+  while IFS= read -r index; do
+    if ! rg -q '^## 参照$' "$index"; then
+      log_error "missing '## 参照' section in $index"
+      continue
+    fi
+
+    dir="$(dirname "$index")"
+    local refs
+    refs="$(extract_index_refs "$index")"
+
+    while IFS= read -r ref; do
+      [[ -n "$ref" ]] || continue
+      if [[ "$ref" == */ ]]; then
+        [[ -d "$dir/$ref" ]] || log_error "index references missing directory: $index -> $ref"
+      else
+        [[ -e "$dir/$ref" ]] || log_error "index references missing path: $index -> $ref"
+      fi
+    done <<< "$refs"
+
+    case "$index" in
+      docs/project/adr/index.md|docs/project/proposals/index.md)
+        local bucket
+        for bucket in active archive; do
+          if [[ -d "$dir/$bucket" ]]; then
+            if ! grep -Fqx "$bucket/" <<< "$refs"; then
+              log_error "missing directory reference in $index -> $bucket/"
+            fi
+          fi
+        done
+        while IFS= read -r file; do
+          [[ -n "$file" ]] || continue
+          local rel
+          rel="${file#"$dir/"}"
+          if ! grep -Fqx "$rel" <<< "$refs"; then
+            log_error "missing file reference in $index -> $rel"
+          fi
+        done < <(find "$dir"/active "$dir"/archive -maxdepth 1 -type f -name '*.md' -not -name 'index.md' 2>/dev/null | sort)
+        ;;
+      *)
+        while IFS= read -r file; do
+          [[ -n "$file" ]] || continue
+          local rel
+          rel="${file#"$dir/"}"
+          if ! grep -Fqx "$rel" <<< "$refs"; then
+            log_error "missing file reference in $index -> $rel"
+          fi
+        done < <(find "$dir" -maxdepth 1 -type f -name '*.md' -not -name 'index.md' | sort)
+
+        while IFS= read -r subindex; do
+          [[ -n "$subindex" ]] || continue
+          local rel
+          rel="${subindex#"$dir/"}"
+          if ! grep -Fqx "$rel" <<< "$refs"; then
+            log_error "missing child index reference in $index -> $rel"
+          fi
+        done < <(find "$dir" -mindepth 2 -maxdepth 2 -type f -name 'index.md' | sort)
+        ;;
+    esac
+  done < <(find docs/project -type f -name 'index.md' | sort)
+}
+
 check_required_skills() {
   local skills=(
     task-prepare
@@ -304,6 +372,7 @@ check_task_files
 check_duplicate_ids
 check_status_values
 check_archive_placement
+check_index_reference_lists
 check_markdown_links
 
 if (( FAILURES > 0 )); then

@@ -22,6 +22,7 @@ argument-hint: "term=<用語> definition=<定義> aliases=<別名>"
 2. 既存用語、表記揺れ、別名を調べる
 3. `core.md` に置くべきか、分野別ファイルに置くべきか判断する
 4. 定義を追加または更新し、必要なら他資料の表記統一を行う
+5. 分野別ファイルを追加、改名した場合は `docs/project/glossary/index.md` の参照リスト更新要否を確認する
 
 ## ルール
 
@@ -34,3 +35,4 @@ argument-hint: "term=<用語> definition=<定義> aliases=<別名>"
 - 類義語と既存項目を確認した
 - 先頭文だけで意味が通る定義になっている
 - core と分野別ファイルの置き分けが妥当である
+- `docs/project/glossary/index.md` の更新要否を確認した

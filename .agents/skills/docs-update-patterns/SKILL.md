@@ -23,7 +23,8 @@ argument-hint: "category=<impl|data|ui|ux|api|test|ops> title=<title>"
 2. 既存 pattern と重複や矛盾がないか調べる
 3. pattern として独立させるべき粒度か判断する
 4. `<prefix><slug>.md` を作成または更新する
-5. pattern 追加、変更に伴う spec / implementation / validation / ADR 影響を確認する
+5. `docs/project/patterns/index.md` の参照リスト更新要否を確認する
+6. pattern 追加、変更に伴う spec / implementation / validation / ADR 影響を確認する
 
 ## ルール
 
@@ -35,4 +36,5 @@ argument-hint: "category=<impl|data|ui|ux|api|test|ops> title=<title>"
 
 - 再利用価値がある
 - 適用範囲と非適用範囲が分かる
+- `docs/project/patterns/index.md` の更新要否を確認した
 - 影響する正本を確認した

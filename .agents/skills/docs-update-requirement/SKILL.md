@@ -24,7 +24,8 @@ argument-hint: "category=<category> title=<title> team=<owner-team>"
 2. `docs/project/requirements/` を確認し、重複や矛盾がないか調べる
 3. requirement として独立させるべき粒度か判断する
 4. `REQ-<category>-<short-title>.md` を作成または更新する
-5. requirement 変更に伴う spec / validation / ADR 影響を確認する
+5. `docs/project/requirements/index.md` の参照リスト更新要否を確認する
+6. requirement 変更に伴う spec / validation / ADR 影響を確認する
 
 ## ルール
 
@@ -37,4 +38,5 @@ argument-hint: "category=<category> title=<title> team=<owner-team>"
 
 - 目的、根拠、成功指標がある
 - 対象範囲と対象外が分かれている
+- `docs/project/requirements/index.md` の更新要否を確認した
 - spec / validation / ADR 影響を確認した

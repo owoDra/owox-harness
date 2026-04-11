@@ -24,6 +24,7 @@
 - 置換関係がある場合は新しい ADR で追えるようにする
 - active と archive の配置を使い分ける
 - requirement や spec と接続できる関連資料を残す
+- `docs/project/adr/index.md` の参照リストに active / archive と個票を反映する
 
 ## ADR で落としやすい観点
 
