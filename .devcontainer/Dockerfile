@@ -48,6 +48,7 @@ RUN curl -LsSf https://astral.sh/uv/install.sh | env UV_INSTALL_DIR=/usr/local/b
 
 # ---------- OpenCode ----------
 RUN npm install -g opencode-ai
+RUN npm install -g @openai/codex
 
 RUN mkdir -p \
   /home/vscode/.config/opencode \

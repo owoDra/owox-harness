@@ -10,7 +10,7 @@ argument-hint: "category=<技術名> stack=<採用スタック> version=<バー�
 
 ## 前提資料
 
-- `docs/project/README.md`
+- `docs/project/index.md`
 - `docs/project/glossary/core.md`
 - `docs/project/tech-stack.md`
 - `.agents/skills/docs-update-tech-stack/references/best-practices.md`

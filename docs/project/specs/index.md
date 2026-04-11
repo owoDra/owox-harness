@@ -27,3 +27,8 @@
 
 - 2 つ以上の subproject にまたがる仕様は `shared/` に置く
 - 1 つの subproject に閉じる仕様はその subproject 配下に置く
+
+## 参照
+
+- `shared/index.md`: 複数 subproject にまたがる共有仕様の入口
+- 現在は subproject 固有仕様なし: 追加時は `<subproject>/index.md` と個票を作成する

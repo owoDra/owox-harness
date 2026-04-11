@@ -5,10 +5,10 @@ AI は原則として次の順で読む。
 1. `AGENTS.md`
 2. `.agents/project.md`
 3. 対象 `.agents/tasks/task-*.md`
-4. `docs/project/README.md`
+4. `docs/project/index.md`
 5. `docs/project/glossary/core.md`
 6. `docs/project/architecture.md`
-7. 対象カテゴリの `README.md`
+7. 対象カテゴリの `index.md`
 8. 対象個票
 
 追加ルール:

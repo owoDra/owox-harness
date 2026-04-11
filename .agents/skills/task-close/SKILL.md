@@ -13,7 +13,7 @@ task の成果、未完了事項、残課題、更新済み正本、次アクシ
 - `.agents/project.md`
 - `.agents/skills/_shared/task-template.md`
 - `.agents/skills/_shared/task-statuses.md`
-- `docs/project/README.md`
+- `docs/project/index.md`
 - 関連する requirement / spec / ADR / validation / code / test / docs
 
 ## やること

@@ -25,3 +25,7 @@
 ## 参照ルール
 
 - 要求変更時は spec / validation / ADR への影響を確認する
+
+## 参照
+
+- 現在は個票なし: requirement 追加時は `REQ-<category>-<short-title>.md` をこのディレクトリに置く

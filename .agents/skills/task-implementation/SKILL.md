@@ -16,7 +16,7 @@ argument-hint: "goal=<何を実装するか> mode=<agent-led|collab-led>"
 - `.agents/skills/_shared/document-update-checklist.md`
 - `.agents/skills/_shared/trace-tags.md`
 - `.agents/skills/_shared/execution-modes.md`
-- `docs/project/README.md`
+- `docs/project/index.md`
 - `docs/project/glossary/core.md`
 - `docs/project/architecture.md` が存在する場合は参照する
 - 対象 requirement / spec / ADR / validation / pattern
@@ -27,15 +27,16 @@ argument-hint: "goal=<何を実装するか> mode=<agent-led|collab-led>"
 2. 必要なら `request_user_input` で `goal`、`mode`、変更可能範囲、完了条件を確認する
 3. 正本、既存コード、既存テストを読み、現状と変更差分を把握する
 4. 実装方針を決め、小さい一貫した変更単位で進める
-5. 必要なテスト、lint、型チェック、手動確認を実行する
-6. 変更に応じて requirement / spec / pattern / ADR / validation / tech-stack の更新要否を確認する
-7. task に実施内容、検証結果、未実施項目、次に読むものを残す
+5. 重要な変更箇所では、関連する requirement / spec / ADR / pattern / validation / test への参照を trace tag で残す方針を決める
+6. 必要なテスト、lint、型チェック、手動確認を実行する
+7. 変更に応じて requirement / spec / pattern / ADR / validation / tech-stack の更新要否を確認する
+8. task に実施内容、検証結果、未実施項目、次に読むものを残す
 
 ## ルール
 
 - 正本と矛盾する実装を確定させない
 - 変更理由が説明できない変更を混ぜない
-- 重要な変更では必要に応じて trace tag を使う
+- 重要な変更では、関連する正本資料やテストへの参照を trace tag で残す
 - 未実施検証がある場合は残リスクを明記する
 - 高リスク変更や仕様変更が必要なら `request_user_input` を使う
 

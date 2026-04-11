@@ -10,7 +10,7 @@ argument-hint: "topic=<変更対象> rationale=<理由>"
 
 ## 前提資料
 
-- `docs/project/README.md`
+- `docs/project/index.md`
 - `docs/project/glossary/core.md`
 - `docs/project/architecture.md`
 - `.agents/skills/_shared/document-update-checklist.md`

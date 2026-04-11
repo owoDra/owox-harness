@@ -13,7 +13,7 @@ argument-hint: "goal=<何をレビューするか> mode=<agent-led|collab-led>"
 - `.agents/project.md`
 - `.agents/skills/_shared/task-template.md`
 - `.agents/skills/_shared/execution-modes.md`
-- `docs/project/README.md`
+- `docs/project/index.md`
 - `docs/project/glossary/core.md`
 - `docs/project/architecture.md` が存在する場合は参照する
 - レビュー対象に対応する requirement / spec / pattern / ADR / validation / code / test

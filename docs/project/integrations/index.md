@@ -24,3 +24,7 @@
 ## 参照ルール
 
 - integration を追加または変更したら `.agents/project.md` と validation 影響を確認する
+
+## 参照
+
+- 現在は個票なし: 追加時は `<integration>.md` を置く

@@ -21,4 +21,8 @@
 
 ## 参照ルール
 
-- subproject 固有仕様が必要な場合は、対象の `<subproject>/README.md` と個票を追加する
+- subproject 固有仕様が必要な場合は、対象の `<subproject>/index.md` と個票を追加する
+
+## 参照
+
+- 現在は共有仕様の個票なし: 追加時は `SPEC-<category>-<short-title>.md` を置く

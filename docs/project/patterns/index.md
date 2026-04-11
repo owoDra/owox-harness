@@ -31,3 +31,7 @@
 
 - requirement や spec の代替にはしない
 - 追加時は spec / implementation / validation への影響を確認する
+
+## 参照
+
+- 現在は個票なし: 追加時はカテゴリ接頭辞付きの pattern 個票を置く

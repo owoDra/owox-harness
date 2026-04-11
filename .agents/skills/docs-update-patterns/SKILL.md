@@ -10,9 +10,9 @@ argument-hint: "category=<impl|data|ui|ux|api|test|ops> title=<title>"
 
 ## 前提資料
 
-- `docs/project/README.md`
+- `docs/project/index.md`
 - `docs/project/glossary/core.md`
-- `docs/project/patterns/README.md`
+- `docs/project/patterns/index.md`
 - `.agents/skills/docs-update-patterns/references/pattern.template.md`
 - `.agents/skills/docs-update-patterns/references/best-practices.md`
 - 関連 requirement / spec / ADR / validation / architecture

@@ -14,7 +14,7 @@ argument-hint: "goal=<何を直すか> mode=<agent-led|collab-led>"
 - `.agents/skills/_shared/task-template.md`
 - `.agents/skills/_shared/document-update-checklist.md`
 - `.agents/skills/_shared/execution-modes.md`
-- `docs/project/README.md`
+- `docs/project/index.md`
 - `docs/project/glossary/core.md`
 - `docs/project/architecture.md` が存在する場合は参照する
 - 関連 requirement / spec / ADR / validation / code / test

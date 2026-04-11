@@ -10,9 +10,9 @@ argument-hint: "integration=<name> kind=<api|service|platform|tool> owner=<team>
 
 ## 前提資料
 
-- `docs/project/README.md`
+- `docs/project/index.md`
 - `docs/project/glossary/core.md`
-- `docs/project/integrations/README.md`
+- `docs/project/integrations/index.md`
 - `.agents/skills/docs-update-integrations/references/integration.template.md`
 - `.agents/skills/docs-update-integrations/references/best-practices.md`
 - 関連 requirement / spec / ADR / architecture / validation / tech-stack

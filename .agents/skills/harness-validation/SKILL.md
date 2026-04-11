@@ -13,7 +13,7 @@ argument-hint: "scope=<all|skills|tasks|docs> mode=<agent-led|collab-led>"
 - `.agents/project.md`
 - `.agents/scripts/validate_harness.sh`
 - `.agents/skills/harness-validation/references/best-practices.md`
-- `docs/project/README.md`
+- `docs/project/index.md`
 - `docs/project/glossary/core.md`
 - `docs/project/architecture.md` が存在する場合は参照する
 

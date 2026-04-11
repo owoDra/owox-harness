@@ -10,9 +10,9 @@ argument-hint: "category=<category> title=<title> team=<owner-team>"
 
 ## 前提資料
 
-- `docs/project/README.md`
+- `docs/project/index.md`
 - `docs/project/glossary/core.md`
-- `docs/project/requirements/README.md`
+- `docs/project/requirements/index.md`
 - `.agents/skills/docs-update-requirement/references/requirement.template.md`
 - `.agents/skills/docs-update-requirement/references/best-practices.md`
 - `docs/project/architecture.md` が存在する場合は参照する

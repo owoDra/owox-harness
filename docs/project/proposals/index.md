@@ -27,3 +27,8 @@
 
 - 採用した proposal は requirement / spec / ADR への昇格を確認する
 - 参照優先度を落とした proposal は `archive/` へ移す
+
+## 参照
+
+- `active/`: 採否判断前の proposal の配置先。現在は個票なし
+- `archive/`: 参照優先度を落とした proposal の配置先。現在は個票なし

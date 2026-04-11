@@ -108,21 +108,21 @@ check_required_layout() {
   require_dir ".agents/skills/_shared"
   require_dir ".agents/scripts"
 
-  require_file "docs/project/README.md"
+  require_file "docs/project/index.md"
   require_file "docs/project/architecture.md"
   require_file "docs/project/tech-stack.md"
   require_file "docs/project/validation.md"
-  require_file "docs/project/glossary/README.md"
+  require_file "docs/project/glossary/index.md"
   require_file "docs/project/glossary/core.md"
-  require_file "docs/project/research/README.md"
-  require_file "docs/project/proposals/README.md"
-  require_file "docs/project/requirements/README.md"
-  require_file "docs/project/specs/README.md"
-  require_file "docs/project/specs/shared/README.md"
-  require_file "docs/project/patterns/README.md"
-  require_file "docs/project/adr/README.md"
-  require_file "docs/project/teams/README.md"
-  require_file "docs/project/integrations/README.md"
+  require_file "docs/project/research/index.md"
+  require_file "docs/project/proposals/index.md"
+  require_file "docs/project/requirements/index.md"
+  require_file "docs/project/specs/index.md"
+  require_file "docs/project/specs/shared/index.md"
+  require_file "docs/project/patterns/index.md"
+  require_file "docs/project/adr/index.md"
+  require_file "docs/project/teams/index.md"
+  require_file "docs/project/integrations/index.md"
 
   require_dir "docs/project/proposals/active"
   require_dir "docs/project/proposals/archive"
@@ -149,6 +149,8 @@ check_required_skills() {
     docs-update-team-guide
     docs-update-tech-stack
     docs-update-validation
+    docs-update-research
+    docs-update-proposal
     harness-init
     harness-update-project
     harness-create-skill
@@ -162,12 +164,12 @@ check_required_skills() {
 
 check_legacy_artifacts() {
   check_absent ".agents/project.yaml"
-  check_absent ".agents/README.md"
-  check_absent ".agents/skills/README.md"
+  check_absent ".agents/index.md"
+  check_absent ".agents/skills/index.md"
   check_absent ".agents/skills/harness-update-project-yaml"
 
-  if find . -path './.git' -prune -o -path './.old' -prune -o -name 'index.md' -print | grep -q .; then
-    log_error "legacy index.md files remain"
+  if find docs/project -name 'README.md' -print | grep -q .; then
+    log_error "legacy README.md files remain under docs/project"
   fi
 
   if rg -n --hidden \
@@ -228,7 +230,7 @@ check_task_files() {
 
 check_duplicate_ids() {
   local ids
-  ids="$(rg -n '^id:' docs/project --glob '*.md' -g '!**/README.md' | sed -E 's/.*id:[[:space:]]*//' || true)"
+  ids="$(rg -n '^id:' docs/project --glob '*.md' -g '!**/index.md' | sed -E 's/.*id:[[:space:]]*//' || true)"
   if [[ -n "$ids" ]]; then
     local dupes
     dupes="$(printf '%s\n' "$ids" | sed '/^$/d' | sort | uniq -d || true)"
@@ -243,7 +245,7 @@ check_duplicate_ids() {
 
 check_status_values() {
   local invalid
-  invalid="$(rg -n '^status:' docs/project --glob '*.md' -g '!**/README.md' | grep -Ev 'status:[[:space:]]*(下書き|提案中|採用|非推奨|保管)$' || true)"
+  invalid="$(rg -n '^status:' docs/project --glob '*.md' -g '!**/index.md' | grep -Ev 'status:[[:space:]]*(下書き|提案中|採用|非推奨|保管)$' || true)"
   if [[ -n "$invalid" ]]; then
     log_error "found invalid document status value"
     printf '%s\n' "$invalid"
@@ -264,7 +266,7 @@ check_archive_placement() {
         log_error "active file is marked as 保管: $file"
       fi
     fi
-  done < <(find docs/project -type f -name '*.md' -not -name 'README.md' | sort)
+  done < <(find docs/project -type f -name '*.md' -not -name 'index.md' | sort)
 }
 
 check_markdown_links() {

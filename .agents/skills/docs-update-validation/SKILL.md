@@ -10,7 +10,7 @@ argument-hint: "check=<確認項目> trigger=<変更理由>"
 
 ## 前提資料
 
-- `docs/project/README.md`
+- `docs/project/index.md`
 - `docs/project/glossary/core.md`
 - `docs/project/validation.md`
 - `.agents/skills/docs-update-validation/references/best-practices.md`

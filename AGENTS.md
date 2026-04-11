@@ -2,7 +2,7 @@
 
 1. `.agents/project.md`
 2. 対象の `.agents/tasks/task-*.md`
-3. 必要に応じて `docs/project/README.md`
+3. 必要に応じて `docs/project/index.md`
 
 ## 責務の境界
 
@@ -13,7 +13,7 @@
 
 - まず `.agents/project.md` を読む
 - 対象 task がある場合は `.agents/tasks/task-*.md` を読む
-- `docs/project/README.md` から必要なカテゴリ README と個票へ降りる
+- `docs/project/index.md` から必要なカテゴリ `index.md` と個票へ降りる
 - 必読用語は `docs/project/glossary/core.md` を優先する
 - archive は明示的に必要な場合だけ読む
 - 不要な全文走査と重複読書を避ける

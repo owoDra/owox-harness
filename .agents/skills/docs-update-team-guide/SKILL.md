@@ -10,9 +10,9 @@ argument-hint: "team=<team> role=<役割> scope=<担当範囲>"
 
 ## 前提資料
 
-- `docs/project/README.md`
+- `docs/project/index.md`
 - `docs/project/glossary/core.md`
-- `docs/project/teams/README.md`
+- `docs/project/teams/index.md`
 - `.agents/skills/docs-update-team-guide/references/team-guide.template.md`
 - `.agents/skills/docs-update-team-guide/references/best-practices.md`
 - 関連 requirement / spec / ADR / architecture / validation

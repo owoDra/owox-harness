@@ -10,8 +10,8 @@ argument-hint: "term=<用語> definition=<定義> aliases=<別名>"
 
 ## 前提資料
 
-- `docs/project/README.md`
-- `docs/project/glossary/README.md`
+- `docs/project/index.md`
+- `docs/project/glossary/index.md`
 - `docs/project/glossary/core.md`
 - `.agents/skills/docs-update-glossary/references/best-practices.md`
 - 関連 requirement / spec / ADR / architecture
