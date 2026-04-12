@@ -1,7 +1,7 @@
 ---
 name: docs-update-glossary
-description: プロジェクトで共通の用語集に用語を追加・統合・正規化するときに使用する
-argument-hint: "term=<用語> definition=<定義> aliases=<別名>"
+description: プロジェクトの用語集に用語を追加、統合、正規化するときに使用する
+argument-hint: "用語=<用語> 定義=<定義> 別名=<別名>"
 ---
 
 ## 目的
@@ -10,49 +10,31 @@ argument-hint: "term=<用語> definition=<定義> aliases=<別名>"
 
 ## 前提資料
 
-- `docs/project/index.md` と関連資料を参照して、用語が使われる文脈、利用言語、責務チーム、外部依存、影響範囲を把握する
-- `docs/project/glossary.md` を参照して既存の用語、命名、書式を把握する
-- `docs/project/architecture.md` を参照して用語集の責務境界を把握する
-- `./references/best-practices.md` を参照して定義の作り方と採録基準を把握する
-- 依頼のきっかけになった requirement / spec / ADR / task / code comment を参照して用語の実使用を確認する
-
-## 前提知識
-
-- 用語集は「このプロジェクトでの意味」を固定する正本であり、一般辞書ではない
-- 既存の正規名称がある場合は新語を増やすより既存項目を更新する
-- 1 用語 1 概念を基本とし、別名や略称は正規名称へ寄せる
+- `docs/project/index.md`
+- `docs/project/glossary/index.md`
+- `docs/project/glossary/core.md`
+- `.agents/skills/_shared/document-reference-rules.md`
+- `.agents/skills/docs-update-glossary/references/best-practices.md`
+- 関連 requirement / spec / ADR / architecture
 
 ## やること
 
-1. `request_user_input` で、追加または更新したい用語、背景、想定読者、別名の有無を確認する
-2. `rg` で `docs/project/` と必要なら実装側を検索し、既存の表記揺れ・類義語・略称を洗い出す
-3. その用語を用語集に入れるべきかを判断する
-   - このプロジェクトで繰り返し使う
-   - 一般語でもこのプロジェクト固有の意味を持つ
-   - 読み手が誤解しやすい
-   - requirement / spec / ADR の理解に効く
-4. 既存項目で吸収できる場合は新規追加せず、正規名称を 1 つに決めて既存定義を更新する
-5. 新規追加または更新する定義を書く
-   - 先頭文で「それが何か」を短く定義する
-   - 必要なときだけ 2 文目以降で境界・対比・使い分けを書く
-   - 未定義の専門語や循環参照を避ける
-6. `docs/project/glossary.md` を更新する
-   - 基本形は `## 用語名` とその直下の簡潔な定義
-   - 別名や略称を残す必要がある場合は、正規名称の定義文中で明示する
-   - 既存ファイルの体裁を大きく崩さず、差分は最小限に保つ
-7. 用語の正規化が必要なら、関係するプロジェクト資料の表記揺れ修正を提案または実施する
+1. 必要なら `request_user_input` で追加、更新したい用語と背景を確認する
+2. 既存用語、表記揺れ、別名を調べる
+3. `core.md` に置くべきか、分野別ファイルに置くべきか判断する
+4. 定義を追加または更新し、必要なら他資料の表記統一を行う
+5. `.agents/skills/_shared/document-reference-rules.md` に従い、`docs/project/glossary/index.md` を必ず更新する
 
 ## ルール
 
-- 用語名は用語集の既存命名を優先する
-- 同義語の新規項目を安易に増やさない
-- 定義は 1 から 3 文で簡潔に書く
-- 「なぜ重要か」より先に「何か」を定義する
-- 実装詳細や一時的な運用メモを用語定義に混ぜない
+- 用語集は一般辞書ではなく、このプロジェクトでの意味を固定する場所として扱う
+- 1 用語 1 概念を基本にする
+- 参照の書き方は `.agents/skills/_shared/document-reference-rules.md` に従う
+- 実装詳細や一時運用メモを定義に混ぜない
 
 ## 確認事項
 
-- `request_user_input` または同等の確認で依頼意図を確認した
-- 類義語・略称・既存項目の有無を調べた
-- 追加した用語が glossary の責務に収まっている
-- 定義だけで意味が通り、他資料に過度に依存していない
+- 類義語と既存項目を確認した
+- 先頭文だけで意味が通る定義になっている
+- core と分野別ファイルの置き分けが妥当である
+- `docs/project/glossary/index.md` を更新した

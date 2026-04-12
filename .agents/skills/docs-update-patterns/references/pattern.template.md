@@ -1,35 +1,24 @@
 ---
-id: PAT-<CATEGORY>-<NNN>
-title: <title>
-status: <draft|proposed|accepted|deprecated|superseded>
-category: <impl|data|ui|ux|api|test|ops|architecture>
-primary_owner_team: <team>
-supporting_teams: []
-affected_subprojects: []
-related_requirements: []
-related_specs: []
-related_adrs: []
-related_validations: []
-review_required_from: []
-last_reviewed_at: YYYY-MM-DD
+status: <下書き|提案中|採用|非推奨|保管>
+related:
+  - <関連資料IDまたはパス>
+subproject: <必要な場合のみ>
 ---
 
-# 目的
+# <title>
 
-# 適用範囲
+## 目的
 
-# 適用しない範囲
+## 適用範囲
 
-# パターン
+## 適用しない範囲
 
-# 適用条件
+## パターン
 
-# 例外 / 逸脱条件
+## 適用条件
 
-# 根拠
+## 例外 / 逸脱条件
 
-# 関連する正本
+## 根拠
 
-# 例
-
-# 備考
+## 関連資料

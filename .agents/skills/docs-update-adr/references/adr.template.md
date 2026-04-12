@@ -1,17 +1,19 @@
 ---
-id: ADR-<NNN>
-title: <title>
-status: <proposed|accepted|rejected|deprecated|superseded>
-scope: []
-tags: []
-related_requirements: []
-related_specs: []
+id: ADR-<NNN>-<short-title>
+status: <下書き|提案中|採用|非推奨|保管>
+related:
+  - <関連資料IDまたはパス>
+subproject: <必要な場合のみ>
 ---
 
-# 経緯
+# <title>
 
-# 判断基準
+## 背景
 
-# 代替案
+## 判断
 
-# 結論
+## 代替案
+
+## 結果
+
+## 関連資料

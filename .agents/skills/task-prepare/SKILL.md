@@ -1,38 +1,62 @@
 ---
 name: task-prepare
-description: ユーザーからリクエストを受けて何かを行うときに必ず使用する
+description: ユーザーからの依頼を受けて、対象範囲、禁止事項、完了条件を整理し、次に使う task 系 skill を決めるときに使用する
+argument-hint: "目的=<今回の依頼> 進め方=<自走|対話>"
 ---
 
-# 目的
+## 目的
 
-ユーザーのリクエストに対してエージェントがやるべき内容に齟齬がないように必要な情報を整理してタスク内容の確認を行う
+依頼内容の認識ずれを減らし、この turn で何を達成するかを明確にしてから後続 task に渡す。
 
-# 初期化例外
+## 初期化例外
 
-- `.agents/project.yaml` が存在しない場合、このスキルで確認を進めず `harness-init` を先に実行する
-- `harness-init` 完了後に、このスキル相当の確認へ戻る
+- `.agents/project.md` が未初期化、または placeholder のままなら `harness-init` を先に使う
+- `harness-init` の完了後に、この skill 相当の整理へ戻る
 
-# 前提資料
+## 前提資料
 
-- `./references/task.example.md` を参照して `tasks/task-*.md` のフォーマットを把握
-- `docs/project/glossary.md` を参照して共通用語と命名を把握する
-- `docs/project/architecture.md` を参照して普遍的なルール・指針を把握する
-- `.agents/project.yaml` を読み以下を把握する
-  - `project.name`: プロジェクト名
-  - `project.description`: プロジェクト説明
-  - `project.kind`: プロジェクトの種類 (`simple`: 単一プロジェクト構成, `monorepo`: 複数のサブプロジェクトが含まれるプロジェクト構成)
-  - `project.lang`: プロジェクトで使用する言語。すべての返答・コメント・ドキュメントはこの言語を使用する
-  - `project.teams`: プロジェクトにかかわるチームとその役割のマップ
-  - `project.integrations`: プロジェクトで参照する外部API・サービスとその役割のマップ
-  - `project.subprojects`: プロジェクトが `monorepo` だった際に内包するサブプロジェクトのマップ
+- `.agents/project.md`
+- `.agents/skills/_shared/task-template.md`
+- `.agents/skills/_shared/execution-modes.md`
+- `.agents/skills/_shared/request-user-input-policy.md`
+- `docs/project/index.md`
+- `docs/project/glossary/core.md`
+- `docs/project/tech-stack.md`
+- `docs/project/patterns/index.md`
+- `docs/project/architecture.md` が存在する場合は参照する
 
-# やること
+## やること
 
-1. ユーザーリクエストに対して以下を `request_user_input` ツールで提案も含めて質問して確認してください
-  - 作業内容に齟齬がないか
-  - どのように進めるか
-  - 禁止事項はあるか
-  - その他不明確で質問すべきものがあれば質問を追加
-2. 確認したタスクについてどのチームの分野かを判断して該当チームの `docs/project/teams/<team>-guide.md` を参照
-3. タスク内容に応じた `task-*` スキルを使用して `tasks/task-*.md` を作成してタスクを進める
-4. 完了後に作成した `tasks/task-*.md` の進捗を更新する
+1. 依頼内容を読み、達成したいこと、禁止事項、曖昧な点を切り分ける
+2. 必要なら `request_user_input` で次を確認する
+   - 今回の目的
+   - 進め方を `自走` と `対話` のどちらにするか
+   - 何を変えたいか
+   - どこまで変えてよいか
+   - 何を変えてはいけないか
+   - 完了条件は何か
+3. `.agents/skills/_shared/execution-modes.md` を参照し、後続 task をどう進めるかと、どこで確認を挟むかを task に記録する
+4. 対象 task に対応する skill を選ぶ
+   - 調査中心なら `task-discovery`
+   - 実装中心なら `task-implementation`
+   - 不具合修正なら `task-fix`
+   - レビューなら `task-review`
+   - 検証なら `task-validation`
+5. `.agents/tasks/task-<short-title>.md` を作成または更新し、後続 skill へ引き継ぐ
+
+## ルール
+
+- task は進捗メモではなく文脈キャッシュとして扱う
+- 未確定事項を確定前提に混ぜない
+- 実装や編集に入る前に対象範囲と対象外を明文化する
+- `docs/project/tech-stack.md` と `docs/project/patterns/index.md` を読み飛ばさない
+- 必要な確認を通常会話だけで済ませず、可能なら `request_user_input` を使う
+
+## 確認事項
+
+- 次に使う task 系 skill が明確である
+- 目的と進め方が task に書かれている
+- 対象範囲と対象外が分かれている
+- 完了条件が task に書かれている
+- `docs/project/tech-stack.md` と `docs/project/patterns/index.md` を参照した
+- 後続が最初に読む task が更新されている

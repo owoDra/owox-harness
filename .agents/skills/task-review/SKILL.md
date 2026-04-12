@@ -1,7 +1,7 @@
 ---
 name: task-review
-description: コード、資料、設計のレビューが主目的のタスクを開始し、進め方と判断ゲートを定めて指摘と結論を整理するときに使用する
-argument-hint: "goal=<何をレビューするか> mode=<agent-led|collab-led>"
+description: コード、資料、設計のレビューが主目的の task を開始し、指摘と結論を整理するときに使用する
+argument-hint: "目的=<何をレビューするか> 進め方=<自走|対話>"
 ---
 
 ## 目的
@@ -10,74 +10,40 @@ argument-hint: "goal=<何をレビューするか> mode=<agent-led|collab-led>"
 
 ## 前提資料
 
-- `../task-prepare/references/task.example.md` を参照して `tasks/task-*.md` の基本フォーマットを把握する
-- `docs/project/glossary.md` を参照して用語と命名を統一する
-- `docs/project/architecture.md` があれば参照して普遍ルールを確認する
-- `.agents/project.yaml` があれば読みプロジェクト、チーム、サブプロジェクト、外部依存を把握する
-- レビュー対象に関連する requirement、pattern、spec、ADR、validation、code、test、docs を参照する
-- 該当チームの `docs/project/teams/<team>-guide.md` があれば参照する
-- `./references/best-practices.md` を参照して review の進め方を把握する
-
-## 前提知識
-
-- review は要約より指摘事項の発見と優先順位づけが主目的である
-- 指摘は正本、コード、テスト、挙動のいずれかに結びつける
-- 修正案があっても、まず問題を明確に定義する
+- `.agents/project.md`
+- `.agents/skills/_shared/task-template.md`
+- `.agents/skills/_shared/execution-modes.md`
+- `.agents/skills/_shared/request-user-input-policy.md`
+- `docs/project/index.md`
+- `docs/project/glossary/core.md`
+- `docs/project/tech-stack.md`
+- `docs/project/patterns/index.md`
+- `docs/project/architecture.md` が存在する場合は参照する
+- レビュー対象に対応する requirement / spec / pattern / ADR / validation / code / test
 
 ## やること
 
-1. ユーザー依頼と `task-prepare` の確認結果をもとに、`request_user_input` ツールで `goal`、`execution_mode`、レビュー対象、禁止事項、完了条件を確認する
-2. `tasks/task-*.md` を作成し、少なくとも以下を記載する
-   - 何を達成するか
-   - どこを変えてよいか
-   - 守るべき不変条件
-   - 更新すべき正本
-   - 実行すべき検証
-   - 完了条件
-   - 進捗
-3. `execution_mode` を明示して進め方を決める
-   - `agent-led`: レビュー方針と停止条件を共有したうえで、Agents 主導で確認、指摘整理、結論提示まで進める
-   - `collab-led`: 注目観点、優先度、指摘採否の考え方を節目ごとに確認しながら進める
-4. ユーザーの判断が必要な項目は `request_user_input` ツールを使って確認する
-   - レビュー観点の優先順位
-   - 対象範囲の切り方
-   - 既知の懸念の扱い
-   - 指摘後に修正へ進むか
-5. レビュー開始前に以下を明文化する
-   - 対象
-   - 対象外
-   - 優先観点
-   - 比較対象となる正本
-   - 停止条件
-6. 正本と変更内容を比較し、指摘事項を整理する
-7. 指摘事項ごとに以下を明確にする
-   - 何が問題か
-   - どの正本、コード、テストと関係するか
-   - どの程度の重大度か
-   - 修正が必要か
-   - 既存 pattern からの逸脱か、pattern 化不足か
-8. 判断ゲートで停止して確認する
-   - `agent-led`: 指摘採否に大きく影響する前提差異、高リスク懸念、レビュー対象の認識違いがある場合のみ `request_user_input` ツールで確認する
-   - `collab-led`: 優先観点確定後、主要 finding 整理後、次アクション提案前に `request_user_input` ツールで確認する
-9. 後続に渡せる成果物を残す
-   - 指摘事項一覧
-   - 未解決事項
-   - 推奨する次タスク種別
-10. 完了後に `tasks/task-*.md` の進捗を更新する
+1. 対象 `.agents/tasks/task-*.md` を作成または更新し、対象、対象外、優先観点、停止条件を明文化する
+2. 必要なら `request_user_input` で `目的`、`進め方`、レビュー観点の優先順位や対象範囲を確認する
+3. `.agents/skills/_shared/execution-modes.md` を参照し、今回を `自走` か `対話` のどちらで進めるかと、どこで確認を挟むかを task に残す
+4. 正本とレビュー対象を読み比べ、指摘候補を集める
+5. 指摘ごとに問題点、根拠、重大度、影響範囲を整理する
+6. 問題がない場合も残留リスクや検証不足を整理する
+7. 推奨する次 task を task に残す
 
 ## ルール
 
-- 指摘事項を重大度順に整理する
+- 指摘は重大度順に整理する
 - 根拠のない推測を断定しない
-- 問題がない場合も残留リスクや検証上の不足を明示する
-- 既存 pattern に従っているか、pattern 化できる重複がないかを確認する
-- ユーザー判断が必要な確認は必ず `request_user_input` ツールを使う
+- 指摘より先に要約を書かない
+- `docs/project/tech-stack.md` と `docs/project/patterns/index.md` を読み飛ばさない
+- 問題なしの場合も残留リスクを明示する
 
 ## 確認事項
 
-- `goal` と `execution_mode` の確認に `request_user_input` ツールを使っている
-- 対象、対象外、優先観点、停止条件が明文化されている
-- 指摘事項が根拠と重大度つきで整理されている
-- pattern 逸脱または pattern 化不足の有無を確認している
-- 問題なしの場合も残留リスクまたは検証上の不足を明示している
-- `tasks/task-*.md` の進捗が更新されている
+- 対象と対象外が明確である
+- 目的と進め方が明確である
+- 指摘事項に根拠と重大度がある
+- `docs/project/tech-stack.md` と `docs/project/patterns/index.md` を参照した
+- 問題なしの場合も残留リスクまたは検証不足があるか確認した
+- 次アクションが整理されている

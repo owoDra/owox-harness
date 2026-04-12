@@ -1,7 +1,7 @@
 ---
 name: docs-update-validation
-description: プロジェクトの品質担保のための検証事項を追加・更新・改訂するときに使用する
-argument-hint: "check=<確認項目> trigger=<変更理由>"
+description: プロジェクトの品質担保のための検証事項を追加、更新、改訂するときに使用する
+argument-hint: "確認項目=<確認項目> 変更理由=<変更理由>"
 ---
 
 ## 目的
@@ -10,46 +10,34 @@ argument-hint: "check=<確認項目> trigger=<変更理由>"
 
 ## 前提資料
 
-- `docs/project/index.md` と関連資料を参照して、検証対象の文脈、利用言語、責務チーム、外部依存、影響範囲を把握する
-- `docs/project/glossary.md` を参照して品質項目、検証用語、命名を統一する
-- `docs/project/validation.md` を参照して既存の確認項目と粒度を把握する
-- `./references/best-practices.md` を参照して validation 更新時の追従ルールを把握する
-- `./references/shared-check-candidates.md` を参照してプロダクト種別にかかわらず共有して検証すべき候補項目を把握する
-- `./references/validation.example.md` を参照して基本フォーマットを把握する
-- 関連する architecture / spec / 実装コード / テストコード / ADR / tech-stack を参照して現状との整合を確認する
-
-## 前提知識
-
-- validation は何をいつどう検証するかの正本である
-- validation を変えると、対応するテストコードも変えなければ整合しない
-- 検証観点の変更は architecture、ADR、技術スタックに波及することがある
+- `docs/project/index.md`
+- `docs/project/glossary/core.md`
+- `docs/project/validation.md`
+- `.agents/skills/_shared/document-reference-rules.md`
+- `.agents/skills/_shared/document-update-checklist.md`
+- `.agents/skills/docs-update-validation/references/best-practices.md`
+- `.agents/skills/docs-update-validation/references/shared-check-candidates.md`
+- `.agents/skills/docs-update-validation/references/validation.template.md`
+- 関連 architecture / spec / code / test / ADR / tech-stack
 
 ## やること
 
-1. `./references/shared-check-candidates.md` をもとに、共通で検証候補にすべき項目を抽出する
-2. `request_user_input` で、変更理由、影響範囲、候補項目ごとに「採用するか」「何で検証するか」を確認する
-3. 候補項目ごとに validation に書くべき内容か判断する
-   - いつ行うか
-   - 何で検証するか
-   - 求める結果
-   - 問題があった際にどうするか
-4. フォーマットに従って `docs/project/validation.md` を追加または更新する
-5. validation 変更後に、関連するテストコードをすべて変更する
-6. validation 変更後に、対応する spec と実装コードへの影響を見直す
-7. 検証方針の根拠変更がある場合は `docs-update-adr` を使って ADR を作成または更新する
-8. 検証基盤や採用ツールに変更が及ぶ場合は `docs-update-tech-stack` も更新する
+1. 共有候補から検証項目候補を整理する
+2. 必要なら `request_user_input` で採用する検証項目、検証手段、期待結果を確認する
+3. `docs/project/validation.md` を更新する
+4. `.agents/skills/_shared/document-reference-rules.md` に従い、`docs/project/index.md` を必ず更新する
+5. validation 変更に伴う test / spec / architecture / ADR / tech-stack 影響を確認する
 
 ## ルール
 
-- validation を変更する場合はテストコードをすべて変更する
-- 共通候補を確認せずに自由に項目を増やしすぎない
-- 文書上の検証項目と実際のテスト手段を乖離させない
-- architecture と矛盾する検証方針を書かない
-- 変更理由が重要判断なら ADR に残す
+- validation 変更をテスト変更と切り離さない
+- 共通候補を見ずに項目を増やしすぎない
+- 参照の書き方は `.agents/skills/_shared/document-reference-rules.md` に従う
+- 文書上の検証項目と実際の検証手段を乖離させない
 
 ## 確認事項
 
-- `request_user_input` または同等の確認で変更理由、対象範囲、候補項目ごとの検証手段を確認した
-- `docs/project/validation.md` の確認項目が更新されている
-- 関連するテストコードをすべて変更した
-- spec / 実装コード / ADR / tech-stack の更新要否も確認した
+- 変更理由と対象範囲が明確である
+- 検証項目ごとに手段と期待結果がある
+- `docs/project/index.md` を更新した
+- test / spec / ADR / tech-stack 影響を確認した

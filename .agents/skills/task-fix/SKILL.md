@@ -1,76 +1,50 @@
 ---
 name: task-fix
-description: 不具合修正、レビュー指摘対応、失敗修正が主目的のタスクを開始し、進め方と判断ゲートを定めて原因調査から修正完了まで進めるときに使用する
-argument-hint: "goal=<何を直すか> mode=<agent-led|collab-led>"
+description: 不具合修正、レビュー指摘対応、失敗修正が主目的の task を開始し、原因調査から回帰確認まで進めるときに使用する
+argument-hint: "目的=<何を直すか> 進め方=<自走|対話>"
 ---
 
 ## 目的
 
-問題の再現、原因特定、修正、回帰確認を行い、必要な資料更新まで含めて修正を完了させる。
+症状の確認、原因特定、修正、回帰確認を行い、必要な正本更新まで含めて修正を完了させる。
 
 ## 前提資料
 
-- `../task-prepare/references/task.example.md` を参照して `tasks/task-*.md` の基本フォーマットを把握する
-- `docs/project/glossary.md` を参照して用語と命名を統一する
-- `docs/project/architecture.md` があれば参照して普遍ルールを確認する
-- `.agents/project.yaml` があれば読みプロジェクト、チーム、サブプロジェクト、外部依存を把握する
-- 関連する requirement、spec、ADR、validation、code、test、既知 issue を参照する
-- 該当チームの `docs/project/teams/<team>-guide.md` があれば参照する
-- `./references/best-practices.md` を参照して fix の進め方を把握する
-
-## 前提知識
-
-- fix は症状だけでなく原因と再発防止観点まで扱う
-- 修正は再現条件と回帰確認がそろって初めて完了といえる
-- レビュー指摘対応でも、指摘内容を鵜呑みにせず根拠を確認する
+- `.agents/project.md`
+- `.agents/skills/_shared/task-template.md`
+- `.agents/skills/_shared/document-update-checklist.md`
+- `.agents/skills/_shared/execution-modes.md`
+- `.agents/skills/_shared/request-user-input-policy.md`
+- `docs/project/index.md`
+- `docs/project/glossary/core.md`
+- `docs/project/tech-stack.md`
+- `docs/project/patterns/index.md`
+- `docs/project/architecture.md` が存在する場合は参照する
+- 関連 requirement / spec / ADR / validation / code / test
 
 ## やること
 
-1. ユーザー依頼と `task-prepare` の確認結果をもとに、`request_user_input` ツールで `goal`、`execution_mode`、対象症状、禁止事項、完了条件を確認する
-2. `tasks/task-*.md` を作成し、少なくとも以下を記載する
-   - 何を達成するか
-   - どこを変えてよいか
-   - 守るべき不変条件
-   - 更新すべき正本
-   - 実行すべき検証
-   - 完了条件
-   - 進捗
-3. `execution_mode` を明示して進め方を決める
-   - `agent-led`: 再現方針と停止条件を共有したうえで、Agents 主導で原因調査、修正、回帰確認まで進める
-   - `collab-led`: 再現結果、原因仮説、修正方針、回帰確認を節目ごとに確認しながら進める
-4. ユーザーの判断が必要な項目は `request_user_input` ツールを使って確認する
-   - 症状の優先順位
-   - 再現条件の解釈
-   - 修正方針の選択
-   - 互換性への影響許容
-5. 修正開始前に以下を明文化する
-   - 症状
-   - 再現条件
-   - 影響範囲
-   - 守るべき不変条件
-   - 回帰確認方法
-   - 停止条件
-6. 症状を再現または確認する
-7. 原因候補を絞り、根本原因を特定する
-8. 修正する
-9. 回帰確認と関連テストを実行する
-10. 変更に応じて正本更新要否を確認する
-11. 判断ゲートで停止して確認する
-   - `agent-led`: 原因が想定と異なる、高リスク変更が必要、仕様変更が必要になった場合のみ `request_user_input` ツールで確認する
-   - `collab-led`: 再現結果確認後、原因特定後、修正方針確定後に `request_user_input` ツールで確認する
-12. 完了後に `tasks/task-*.md` の進捗を更新する
+1. 対象 `.agents/tasks/task-*.md` を作成または更新し、症状、再現条件、停止条件、回帰確認方法を明文化する
+2. 必要なら `request_user_input` で `目的`、`進め方`、症状の優先順位、互換性への影響許容、完了条件を確認する
+3. `.agents/skills/_shared/execution-modes.md` を参照し、今回を `自走` か `対話` のどちらで進めるかと、どこで確認を挟むかを task に残す
+4. 症状を再現または確認する
+5. 原因候補を絞り、根本原因を特定する
+6. 最小限の修正を行い、関連テストと回帰確認を実施する
+7. 必要な正本更新要否を確認し、task に記録する
 
 ## ルール
 
 - 再現または症状確認なしに修正を始めない
 - 症状、原因、修正、回帰確認を分けて記録する
 - 仕様問題を実装だけで隠さない
-- ユーザー判断が必要な確認は必ず `request_user_input` ツールを使う
+- `docs/project/tech-stack.md` と `docs/project/patterns/index.md` を読み飛ばさない
+- 高リスク変更が必要なら `request_user_input` を使う
 
 ## 確認事項
 
-- `goal` と `execution_mode` の確認に `request_user_input` ツールを使っている
-- 症状、再現条件、停止条件が明文化されている
-- 原因と修正内容が分けて整理されている
-- 回帰確認を実行している
-- `tasks/task-*.md` の進捗が更新されている
+- 症状と再現条件が明確である
+- 目的と進め方が明確である
+- 原因が整理されている
+- `docs/project/tech-stack.md` と `docs/project/patterns/index.md` を参照した
+- 回帰確認方法と結果が残っている
+- 正本更新の要否を確認した

@@ -1,77 +1,46 @@
 ---
 name: task-close
-description: タスク完了時に成果、未完了事項、正本更新、引き継ぎを整理してクローズするときに使用する
-argument-hint: "goal=<何を閉じるか> mode=<agent-led|collab-led>"
+description: task 完了時に成果、未完了事項、更新した正本、次アクションを整理して閉じるときに使用する
+argument-hint: "目的=<何を閉じるか> 進め方=<自走|対話>"
 ---
 
 ## 目的
 
-タスクの成果、未完了事項、残課題、更新済み正本、次アクションを整理し、再開や引き継ぎが可能な状態でタスクを閉じる。
+task の成果、未完了事項、残課題、更新済み正本、次アクションを整理し、再開や引き継ぎが可能な状態で閉じる。
 
 ## 前提資料
 
-- `../task-prepare/references/task.example.md` を参照して `tasks/task-*.md` の基本フォーマットを把握する
-- `docs/project/glossary.md` を参照して用語と命名を統一する
-- `docs/project/architecture.md` があれば参照して普遍ルールを確認する
-- `.agents/project.yaml` があれば読みプロジェクト、チーム、サブプロジェクト、外部依存を把握する
-- 対象 task に関連する requirement、spec、ADR、validation、code、test、docs、`tasks/task-*.md` を参照する
-- 該当チームの `docs/project/teams/<team>-guide.md` があれば参照する
-- `./references/best-practices.md` を参照して close の進め方を把握する
-
-## 前提知識
-
-- close は単なる終了宣言ではなく、成果と残課題の整理である
-- 完了したことと、意図的に残したことを分けて残す
-- 後続が再開できる状態まで整えて初めて close といえる
+- `.agents/project.md`
+- `.agents/skills/_shared/task-template.md`
+- `.agents/skills/_shared/task-statuses.md`
+- `.agents/skills/_shared/execution-modes.md`
+- `.agents/skills/_shared/request-user-input-policy.md`
+- `docs/project/index.md`
+- `docs/project/tech-stack.md`
+- `docs/project/patterns/index.md`
+- 関連する requirement / spec / ADR / validation / code / test / docs
 
 ## やること
 
-1. ユーザー依頼と `task-prepare` の確認結果をもとに、`request_user_input` ツールで `goal`、`execution_mode`、クローズ対象、禁止事項、完了条件を確認する
-2. `tasks/task-*.md` を更新し、少なくとも以下を見直す
-   - 何を達成したか
-   - どこを変えたか
-   - 守った不変条件
-   - 更新した正本
-   - 実行した検証
-   - 完了条件の充足状況
-   - 進捗
-3. `execution_mode` を明示して進め方を決める
-   - `agent-led`: 整理観点と停止条件を共有したうえで、Agents 主導で成果整理、残課題整理、クローズ更新まで進める
-   - `collab-led`: 完了判定、残課題の扱い、次アクション提案を節目ごとに確認しながら進める
-4. ユーザーの判断が必要な項目は `request_user_input` ツールを使って確認する
-   - 完了とみなす範囲
-   - 未完了事項の扱い
-   - 引き継ぎ先または次タスク
-   - 追加で残すべきサマリ
-5. クローズ前に以下を明文化する
-   - 完了したこと
-   - 未完了事項
-   - 既知の残課題
-   - 更新済み正本
-   - 実施済み検証
-   - 停止条件
-6. 完了条件を見直し、満たしているか確認する
-7. 後続に渡す情報を整理する
-   - 成果サマリ
-   - 未完了事項
-   - 残課題
-   - 次の推奨 task 種別
-8. 判断ゲートで停止して確認する
-   - `agent-led`: 完了条件未達、残課題の優先度が高い、追加作業が必要な場合のみ `request_user_input` ツールで確認する
-   - `collab-led`: 完了判定前、残課題整理後、次アクション確定前に `request_user_input` ツールで確認する
-9. `tasks/task-*.md` の進捗を最終更新する
+1. 対象 `.agents/tasks/task-*.md` を更新し、完了したこと、未完了事項、残課題、更新した正本、検証結果を整理する
+2. 必要なら `request_user_input` で `目的`、`進め方`、完了とみなす範囲や次アクションを確認する
+3. `.agents/skills/_shared/execution-modes.md` を参照し、今回を `自走` か `対話` のどちらで進めるかと、どこで確認を挟むかを task に残す
+4. 完了条件を満たしているか確認する
+5. `状態` を適切な値へ更新し、`次に読むもの` を残す
 
 ## ルール
 
 - 完了と未完了を混ぜない
-- 完了条件未達なら close せず次 task へ送る
+- 完了条件未達なら完了扱いにしない
 - 残課題は曖昧にぼかさない
-- ユーザー判断が必要な確認は必ず `request_user_input` ツールを使う
+- `docs/project/tech-stack.md` と `docs/project/patterns/index.md` を読み飛ばさない
+- 次の作業で最初に読む情報を残す
 
 ## 確認事項
 
-- `goal` と `execution_mode` の確認に `request_user_input` ツールを使っている
-- 完了したこと、未完了事項、残課題が分離されている
-- 更新済み正本と実施済み検証が整理されている
-- 次の推奨 task 種別が示されている
-- `tasks/task-*.md` の進捗が最終更新されている
+- 完了したことと未完了事項が分離されている
+- 目的と進め方が明確である
+- 更新済み正本と検証結果が整理されている
+- `docs/project/tech-stack.md` と `docs/project/patterns/index.md` を参照した
+- 次アクションまたは次に読むものが残っている
+- task の状態が最終化されている

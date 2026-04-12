@@ -1,38 +1,29 @@
 ---
-id: SPEC-<CATEGORY>-<NNN>
-title: <title>
-status: <draft|proposed|accepted|deprecated|superseded>
-category: <flow|state|permission|interaction|api|data>
-related_requirements: []
-related_adrs: []
-related_validations: []
-affected_components: []
-compatibility: <backward-compatible|breaking|internal-only>
-last_reviewed_at: YYYY-MM-DD
+id: SPEC-<category>-<short-title>
+status: <下書き|提案中|採用|非推奨|保管>
+related:
+  - <関連資料IDまたはパス>
+subproject: <必要な場合のみ>
 ---
 
-# 概要
+# <title>
 
-# 関連要求
+## 概要
 
-# 用語と規範
+## 関連要求
 
-# 入力
+## 入力
 
-# 出力
+## 出力
 
-# 振る舞い
+## 挙動
 
-# 状態遷移 / 不変条件
+## 状態遷移 / 不変条件
 
-# エラー / 例外
+## エラー / 例外
 
-# 横断ルール
+## 横断ルール
 
-# 互換性 / 非推奨化
+## 検証観点
 
-# 例
-
-# 検証観点
-
-# 備考
+## 関連資料

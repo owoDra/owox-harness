@@ -46,20 +46,24 @@ RUN mkdir -p /etc/apt/keyrings \
 # ---------- Python Dev Environment ----------
 RUN curl -LsSf https://astral.sh/uv/install.sh | env UV_INSTALL_DIR=/usr/local/bin sh
 
-# ---------- Codex ----------
+# ---------- OpenCode ----------
+RUN npm install -g opencode-ai
 RUN npm install -g @openai/codex
 
 RUN mkdir -p \
-  /home/vscode/.codex \
+  /home/vscode/.config/opencode \
+  /home/vscode/.local/share/opencode \
+  /home/vscode/.cache/opencode \
   /home/vscode/.npm-global \
   /home/vscode/.local/bin \
   /home/vscode/.local/share/pnpm \
+  /home/vscode/.local/share/opencode \
   /home/vscode/.cache/uv \
   /home/vscode/.cache/pip \
+  /home/vscode/.cache/opencode \
   /pnpm/store \
   && chown -R vscode:vscode /home/vscode /pnpm
 
-ENV CODEX_HOME=/home/vscode/.codex
 ENV NPM_CONFIG_PREFIX=/home/vscode/.npm-global
 ENV PNPM_HOME=/home/vscode/.local/share/pnpm
 ENV PNPM_STORE_DIR=/pnpm/store
