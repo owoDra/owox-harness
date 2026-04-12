@@ -1,7 +1,7 @@
 ---
 name: harness-validation
 description: ハーネスとプロジェクト資料の配置、命名、参照、責務分離の整合性を確認するときに使用する
-argument-hint: "scope=<all|skills|tasks|docs> mode=<agent-led|collab-led>"
+argument-hint: "範囲=<all|skills|tasks|docs> 進め方=<自走|対話>"
 ---
 
 ## 目的
@@ -19,7 +19,7 @@ argument-hint: "scope=<all|skills|tasks|docs> mode=<agent-led|collab-led>"
 
 ## やること
 
-1. 必要なら `request_user_input` で `scope`、完了条件、確認対象外を確認する
+1. 必要なら `request_user_input` で `範囲`、`進め方`、完了条件、確認対象外を確認する
 2. 必須資料の存在を確認する
 3. 配置ルール、命名規則、見出し、front matter、相互参照、責務分離、index 参照リストと実体の整合を確認する
 4. `.agents/scripts/validate_harness.sh` を使って機械検査を実行する

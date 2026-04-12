@@ -76,6 +76,30 @@ require_dir() {
   [[ -d "$path" ]] || log_error "missing directory: $path"
 }
 
+find_workspace_markdown_files() {
+  find . \
+    -type d \( \
+      -name .git -o \
+      -name .old -o \
+      -name node_modules -o \
+      -name bower_components -o \
+      -name vendor -o \
+      -name dist -o \
+      -name build -o \
+      -name coverage -o \
+      -name .next -o \
+      -name .nuxt -o \
+      -name .svelte-kit -o \
+      -name .turbo -o \
+      -name .cache -o \
+      -name .pnpm-store -o \
+      -name .yarn -o \
+      -name venv -o \
+      -name .venv \
+    \) -prune -o \
+    -type f -name '*.md' -print | sort
+}
+
 check_absent() {
   local path="$1"
   [[ ! -e "$path" ]] || log_error "unexpected legacy path remains: $path"
@@ -361,7 +385,7 @@ check_markdown_links() {
         log_error "broken markdown link in $file -> $target"
       fi
     done < <(grep -oE '\[[^]]+\]\(([^)]+)\)' "$file" || true)
-  done < <(find . -path './.git' -prune -o -path './.old' -prune -o -type f -name '*.md' -print | sort)
+  done < <(find_workspace_markdown_files)
 }
 
 check_required_layout

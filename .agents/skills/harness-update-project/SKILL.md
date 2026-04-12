@@ -1,7 +1,7 @@
 ---
 name: harness-update-project
 description: ハーネス用の project.md を追加、更新、正規化するときに使用する
-argument-hint: "field=<name|description|language|kind|subprojects|teams|integrations> change=<内容>"
+argument-hint: "項目=<name|description|language|kind|subprojects|teams|integrations> 変更内容=<内容>"
 ---
 
 ## 目的

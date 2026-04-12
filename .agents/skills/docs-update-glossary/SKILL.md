@@ -1,7 +1,7 @@
 ---
 name: docs-update-glossary
 description: プロジェクトの用語集に用語を追加、統合、正規化するときに使用する
-argument-hint: "term=<用語> definition=<定義> aliases=<別名>"
+argument-hint: "用語=<用語> 定義=<定義> 別名=<別名>"
 ---
 
 ## 目的
@@ -13,6 +13,7 @@ argument-hint: "term=<用語> definition=<定義> aliases=<別名>"
 - `docs/project/index.md`
 - `docs/project/glossary/index.md`
 - `docs/project/glossary/core.md`
+- `.agents/skills/_shared/document-reference-rules.md`
 - `.agents/skills/docs-update-glossary/references/best-practices.md`
 - 関連 requirement / spec / ADR / architecture
 
@@ -22,12 +23,13 @@ argument-hint: "term=<用語> definition=<定義> aliases=<別名>"
 2. 既存用語、表記揺れ、別名を調べる
 3. `core.md` に置くべきか、分野別ファイルに置くべきか判断する
 4. 定義を追加または更新し、必要なら他資料の表記統一を行う
-5. 分野別ファイルを追加、改名した場合は `docs/project/glossary/index.md` の参照リスト更新要否を確認する
+5. `.agents/skills/_shared/document-reference-rules.md` に従い、`docs/project/glossary/index.md` を必ず更新する
 
 ## ルール
 
 - 用語集は一般辞書ではなく、このプロジェクトでの意味を固定する場所として扱う
 - 1 用語 1 概念を基本にする
+- 参照の書き方は `.agents/skills/_shared/document-reference-rules.md` に従う
 - 実装詳細や一時運用メモを定義に混ぜない
 
 ## 確認事項
@@ -35,4 +37,4 @@ argument-hint: "term=<用語> definition=<定義> aliases=<別名>"
 - 類義語と既存項目を確認した
 - 先頭文だけで意味が通る定義になっている
 - core と分野別ファイルの置き分けが妥当である
-- `docs/project/glossary/index.md` の更新要否を確認した
+- `docs/project/glossary/index.md` を更新した
