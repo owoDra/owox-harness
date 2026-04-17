@@ -1,4 +1,4 @@
-# Shared Specs
+# 共有仕様
 
 ## 役割
 
@@ -25,4 +25,5 @@
 
 ## 参照
 
-- 現在は共有仕様の個票なし: 追加時は `SPEC-<category>-<short-title>.md` を置く
+- `SPEC-workflow-core-contracts.md`: `owox` の workflow / task / verify / gate / handoff の共通契約
+- `SPEC-integration-adapter-contracts.md`: CLI adapter が満たすべき共通契約

@@ -1,4 +1,4 @@
-# Requirements
+# 要求
 
 ## 役割
 
@@ -28,4 +28,4 @@
 
 ## 参照
 
-- 現在は個票なし: requirement 追加時は `REQ-<category>-<short-title>.md` をこのディレクトリに置く
+- `REQ-harness-v2-foundation.md`: owox-harness v2 の要求定義

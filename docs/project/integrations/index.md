@@ -1,4 +1,4 @@
-# Integrations
+# 外部連携
 
 ## 役割
 
@@ -27,4 +27,8 @@
 
 ## 参照
 
-- 現在は個票なし: 追加時は `<integration>.md` を置く
+- `ai-coding-clis.md`: 4 つの主要 CLI にまたがる共通連携方針
+- `opencode.md`: OpenCode integration の個票
+- `claude-code.md`: Claude Code integration の個票
+- `codex.md`: Codex integration の個票
+- `copilot-cli.md`: GitHub Copilot CLI integration の個票

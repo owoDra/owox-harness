@@ -1,4 +1,4 @@
-# Specs
+# 仕様
 
 ## 役割
 
@@ -31,4 +31,7 @@
 ## 参照
 
 - `shared/index.md`: 複数 subproject にまたがる共有仕様の入口
-- 現在は subproject 固有仕様なし: 追加時は `<subproject>/index.md` と個票を作成する
+- `core/index.md`: `core` subproject 固有仕様の入口
+- `cli/index.md`: `cli` subproject 固有仕様の入口
+- `shared/SPEC-workflow-core-contracts.md`: workflow / task / verify / gate / handoff の共通仕様
+- `shared/SPEC-integration-adapter-contracts.md`: CLI adapter の共通仕様

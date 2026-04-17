@@ -1,4 +1,4 @@
-# Patterns
+# パターン
 
 ## 役割
 
@@ -34,4 +34,5 @@
 
 ## 参照
 
-- 現在は個票なし: 追加時はカテゴリ接頭辞付きの pattern 個票を置く
+- `impl-adapter-boundary.md`: adapter 境界を保つ実装パターン
+- `test-evidence-driven-validation.md`: evidence に基づく検証パターン

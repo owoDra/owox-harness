@@ -1,14 +1,178 @@
-# Validation
+# 検証
 
 ## 目的
 
-このファイルは、変更時に確認すべき検証方針を記録します。
+この文書は、`owox-harness` v2 を開発する際に確認すべき検証項目を定義します。
 
-## 読むべき場面
+## 検証の基本方針
 
-- 変更後に何をどう確認すべきか整理したいとき
-- 検証観点を追加または更新したいとき
+- source of truth と生成物の二重管理を防ぐ
+- workflow の状態遷移を壊さない
+- locale と hidden context の境界を壊さない
+- CLI adapter の差分を core に漏らさない
+- サブエージェント利用時と fallback 時の両方を検証する
 
-## 検証項目
+## 実装開始時の最小完了条件
 
-未記入
+- 変更対象に対応する requirement と spec を読んでいる
+- task に acceptance criteria と required checks がある
+- 実施した検証結果が evidence として残る
+- `validate` 相当の整合性確認が通る
+- 未実施検証がある場合は残リスクを明記する
+
+## P0: 毎回確認したい項目
+
+### V-1. スキーマ検証
+
+- `owox.harness.yaml` が schema に通る
+- 必須項目の欠落を検知できる
+- locale 設定が妥当である
+- profile 設定が妥当である
+
+### V-2. 生成の冪等性
+
+- 同じ入力で再生成して無駄な差分が出ない
+- 生成順序によって内容が変わらない
+- source → generated の対応が安定している
+
+### V-3. 正本と生成物の分離
+
+- `.agents/` や `AGENTS.md` を source として読んでいない
+- 生成物を手編集した結果が source に逆流しない
+
+### V-4. workflow 状態遷移
+
+- task 状態遷移が定義どおりに動く
+- 不正な状態遷移を拒否できる
+- gate 条件と verify 条件が正しく評価される
+
+### V-5. verify / guard / gate
+
+- 必須検証が実行される
+- 危険操作が期待どおり deny / ask / allow される
+- 人間確認が必要な条件で gate が立つ
+
+### V-6. 多言語境界
+
+- visible output が project locale に従う
+- hidden context が英語ベースで維持される
+- locale 切替で internal key が崩れない
+
+## P0: adapter ごとに確認したい項目
+
+### V-7. Codex adapter
+
+- generated config / skills / hooks が有効な形式で出力される
+- hooks 未対応環境でも壊れず degrade できる
+- MCP / skills 連携が壊れていない
+
+### V-8. Claude Code adapter
+
+- generated `CLAUDE.md` / skills / hooks / subagents が有効な形式で出力される
+- hooks で deterministic enforcement ができる
+- subagent handoff が壊れない
+
+### V-9. OpenCode adapter
+
+- generated `AGENTS.md` / `.opencode` / tools / agents / plugins が有効な形式で出力される
+- command / subtask / agent routing が期待どおりに働く
+- MCP / custom tools 導線が壊れない
+
+### V-10. Copilot CLI adapter
+
+- generated custom agents / skills / hooks / plugin files が有効な形式で出力される
+- project-level precedence 前提でも意図した挙動になる
+- current working directory から hooks が読まれる前提を満たす
+
+## P0: subagent workflow で確認したい項目
+
+### V-11. parent → child handoff
+
+- 目的、範囲、対象外、完了条件、参照資料が欠落しない
+- locale 依存の visible 部分と hidden 構造が崩れない
+
+### V-12. child → parent report
+
+- 事実と提案が分離される
+- 実施内容と未確定事項が分離される
+- evidence が task に紐づく
+
+### V-13. fallback
+
+- subagent 非対応または無効時に単独 workflow へ degrade できる
+- degrade 時も acceptance criteria と verify 契約が保たれる
+
+## P1: 継続的に確認したい項目
+
+### V-14. fixture E2E
+
+最低でも次の fixture を持つのが望ましいです。
+
+- 最小 web project
+- monorepo web project
+- locale: Japanese
+- locale: English
+- subagent enabled
+- subagent disabled
+
+### V-15. snapshot coverage
+
+- `AGENTS.md`
+- `.agents/project.md`
+- task template
+- docs skeleton
+- CLI adapter files
+- locale rendered docs
+
+### V-16. migration safety
+
+- v1 相当入力から v2 source へ移行できる
+- 生成後の差分が説明可能である
+
+## 失敗時の扱い
+
+- schema failure は即時停止
+- generation mismatch は即時停止
+- verify failure は task 完了不可
+- guard failure は操作拒否
+- gate required は human confirmation 待ち
+
+## 推奨テスト構成
+
+- unit: core
+- snapshot: generators / renderers
+- integration: cli command chains
+- e2e: fixture repository workflows
+
+## package ごとの優先検証
+
+### core
+
+- state machine の unit test
+- policy evaluation の unit test
+- locale 非依存な内部表現のテスト
+
+### cli
+
+- command chain の integration test
+- generation idempotency の snapshot test
+- validate / sync の失敗系テスト
+
+### adapters
+
+- generated files の形式検証
+- degrade 時の fallback 検証
+- project-level precedence と hook 有無の差分検証
+
+## 関連資料
+
+- `requirements/REQ-harness-v2-foundation.md`
+- `specs/shared/SPEC-workflow-core-contracts.md`
+- `specs/shared/SPEC-integration-adapter-contracts.md`
+- `specs/core/SPEC-task-state-machine.md`
+- `specs/core/SPEC-policy-evaluation.md`
+- `specs/cli/SPEC-command-surface.md`
+- `specs/cli/SPEC-generation-pipeline.md`
+- `patterns/test-evidence-driven-validation.md`
+- `architecture.md`
+- `integrations/ai-coding-clis.md`
