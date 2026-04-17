@@ -32,6 +32,10 @@
 ### `harness-init`
 
 - 必須設定を収集する
+- scan / suggest / confirm / materialize / resume の段階実行を扱える
+- decision template export と migration helper を扱える
+- 新規 project と既存 project の両方を扱える
+- repo facts と pending decisions を session として保持できる
 - `owox.harness.yaml` を生成または更新する
 - `.agents/`、`AGENTS.md`、docs skeleton、adapter files を生成する
 - 最後に `validate` を実行する
@@ -91,10 +95,15 @@
 - 主要コマンドが責務どおりに分離されている
 - エラー分類が上位資料と矛盾しない
 - `harness-init` と `sync` が source of truth を起点に動く
+- consultative init が中断・再開できる
 
 ## 関連資料
 
 - `../shared/SPEC-workflow-core-contracts.md`
 - `SPEC-generation-pipeline.md`
+- `SPEC-harness-init-consultative-workflow.md`
+- `SPEC-init-provider-and-migration-helpers.md`
 - `../../requirements/REQ-harness-v2-foundation.md`
+- `../../requirements/REQ-harness-init-consultative-setup.md`
+- `../../requirements/REQ-init-provider-and-migration-helpers.md`
 - `../../validation.md`

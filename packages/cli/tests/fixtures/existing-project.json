@@ -1,0 +1,6 @@
+{
+  "README.md": "# Sample Existing Project\n\nThis repo already has docs and scripts.\n",
+  "package.json": "{\n  \"name\": \"sample-existing\",\n  \"private\": true,\n  \"scripts\": {\n    \"build\": \"vite build\",\n    \"test\": \"vitest run\",\n    \"lint\": \"eslint .\"\n  }\n}\n",
+  "docs/project/index.md": "# Project Docs\n\nExisting source docs.\n",
+  "docs/project/glossary/core.md": "# Core Glossary\n\n## sample\nExisting glossary entry.\n"
+}

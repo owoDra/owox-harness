@@ -1,0 +1,37 @@
+{
+  "name": "@owox-harness/cli",
+  "version": "0.0.0",
+  "description": "CLI runtime and generators for owox-harness",
+  "license": "MIT",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "bin": {
+    "owox": "./dist/index.js"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "tsc -b",
+    "typecheck": "tsc -b"
+  },
+  "dependencies": {
+    "@owox-harness/core": "workspace:*",
+    "cac": "^6.7.14",
+    "yaml": "^2.8.0",
+    "zod": "^3.24.4"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

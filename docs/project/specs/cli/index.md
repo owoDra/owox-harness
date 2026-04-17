@@ -30,3 +30,6 @@
 
 - `SPEC-command-surface.md`: CLI の主要コマンド群の責務とエラー分類
 - `SPEC-generation-pipeline.md`: source から生成物までの変換と同期の流れ
+- `SPEC-harness-init-consultative-workflow.md`: consultative harness-init の段階実行と session 仕様
+- `SPEC-managed-document-token-budgets.md`: managed markdown documents の token budget 仕様
+- `SPEC-init-provider-and-migration-helpers.md`: init provider 抽象と migration helper の仕様

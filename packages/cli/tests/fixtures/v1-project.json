@@ -1,0 +1,6 @@
+{
+  "README.md": "# Legacy Harness\n\nThis project already uses v1 assets.\n",
+  "AGENTS.md": "## Legacy Rules\n\nRead .agents/project.md first.\n",
+  ".agents/project.md": "# Project\n\n## Name\nlegacy-project\n",
+  "package.json": "{\n  \"name\": \"legacy-project\",\n  \"private\": true,\n  \"scripts\": {\n    \"build\": \"pnpm -r build\",\n    \"test\": \"vitest run\"\n  }\n}\n"
+}

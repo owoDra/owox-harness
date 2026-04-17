@@ -1,0 +1,7 @@
+{
+  "README.md": "# Monorepo Sample\n\nRepository for apps and packages.\n",
+  "pnpm-workspace.yaml": "packages:\n  - apps/*\n  - packages/*\n",
+  "package.json": "{\n  \"name\": \"sample-monorepo\",\n  \"private\": true,\n  \"scripts\": {\n    \"build\": \"pnpm -r build\",\n    \"test\": \"pnpm -r test\"\n  }\n}\n",
+  "apps/web/package.json": "{\n  \"name\": \"web\",\n  \"private\": true\n}\n",
+  "packages/ui/package.json": "{\n  \"name\": \"ui\",\n  \"private\": true\n}\n"
+}

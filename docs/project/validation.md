@@ -35,6 +35,18 @@
 - 生成順序によって内容が変わらない
 - source → generated の対応が安定している
 
+### V-2a. init session 完全性
+
+- scan / suggest / confirm / materialize の状態が壊れない
+- confirm 前に materialize できない
+- resume 後も pending decisions が失われない
+
+### V-2b. managed document token budgets
+
+- managed markdown documents が configured budget を超えない
+- low budget 時に split または compact が働く
+- validate が token_limit issue を返せる
+
 ### V-3. 正本と生成物の分離
 
 - `.agents/` や `AGENTS.md` を source として読んでいない
@@ -157,6 +169,7 @@
 - command chain の integration test
 - generation idempotency の snapshot test
 - validate / sync の失敗系テスト
+- consultative init session の resume / confirm / materialize テスト
 
 ### adapters
 
@@ -173,6 +186,8 @@
 - `specs/core/SPEC-policy-evaluation.md`
 - `specs/cli/SPEC-command-surface.md`
 - `specs/cli/SPEC-generation-pipeline.md`
+- `specs/cli/SPEC-harness-init-consultative-workflow.md`
+- `specs/cli/SPEC-managed-document-token-budgets.md`
 - `patterns/test-evidence-driven-validation.md`
 - `architecture.md`
 - `integrations/ai-coding-clis.md`

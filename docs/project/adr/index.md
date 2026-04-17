@@ -29,5 +29,7 @@
 
 ## 参照
 
-- `active/`: 現在有効な ADR の配置先。現在は個票なし
+- `active/ADR-001-consultative-harness-init.md`: consultative harness-init を v2 の標準導線にする判断
+- `active/ADR-002-managed-document-token-budgets.md`: managed documents に token budget を導入する判断
+- `active/ADR-003-init-provider-and-migration-helpers.md`: init provider 抽象と migration helper を追加する判断
 - `archive/`: 参照優先度を落とした ADR の配置先。現在は個票なし

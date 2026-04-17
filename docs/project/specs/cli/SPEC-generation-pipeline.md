@@ -20,6 +20,11 @@
 
 ## 処理段階
 
+### 0. init session 準備
+
+- consultative `harness-init` では session を読み書きする
+- scan / suggest / confirm の途中結果を保持する
+
 ### 1. source 読込
 
 - `owox.harness.yaml` を読む
@@ -29,11 +34,13 @@
 
 - 設定値を schema で検証する
 - locale、profile、adapter 設定の妥当性を確認する
+- init session がある場合は decision completeness を確認する
 
 ### 3. internal model 化
 
 - locale 非依存の内部表現へ正規化する
 - hidden context と visible document の分離を保つ
+- scan facts と confirmed decisions を分離する
 
 ### 4. 生成計画の作成
 
@@ -45,6 +52,7 @@
 
 - visible documents を project locale で描画する
 - rules file、skills、config、docs skeleton を出力する
+- managed markdown documents には token budget を適用する
 
 ### 6. sync
 
@@ -54,6 +62,7 @@
 ### 7. validate
 
 - 配置、命名、参照、責務分離を確認する
+- managed documents の token over-limit を確認する
 - 問題があれば generation mismatch として停止する
 
 ## ファイル分類
@@ -79,5 +88,7 @@
 
 - `../shared/SPEC-integration-adapter-contracts.md`
 - `SPEC-command-surface.md`
+- `SPEC-harness-init-consultative-workflow.md`
+- `SPEC-managed-document-token-budgets.md`
 - `../../architecture.md`
 - `../../validation.md`
