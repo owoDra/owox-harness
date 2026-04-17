@@ -6,7 +6,7 @@ import { createDefaultHarnessConfig, getConfigPath, loadHarnessConfig, saveHarne
 import { syncGeneratedFiles, validateGeneratedFiles } from "./generation.js";
 import { resolveSuggestionProvider } from "./suggestion-provider.js";
 
-const initModeSchema = z.enum(["new_project", "existing_project", "existing_project_with_v1"]);
+const initModeSchema = z.enum(["new_project", "existing_project"]);
 const initStateSchema = z.enum([
   "draft",
   "scanning",
@@ -28,7 +28,7 @@ const repoFactSchema = z.object({
   scripts: z.array(z.string()),
   docs: z.array(z.string()),
   existingCliConfigs: z.array(z.string()),
-  hasV1Artifacts: z.boolean(),
+  hasLegacyHarnessArtifacts: z.boolean(),
   inferredLocale: z.enum(["ja", "en"]),
   inferredInitMode: initModeSchema
 });
@@ -296,13 +296,11 @@ export async function scanRepoFacts(rootDir: string): Promise<RepoFacts> {
   }
 
   const docs = topLevel.filter((entry) => entry.startsWith("docs") || entry === "README.md");
-  const hasV1Artifacts = (await pathExists(resolve(rootDir, ".agents/project.md"))) || (await pathExists(resolve(rootDir, "AGENTS.md")));
+  const hasLegacyHarnessArtifacts = (await pathExists(resolve(rootDir, ".agents/project.md"))) || (await pathExists(resolve(rootDir, "AGENTS.md")));
   const repoShape = (await pathExists(resolve(rootDir, "pnpm-workspace.yaml"))) || topLevel.includes("packages/") ? "monorepo" : "single";
-  const inferredInitMode: InitMode = hasV1Artifacts
-    ? "existing_project_with_v1"
-    : topLevel.length === 0 || topLevel.every((entry) => entry === ".git/" || entry === ".owox/")
-      ? "new_project"
-      : "existing_project";
+  const inferredInitMode: InitMode = topLevel.length === 0 || topLevel.every((entry) => entry === ".git/" || entry === ".owox/")
+    ? "new_project"
+    : "existing_project";
 
   return {
     repoShape,
@@ -338,7 +336,7 @@ export async function scanRepoFacts(rootDir: string): Promise<RepoFacts> {
         )
       ))
     ].filter((value): value is string => value !== null),
-    hasV1Artifacts,
+    hasLegacyHarnessArtifacts,
     inferredLocale: inferLocale(readme),
     inferredInitMode
   };

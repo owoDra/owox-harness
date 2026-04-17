@@ -27,7 +27,6 @@ import {
   runHarnessInitStart,
   runHarnessInitSuggest,
   runHarnessInitTemplate,
-  runMigrateV1,
   runSync,
   runTaskCreate,
   runTaskEvidence,
@@ -150,9 +149,6 @@ cli.command("harness-init-template <rootDir> <outputPath>", "write a decision te
   }
 );
 
-cli.command("migrate-v1 <rootDir>", "migrate a v1-style project into v2 source/config outputs").action(async (rootDir: string) => {
-  printResult(await runMigrateV1(rootDir));
-});
 
 cli.command("sync <configPath>", "sync managed artifacts from source of truth").action(async (configPath: string) => {
   printResult(await runSync(configPath));

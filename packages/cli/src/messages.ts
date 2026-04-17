@@ -23,19 +23,19 @@ const messages = {
   ja: {
     validatePassed: "設定は有効です。",
     validateFailed: "設定が不正です。",
-    taskCreated: "task を作成しました。",
-    taskUpdated: "task を更新しました。",
-    taskTransitioned: "task の状態を更新しました。",
-    taskEvidenceAdded: "task に evidence を追加しました。",
-    verifyPass: "verify に成功しました。",
-    verifyFail: "verify に失敗しました。",
-    verifyBlocked: "verify は前提不足で保留です。",
+    taskCreated: "タスクを作成しました。",
+    taskUpdated: "タスクを更新しました。",
+    taskTransitioned: "タスクの状態を更新しました。",
+    taskEvidenceAdded: "タスクに証跡を追加しました。",
+    verifyPass: "検証に成功しました。",
+    verifyFail: "検証に失敗しました。",
+    verifyBlocked: "検証は前提不足で保留です。",
     guardAllow: "操作を許可しました。",
     guardAsk: "人間確認が必要です。",
     guardDeny: "操作を拒否しました。",
-    gateNotRequired: "human gate は不要です。",
-    gateRequired: "human gate が必要です。",
-    gateResolved: "human gate は解決済みです。"
+    gateNotRequired: "人間確認は不要です。",
+    gateRequired: "人間確認が必要です。",
+    gateResolved: "人間確認は解決済みです。"
   }
 } as const;
 

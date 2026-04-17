@@ -179,34 +179,6 @@ export async function runHarnessInitTemplate(sessionPath: string, outputPath: st
   } satisfies CommandResult<{ outputPath: string; template: typeof template }>;
 }
 
-export async function runMigrateV1(rootDir: string) {
-  const sessionPath = getInitSessionPath(rootDir);
-  await createInitSession({ rootDir, visibleLocale: "en" });
-  const scanned = await runInitScan(sessionPath);
-  const suggested = await runInitSuggest(sessionPath);
-  const fallbackName = rootDir.split("/").filter(Boolean).at(-1) ?? "project";
-  const fallbackLocale = suggested.confirmedDecisions.locale ?? scanned.repoFacts?.inferredLocale ?? "en";
-
-  await runInitConfirm(sessionPath, {
-    name: suggested.confirmedDecisions.name ?? fallbackName,
-    initMode: "existing_project_with_v1",
-    locale: fallbackLocale,
-    profile: suggested.confirmedDecisions.profile ?? "web",
-    adapters: suggested.confirmedDecisions.adapters ?? ["codex", "claude-code"],
-    sourceOfTruthPolicy: suggested.confirmedDecisions.sourceOfTruthPolicy ?? "reuse_existing_docs",
-    managedArtifactsPolicy: suggested.confirmedDecisions.managedArtifactsPolicy ?? "safe_minimum",
-    requiredChecks: suggested.confirmedDecisions.requiredChecks,
-    selectedReferences: suggested.confirmedDecisions.selectedReferences
-  });
-
-  const materialized = await runInitMaterialize(sessionPath);
-  return {
-    ok: materialized.generatedIssues.length === 0,
-    message: materialized.generatedIssues.length === 0 ? "v1 migration completed." : "v1 migration completed with validation issues.",
-    data: materialized
-  } satisfies CommandResult<typeof materialized>;
-}
-
 export async function runSync(configPath: string) {
   const { config } = await loadConfigAndMessages(configPath);
   const rootDir = getRootDirFromConfigPath(configPath);

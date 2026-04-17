@@ -31,4 +31,4 @@
 - `REQ-harness-v2-foundation.md`: owox-harness v2 の要求定義
 - `REQ-harness-init-consultative-setup.md`: consultative harness-init の要求定義
 - `REQ-managed-document-token-budgets.md`: managed document の token budget 要求
-- `REQ-init-provider-and-migration-helpers.md`: suggestion provider と migration helper の要求
+- `REQ-init-provider-and-decision-templates.md`: suggestion provider と decision template export の要求

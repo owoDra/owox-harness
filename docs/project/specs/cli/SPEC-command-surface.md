@@ -33,7 +33,7 @@
 
 - 必須設定を収集する
 - scan / suggest / confirm / materialize / resume の段階実行を扱える
-- decision template export と migration helper を扱える
+- decision template export を扱える
 - 新規 project と既存 project の両方を扱える
 - repo facts と pending decisions を session として保持できる
 - `owox.harness.yaml` を生成または更新する
@@ -102,8 +102,8 @@
 - `../shared/SPEC-workflow-core-contracts.md`
 - `SPEC-generation-pipeline.md`
 - `SPEC-harness-init-consultative-workflow.md`
-- `SPEC-init-provider-and-migration-helpers.md`
+- `SPEC-init-provider-and-decision-templates.md`
 - `../../requirements/REQ-harness-v2-foundation.md`
 - `../../requirements/REQ-harness-init-consultative-setup.md`
-- `../../requirements/REQ-init-provider-and-migration-helpers.md`
+- `../../requirements/REQ-init-provider-and-decision-templates.md`
 - `../../validation.md`

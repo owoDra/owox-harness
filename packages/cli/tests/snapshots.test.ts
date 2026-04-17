@@ -47,7 +47,7 @@ describe("suggestion snapshots", () => {
         scripts: ["build", "test"],
         docs: ["README.md"],
         existingCliConfigs: ["CLAUDE.md"],
-        hasV1Artifacts: false,
+        hasLegacyHarnessArtifacts: false,
         inferredLocale: "en",
         inferredInitMode: "existing_project"
       },

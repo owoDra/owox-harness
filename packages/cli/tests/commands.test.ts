@@ -15,7 +15,6 @@ import {
   runHarnessInitStart,
   runHarnessInitSuggest,
   runHarnessInitTemplate,
-  runMigrateV1,
   runSync,
   runTaskCreate,
   runTaskEvidence,
@@ -314,9 +313,9 @@ describe("cli commands", () => {
     await expect(runValidate(configPath)).resolves.toMatchObject({ ok: true });
   });
 
-  test("consultative init detects v1 migration fixture", async () => {
+  test("consultative init treats legacy harness fixture as an existing project", async () => {
     const rootDir = await createProjectRoot();
-    await seedFixture(rootDir, "v1-project.json");
+    await seedFixture(rootDir, "legacy-project.json");
 
     await runHarnessInitStart({ rootDir, visibleLocale: "en" });
     const sessionPath = getInitSessionPath(rootDir);
@@ -326,8 +325,8 @@ describe("cli commands", () => {
       data: {
         session: {
           repoFacts: {
-            inferredInitMode: "existing_project_with_v1",
-            hasV1Artifacts: true
+            inferredInitMode: "existing_project",
+            hasLegacyHarnessArtifacts: true
           }
         }
       }
@@ -337,7 +336,7 @@ describe("cli commands", () => {
     await expect(
       runHarnessInitConfirm(sessionPath, {
         name: "legacy-project",
-        initMode: "existing_project_with_v1",
+        initMode: "existing_project",
         locale: "en",
         profile: "web",
         adapters: ["codex", "claude-code"],
@@ -348,7 +347,7 @@ describe("cli commands", () => {
 
     await expect(runHarnessInitMaterialize(sessionPath)).resolves.toMatchObject({ ok: true });
     const configPath = getConfigPath(rootDir);
-    await expect(readFile(configPath, "utf8")).resolves.toContain("mode: existing_project_with_v1");
+    await expect(readFile(configPath, "utf8")).resolves.toContain("mode: existing_project");
     await expect(runValidate(configPath)).resolves.toMatchObject({ ok: true });
   });
 
@@ -388,15 +387,6 @@ describe("cli commands", () => {
 
     await expect(runHarnessInitTemplate(sessionPath, outputPath)).resolves.toMatchObject({ ok: true });
     await expect(readFile(outputPath, "utf8")).resolves.toContain("pendingDecisions");
-  });
-
-  test("migrate-v1 command materializes v2 config from legacy fixture", async () => {
-    const rootDir = await createProjectRoot();
-    await seedFixture(rootDir, "v1-project.json");
-
-    await expect(runMigrateV1(rootDir)).resolves.toMatchObject({ ok: true });
-    const configPath = getConfigPath(rootDir);
-    await expect(readFile(configPath, "utf8")).resolves.toContain("mode: existing_project_with_v1");
   });
 
   test("validate reports broken project doc links", async () => {

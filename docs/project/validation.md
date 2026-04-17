@@ -6,11 +6,11 @@
 
 ## 検証の基本方針
 
-- source of truth と生成物の二重管理を防ぐ
+- 正本と生成物の二重管理を防ぐ
 - workflow の状態遷移を壊さない
 - locale と hidden context の境界を壊さない
 - CLI adapter の差分を core に漏らさない
-- サブエージェント利用時と fallback 時の両方を検証する
+- サブエージェント利用時と代替動作時の両方を検証する
 
 ## 実装開始時の最小完了条件
 
@@ -35,17 +35,17 @@
 - 生成順序によって内容が変わらない
 - source → generated の対応が安定している
 
-### V-2a. init session 完全性
+### V-2a. 初期化セッション完全性
 
 - scan / suggest / confirm / materialize の状態が壊れない
 - confirm 前に materialize できない
-- resume 後も pending decisions が失われない
+- 再開後も未確定の判断項目が失われない
 
-### V-2b. managed document token budgets
+### V-2b. 管理文書のトークン上限
 
-- managed markdown documents が configured budget を超えない
-- low budget 時に split または compact が働く
-- validate が token_limit issue を返せる
+- 管理対象の Markdown 文書が設定した上限を超えない
+- 上限が低い場合に分割または圧縮が働く
+- validate がトークン上限超過を返せる
 
 ### V-3. 正本と生成物の分離
 
@@ -74,29 +74,29 @@
 
 ### V-7. Codex adapter
 
-- generated config / skills / hooks が有効な形式で出力される
-- hooks 未対応環境でも壊れず degrade できる
+- 生成された設定 / skills / hooks が有効な形式で出力される
+- hooks 未対応環境でも壊れずに段階的に機能縮退できる
 - MCP / skills 連携が壊れていない
 
 ### V-8. Claude Code adapter
 
-- generated `CLAUDE.md` / skills / hooks / subagents が有効な形式で出力される
-- hooks で deterministic enforcement ができる
-- subagent handoff が壊れない
+- 生成された `CLAUDE.md` / skills / hooks / subagents が有効な形式で出力される
+- hooks で決定的な強制ができる
+- サブエージェント handoff が壊れない
 
 ### V-9. OpenCode adapter
 
-- generated `AGENTS.md` / `.opencode` / tools / agents / plugins が有効な形式で出力される
+- 生成された `AGENTS.md` / `.opencode` / tools / agents / plugins が有効な形式で出力される
 - command / subtask / agent routing が期待どおりに働く
 - MCP / custom tools 導線が壊れない
 
 ### V-10. Copilot CLI adapter
 
-- generated custom agents / skills / hooks / plugin files が有効な形式で出力される
+- 生成された custom agents / skills / hooks / plugin files が有効な形式で出力される
 - project-level precedence 前提でも意図した挙動になる
 - current working directory から hooks が読まれる前提を満たす
 
-## P0: subagent workflow で確認したい項目
+## P0: サブエージェント workflow で確認したい項目
 
 ### V-11. parent → child handoff
 
@@ -109,9 +109,9 @@
 - 実施内容と未確定事項が分離される
 - evidence が task に紐づく
 
-### V-13. fallback
+### V-13. 代替動作
 
-- subagent 非対応または無効時に単独 workflow へ degrade できる
+- subagent 非対応または無効時に単独 workflow へ移行できる
 - degrade 時も acceptance criteria と verify 契約が保たれる
 
 ## P1: 継続的に確認したい項目
@@ -132,14 +132,14 @@
 - `AGENTS.md`
 - `.agents/project.md`
 - task template
-- docs skeleton
+- 文書ひな型
 - CLI adapter files
 - locale rendered docs
 
-### V-16. migration safety
+### V-16. legacy coexistence
 
-- v1 相当入力から v2 source へ移行できる
-- 生成後の差分が説明可能である
+- 既存 legacy harness files があっても consultative init が壊れない
+- generated outputs と legacy files の責務が混ざらない
 
 ## 失敗時の扱い
 
@@ -169,12 +169,12 @@
 - command chain の integration test
 - generation idempotency の snapshot test
 - validate / sync の失敗系テスト
-- consultative init session の resume / confirm / materialize テスト
+- 相談型初期化セッションの再開 / 確認 / 出力確定テスト
 
 ### adapters
 
 - generated files の形式検証
-- degrade 時の fallback 検証
+- 機能縮退時の代替動作検証
 - project-level precedence と hook 有無の差分検証
 
 ## 関連資料

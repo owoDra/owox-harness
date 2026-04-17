@@ -33,7 +33,7 @@ export const harnessConfigSchema = z.object({
     .default({ hiddenLanguage: "en", docsRoot: "docs/project" }),
   init: z
     .object({
-      mode: z.enum(["new_project", "existing_project", "existing_project_with_v1"]).default("new_project"),
+      mode: z.enum(["new_project", "existing_project"]).default("new_project"),
       sourceOfTruthPolicy: z.enum(["reuse_existing_docs", "create_fresh_docs", "hybrid"]).default("hybrid"),
       managedArtifactsPolicy: z.enum(["safe_minimum", "full_generation"]).default("safe_minimum"),
       suggestionProvider: z.enum(["builtin", "external"]).default("builtin"),

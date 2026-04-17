@@ -58,12 +58,12 @@ export const builtinSuggestionProvider: SuggestionProvider = {
       {
         topic: "init_mode",
         recommended: context.repoFacts.inferredInitMode,
-        alternatives: ["new_project", "existing_project", "existing_project_with_v1"].filter(
+        alternatives: ["new_project", "existing_project"].filter(
           (value) => value !== context.repoFacts.inferredInitMode
         ),
-        reasons: ["Derived from detected repository files and v1 artifacts."],
+        reasons: ["Derived from detected repository files and existing project artifacts."],
         risks: ["Misclassification is possible when the repository is only partially initialized."],
-        openQuestions: ["Should existing artifacts be migrated in-place or regenerated?"]
+        openQuestions: ["Should existing legacy harness files be ignored or removed manually?"]
       },
       {
         topic: "name",
