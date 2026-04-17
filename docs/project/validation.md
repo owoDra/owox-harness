@@ -16,6 +16,7 @@
 
 - 変更対象に対応する requirement と spec を読んでいる
 - task に acceptance criteria と required checks がある
+- intent と required decisions が必要な場合は定義されている
 - 実施した検証結果が evidence として残る
 - `validate` 相当の整合性確認が通る
 - 未実施検証がある場合は残リスクを明記する
@@ -49,20 +50,29 @@
 
 ### V-3. 正本と生成物の分離
 
-- `.agents/` や `AGENTS.md` を source として読んでいない
+- `.owox/`、CLI 固有の rules file、CLI 固有の生成ディレクトリを source として読んでいない
 - 生成物を手編集した結果が source に逆流しない
+- AI 専用 artifact が `docs/project/` に混入していない
 
 ### V-4. workflow 状態遷移
 
 - task 状態遷移が定義どおりに動く
 - 不正な状態遷移を拒否できる
+- intent 未確定や required decision 未解決で `executing` へ進まない
 - gate 条件と verify 条件が正しく評価される
 
 ### V-5. verify / guard / gate
 
 - 必須検証が実行される
+- execution verify と intent verify が区別される
 - 危険操作が期待どおり deny / ask / allow される
 - 人間確認が必要な条件で gate が立つ
+
+### V-5a. prerequisite enforcement
+
+- 必読 docs 未確認で `planning` や `executing` へ進まない
+- required checks 未定義で `done` へ進まない
+- required evidence 未添付で `done` へ進まない
 
 ### V-6. 多言語境界
 
@@ -101,6 +111,7 @@
 ### V-11. parent → child handoff
 
 - 目的、範囲、対象外、完了条件、参照資料が欠落しない
+- intent summary と relevant decisions が欠落しない
 - locale 依存の visible 部分と hidden 構造が崩れない
 
 ### V-12. child → parent report
@@ -129,8 +140,9 @@
 
 ### V-15. snapshot coverage
 
-- `AGENTS.md`
-- `.agents/project.md`
+- CLI 固有の rules file
+- CLI 固有の生成ディレクトリの代表出力
+- `.owox/` 配下の代表 artifact
 - task template
 - 文書ひな型
 - CLI adapter files
@@ -180,7 +192,9 @@
 ## 関連資料
 
 - `requirements/REQ-harness-v2-foundation.md`
+- `requirements/REQ-intent-governed-agent-control.md`
 - `specs/shared/SPEC-workflow-core-contracts.md`
+- `specs/shared/SPEC-intent-governed-agent-control.md`
 - `specs/shared/SPEC-integration-adapter-contracts.md`
 - `specs/core/SPEC-task-state-machine.md`
 - `specs/core/SPEC-policy-evaluation.md`

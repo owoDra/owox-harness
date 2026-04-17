@@ -27,3 +27,4 @@
 
 - `SPEC-workflow-core-contracts.md`: `owox` の workflow / task / verify / gate / handoff の共通契約
 - `SPEC-integration-adapter-contracts.md`: CLI adapter が満たすべき共通契約
+- `SPEC-intent-governed-agent-control.md`: intent、decision ledger、mandatory `owox` execution、`.owox/` 境界の共通仕様

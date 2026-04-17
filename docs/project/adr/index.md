@@ -32,4 +32,5 @@
 - `active/ADR-001-consultative-harness-init.md`: consultative harness-init を v2 の標準導線にする判断
 - `active/ADR-002-managed-document-token-budgets.md`: managed documents に token budget を導入する判断
 - `active/ADR-003-init-provider-and-decision-templates.md`: init provider 抽象と decision template export を追加する判断
+- `active/ADR-004-intent-governed-agent-control.md`: intent 契約、`owox` 必須利用、`.owox/` 集約を採用する判断
 - `archive/`: 参照優先度を落とした ADR の配置先。現在は個票なし

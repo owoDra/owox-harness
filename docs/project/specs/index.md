@@ -35,6 +35,7 @@
 - `cli/index.md`: `cli` subproject 固有仕様の入口
 - `shared/SPEC-workflow-core-contracts.md`: workflow / task / verify / gate / handoff の共通仕様
 - `shared/SPEC-integration-adapter-contracts.md`: CLI adapter の共通仕様
+- `shared/SPEC-intent-governed-agent-control.md`: intent、decision ledger、mandatory `owox` execution、`.owox/` 境界の共通仕様
 - `cli/SPEC-harness-init-consultative-workflow.md`: consultative harness-init workflow 仕様
 - `cli/SPEC-managed-document-token-budgets.md`: managed documents の token budget 仕様
 - `cli/SPEC-init-provider-and-decision-templates.md`: init provider 抽象と decision template export の仕様

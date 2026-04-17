@@ -29,6 +29,7 @@
 ## 参照
 
 - `REQ-harness-v2-foundation.md`: owox-harness v2 の要求定義
+- `REQ-intent-governed-agent-control.md`: intent 契約、`owox` 必須利用、前提不足時停止、`.owox/` 境界の要求
 - `REQ-harness-init-consultative-setup.md`: consultative harness-init の要求定義
 - `REQ-managed-document-token-budgets.md`: managed document の token budget 要求
 - `REQ-init-provider-and-decision-templates.md`: suggestion provider と decision template export の要求

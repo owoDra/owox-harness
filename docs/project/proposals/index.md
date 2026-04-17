@@ -31,4 +31,5 @@
 ## 参照
 
 - `active/`: 採否判断前の proposal の配置先。現在は個票なし
-- `archive/`: 参照優先度を落とした proposal の配置先。現在は個票なし
+- `archive/`: 参照優先度を落とした proposal の配置先
+- `archive/proposal-intent-governed-agent-control.md`: requirement / spec / ADR へ昇格済みの提案

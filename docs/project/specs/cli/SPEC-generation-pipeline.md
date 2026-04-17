@@ -52,6 +52,7 @@
 
 - visible documents を project locale で描画する
 - rules file、skills、config、docs skeleton を出力する
+- hidden runtime artifact は `.owox/` に出力する
 - managed markdown documents には token budget を適用する
 
 ### 6. sync
@@ -68,8 +69,10 @@
 ## ファイル分類
 
 - source of truth: `owox.harness.yaml`、schema、templates、adapter definitions、profiles
-- generated artifacts: `.agents/`、`AGENTS.md`、docs skeleton、adapter files
+- generated artifacts: `.owox/`、CLI 固有の rules file、CLI 固有の生成ディレクトリ、docs skeleton、adapter files
 - project docs source of truth: `docs/project/` の正本
+
+`.owox/` は hidden context、runtime state、intent、decision ledger、context packet、evidence index などの AI 専用 artifact を保持する。
 
 ## 失敗条件
 
@@ -87,6 +90,7 @@
 ## 関連資料
 
 - `../shared/SPEC-integration-adapter-contracts.md`
+- `../shared/SPEC-intent-governed-agent-control.md`
 - `SPEC-command-surface.md`
 - `SPEC-harness-init-consultative-workflow.md`
 - `SPEC-managed-document-token-budgets.md`

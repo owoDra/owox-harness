@@ -53,6 +53,7 @@ AI は通常、この index から `glossary/core.md`、`requirements/REQ-harnes
 - `requirements/index.md`: 要求カテゴリの入口
 - `architecture.md`: 不変条件、責務分離、設計方針
 - `requirements/REQ-harness-v2-foundation.md`: v2 要件定義
+- `requirements/REQ-intent-governed-agent-control.md`: intent 契約、`owox` 必須利用、`.owox/` 境界の要求
 - `integrations/ai-coding-clis.md`: AI coding CLI 連携仕様
 - `integrations/index.md`: 外部連携カテゴリの入口
 - `tech-stack.md`: 採用技術一覧
@@ -60,6 +61,7 @@ AI は通常、この index から `glossary/core.md`、`requirements/REQ-harnes
 - `research/index.md`: 技術調査カテゴリの入口
 - `proposals/index.md`: 設計草案カテゴリの入口
 - `specs/index.md`: 仕様カテゴリの入口
+- `specs/shared/SPEC-intent-governed-agent-control.md`: intent、decision ledger、mandatory `owox` execution、`.owox/` 境界の仕様
 - `patterns/index.md`: パターンカテゴリの入口
 - `adr/index.md`: 重要判断カテゴリの入口
 - `teams/index.md`: チームガイドカテゴリの入口

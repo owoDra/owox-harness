@@ -26,6 +26,7 @@
 - すべてのコマンドは source of truth と生成物の境界を壊してはいけない
 - すべてのコマンドは失敗時に理由を機械可読に扱える形で返せることが望ましい
 - visible output は project locale に従う
+- AI 専用 artifact は `.owox/` に置き、`docs/project/` に書き戻さない
 
 ## コマンド責務
 
@@ -37,17 +38,19 @@
 - 新規 project と既存 project の両方を扱える
 - repo facts と pending decisions を session として保持できる
 - `owox.harness.yaml` を生成または更新する
-- `.agents/`、`AGENTS.md`、docs skeleton、adapter files を生成する
+- `.owox/`、CLI 固有の rules file、CLI 固有の生成ディレクトリ、docs skeleton、adapter files を生成または初期化する
 - 最後に `validate` を実行する
 
 ### `task`
 
 - task の作成、更新、状態遷移を扱う
+- intent と required decisions を参照して prerequisite を評価する
 - task 契約を満たさない更新を拒否する
 
 ### `verify`
 
 - acceptance criteria と required checks を評価する
+- execution verify と intent verify を評価する
 - evidence を task に紐づける
 
 ### `guard`
@@ -61,6 +64,7 @@
 ### `handoff`
 
 - parent / child 間の handoff 文書を生成または更新する
+- `.owox/` 上の context packet を生成または更新する
 
 ### `sync`
 
@@ -70,6 +74,7 @@
 ### `validate`
 
 - 正本、生成物、参照関係、配置ルールの整合性を確認する
+- `.owox/`、CLI 固有の生成ディレクトリ、`docs/project/` の責務分離を確認する
 
 ## 最小エラー分類
 
@@ -78,6 +83,7 @@
 - `guard_denied`
 - `gate_required`
 - `verification_failed`
+- `prerequisite_missing`
 - `sync_mismatch`
 - `internal_error`
 
@@ -100,6 +106,7 @@
 ## 関連資料
 
 - `../shared/SPEC-workflow-core-contracts.md`
+- `../shared/SPEC-intent-governed-agent-control.md`
 - `SPEC-generation-pipeline.md`
 - `SPEC-harness-init-consultative-workflow.md`
 - `SPEC-init-provider-and-decision-templates.md`

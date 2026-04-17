@@ -23,7 +23,7 @@
 
 ## 参照ルール
 
-- integration を追加または変更したら `.agents/project.md` と validation 影響を確認する
+- integration を追加または変更したら `.owox/`、CLI 固有の生成ディレクトリ、validation への影響を確認する
 
 ## 参照
 
