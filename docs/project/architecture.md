@@ -36,6 +36,7 @@
 - visible documents と visible outputs は project locale に従う
 - hidden context と内部キーは英語を基本とする
 - AI が読む rules、skills、agents、handoff などの AI-facing Markdown は project locale に関係なく英語で保つ
+- `.owox/` 配下の runtime artifact は可能な限り `owox` CLI 経由で参照し、agent が直接読む前提を避ける
 - hidden context や runtime artifact は `docs/project/` ではなく `.owox/` に置く
 
 ### INV-3. AI に任せるのは判断と補完である

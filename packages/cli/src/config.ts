@@ -5,6 +5,22 @@ import { z } from "zod";
 
 export const adapterSchema = z.enum(["codex", "claude-code", "opencode", "copilot-cli"]);
 
+const DEFAULT_MANAGED_DOCUMENT_PATHS = [
+  "AGENTS.md",
+  ".owox/",
+  "docs/project/",
+  ".codex/",
+  ".claude/",
+  ".opencode/",
+  ".github/",
+  "CLAUDE.md"
+] as const;
+
+const DEFAULT_PROTECTED_PATHS = ["docs/project/", ".owox/", ".github/", ".claude/", ".codex/", ".opencode/"] as const;
+const DEFAULT_DENIED_ACTIONS = ["git reset --hard", "git checkout --", "rm -rf /"] as const;
+const DEFAULT_ASK_ACTIONS = ["push", "release", "deploy"] as const;
+const DEFAULT_REQUIRED_CHECKS = ["pnpm validate", "pnpm build"] as const;
+
 const documentBudgetOverrideSchema = z.object({
   path: z.string().min(1).optional(),
   pathPrefix: z.string().min(1).optional(),
@@ -55,10 +71,9 @@ export const harnessConfigSchema = z.object({
   }),
   source: z
     .object({
-      hiddenLanguage: z.literal("en").default("en"),
       docsRoot: z.string().min(1).default("docs/project")
     })
-    .default({ hiddenLanguage: "en", docsRoot: "docs/project" }),
+    .default({ docsRoot: "docs/project" }),
   init: z
     .object({
       mode: z.enum(["new_project", "existing_project"]).default("new_project"),
@@ -80,23 +95,14 @@ export const harnessConfigSchema = z.object({
           defaultMaxTokens: z.number().int().positive().default(800),
           splitThreshold: z.number().int().positive().default(1200),
           trimOptionalSections: z.boolean().default(true),
-          managedPaths: z.array(z.string().min(1)).default([
-            "AGENTS.md",
-            ".owox/",
-            "docs/project/",
-            ".codex/",
-            ".claude/",
-            ".opencode/",
-            ".github/",
-            "CLAUDE.md"
-          ]),
+          managedPaths: z.array(z.string().min(1)).default([...DEFAULT_MANAGED_DOCUMENT_PATHS]),
           overrides: z.array(documentBudgetOverrideSchema).default([])
         })
         .default({
           defaultMaxTokens: 800,
           splitThreshold: 1200,
           trimOptionalSections: true,
-          managedPaths: ["AGENTS.md", ".owox/", "docs/project/", ".codex/", ".claude/", ".opencode/", ".github/", "CLAUDE.md"],
+          managedPaths: [...DEFAULT_MANAGED_DOCUMENT_PATHS],
           overrides: []
         })
     })
@@ -105,7 +111,7 @@ export const harnessConfigSchema = z.object({
         defaultMaxTokens: 800,
         splitThreshold: 1200,
         trimOptionalSections: true,
-        managedPaths: ["AGENTS.md", ".owox/", "docs/project/", ".codex/", ".claude/", ".opencode/", ".github/", "CLAUDE.md"],
+        managedPaths: [...DEFAULT_MANAGED_DOCUMENT_PATHS],
         overrides: []
       }
     }),
@@ -113,21 +119,21 @@ export const harnessConfigSchema = z.object({
   adapters: z.array(adapterSchema).default(["codex", "claude-code", "opencode", "copilot-cli"]),
   policies: z
     .object({
-      protectedPaths: z.array(z.string().min(1)).default(["docs/project/", ".owox/", ".github/", ".claude/", ".codex/", ".opencode/"]),
-      deniedActions: z.array(z.string().min(1)).default(["git reset --hard", "git checkout --", "rm -rf /"]),
-      askActions: z.array(z.string().min(1)).default(["push", "release", "deploy"])
+      protectedPaths: z.array(z.string().min(1)).default([...DEFAULT_PROTECTED_PATHS]),
+      deniedActions: z.array(z.string().min(1)).default([...DEFAULT_DENIED_ACTIONS]),
+      askActions: z.array(z.string().min(1)).default([...DEFAULT_ASK_ACTIONS])
     })
     .default({
-      protectedPaths: ["docs/project/", ".owox/", ".github/", ".claude/", ".codex/", ".opencode/"],
-      deniedActions: ["git reset --hard", "git checkout --", "rm -rf /"],
-      askActions: ["push", "release", "deploy"]
+      protectedPaths: [...DEFAULT_PROTECTED_PATHS],
+      deniedActions: [...DEFAULT_DENIED_ACTIONS],
+      askActions: [...DEFAULT_ASK_ACTIONS]
     }),
   taskDefaults: z
     .object({
-      requiredChecks: z.array(z.string().min(1)).default(["pnpm validate", "pnpm build"]),
+      requiredChecks: z.array(z.string().min(1)).default([...DEFAULT_REQUIRED_CHECKS]),
       references: z.array(z.string().min(1)).default([])
     })
-    .default({ requiredChecks: ["pnpm validate", "pnpm build"], references: [] })
+    .default({ requiredChecks: [...DEFAULT_REQUIRED_CHECKS], references: [] })
 });
 
 export type HarnessConfig = z.infer<typeof harnessConfigSchema>;

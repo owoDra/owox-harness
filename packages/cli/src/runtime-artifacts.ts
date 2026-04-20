@@ -1,5 +1,5 @@
 import { mkdir, readFile, readdir, writeFile } from "node:fs/promises";
-import { dirname, join } from "node:path";
+import { dirname, join, normalize } from "node:path";
 import { z } from "zod";
 import { evaluatePrerequisites, type DecisionRecord, type DriftAuditResult, type IntentData } from "@owox-harness/core";
 import type { HarnessConfig } from "./config.js";
@@ -69,6 +69,18 @@ export function getDecisionLedgerPath(rootDir: string, config: HarnessConfig): s
 
 export function getDriftAuditPath(rootDir: string, config: HarnessConfig, taskId: string): string {
   return join(getOwoxRoot(rootDir, config), "drift-audits", `${taskId}.json`);
+}
+
+export function resolveOwoxArtifactPath(rootDir: string, config: HarnessConfig, artifactPath: string): string {
+  const normalizedArtifactPath = normalize(artifactPath).replace(/^\/+/, "");
+  if (normalizedArtifactPath.startsWith("..") || normalizedArtifactPath.includes("../")) {
+    throw new Error("artifactPath must stay inside .owox");
+  }
+  return join(getOwoxRoot(rootDir, config), normalizedArtifactPath);
+}
+
+export async function readOwoxArtifact(rootDir: string, config: HarnessConfig, artifactPath: string): Promise<string> {
+  return readFile(resolveOwoxArtifactPath(rootDir, config, artifactPath), "utf8");
 }
 
 export async function loadIntent(rootDir: string, config: HarnessConfig, intentId: string): Promise<IntentData | undefined> {

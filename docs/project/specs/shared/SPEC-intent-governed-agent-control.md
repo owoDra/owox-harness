@@ -96,6 +96,7 @@ child は packet に含まれない前提を暗黙採用してはいけません
 ## mandatory owox execution 契約
 
 - AI は task 作成、状態遷移、verify、gate、handoff、drift audit を `owox` を通して行う
+- `.owox/` 配下の runtime artifact 読取も、可能な限り `owox` CLI を通して行う
 - rules files は `owox` 利用導線のみを短く記し、重い手順本文を持たない
 - adapter は hooks、plugins、commands、subagents のいずれかで `owox` command を強制または優先させる
 - `owox` を通さない進行が検知された場合、少なくとも `guard_denied`、`gate_required`、`blocked` のいずれかで停止できる必要がある
@@ -160,6 +161,7 @@ child は packet に含まれない前提を暗黙採用してはいけません
 ### CLI 固有の生成ディレクトリ
 
 - `.claude/`、`.opencode/`、`.codex/`、`.github/` など、各 CLI が読む設定や skill / agent 定義を置く
+- adapter ごとの ignore file を生成し、`.owox/` を直接 index しない前提を補助する
 - task state や hidden runtime artifact は置かない
 
 ## 失敗時の扱い

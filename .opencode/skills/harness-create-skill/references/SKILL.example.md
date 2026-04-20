@@ -10,8 +10,8 @@ argument-hint: "goal=<why> mode=<autonomous|interactive>"
 
 ## Read First
 
-- .owox/project.md
-- docs/project/index.md
+- use `owox artifact-read owox.harness.yaml project.md` for project runtime context
+- `docs/project/index.md`
 - the source documents that define this workflow
 
 ## What To Do
@@ -24,6 +24,7 @@ argument-hint: "goal=<why> mode=<autonomous|interactive>"
 
 - Keep AI-facing Markdown in English.
 - Route workflow control through the `owox` CLI.
+- Do not read `.owox/` files directly.
 
 ## Checks
 

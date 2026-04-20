@@ -1,0 +1,2 @@
+# Exclude owox runtime artifacts from direct agent indexing.
+.owox/

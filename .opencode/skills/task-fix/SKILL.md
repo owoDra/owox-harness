@@ -3,18 +3,16 @@ name: task-fix
 description: Use when bug fixing, failure recovery, or review follow-up is the primary goal.
 argument-hint: "goal=<what to fix> mode=<autonomous|interactive>"
 ---
-
 ## Purpose
 
 Diagnose the failure, apply the smallest correct fix, and confirm the regression is covered.
 
 ## Read First
 
-- `.owox/project.md`
-- `docs/project/index.md`
-- `owox.harness.yaml`
-- the relevant `.owox/tasks/task-*.md` file and `.owox/tasks/task-current.json` when present
-- the matching requirement, spec, ADR, pattern, validation, or team guide for this scope
+- Use `owox artifact-read owox.harness.yaml project.md` for project runtime context.
+- Use `owox artifact-read owox.harness.yaml tasks/task-current.json` when an active task exists.
+- Read `docs/project/index.md` and the relevant requirement, spec, ADR, pattern, validation, or team guide for this scope.
+- Read code and tests directly only when they are part of the current task scope.
 
 ## What To Do
 
@@ -32,6 +30,7 @@ Diagnose the failure, apply the smallest correct fix, and confirm the regression
 - Keep AI-facing Markdown in English.
 - Prefer source-of-truth documents over generated artifacts.
 - Do not skip human gates for risky, architectural, or externally visible changes.
+- Do not read files under `.owox/` directly; use `owox artifact-read` or another dedicated `owox` command.
 - Record assumptions, open questions, and residual risk instead of hiding them.
 
 ## Checks

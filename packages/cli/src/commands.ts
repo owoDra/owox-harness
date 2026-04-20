@@ -60,6 +60,7 @@ import {
   appendDecisionRecord,
   loadDecisionLedger,
   loadIntent,
+  readOwoxArtifact,
   saveDriftAudit,
   saveIntent,
   validateRuntimeArtifacts
@@ -207,6 +208,24 @@ export async function runSync(configPath: string) {
     message: config.project.locale === "ja" ? "generated artifacts を同期しました。" : "Generated artifacts synced.",
     data: result
   } satisfies CommandResult<typeof result>;
+}
+
+export async function runArtifactRead(configPath: string, artifactPath: string): Promise<CommandResult<{ artifactPath: string; content: string }>> {
+  try {
+    const { config } = await loadConfigAndMessages(configPath);
+    const rootDir = getRootDirFromConfigPath(configPath);
+    const content = await readOwoxArtifact(rootDir, config, artifactPath);
+    return {
+      ok: true,
+      message: "Artifact read.",
+      data: { artifactPath, content }
+    };
+  } catch (error) {
+    return {
+      ok: false,
+      message: error instanceof Error ? error.message : "artifact read failed"
+    };
+  }
 }
 
 export async function runValidate(configPath: string): Promise<CommandResult<{ config: HarnessConfig; issues: string[] }>> {

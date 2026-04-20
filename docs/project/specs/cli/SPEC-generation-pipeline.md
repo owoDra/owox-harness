@@ -53,6 +53,7 @@
 - visible documents を project locale で描画する
 - rules file、skills、config、docs skeleton を出力する
 - AI が読む rules file、skills、agents、commands、handoff などの AI-facing Markdown は英語で出力する
+- adapter ごとの ignore file を出力し、`.owox/` を直接 index しない前提を補助する
 - hidden runtime artifact は `.owox/` に出力する
 - managed markdown documents には token budget を適用する
 

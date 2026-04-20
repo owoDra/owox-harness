@@ -5,7 +5,6 @@ project:
   profile: web
 
 source:
-  hiddenLanguage: en
   docsRoot: docs/project
 
 init:

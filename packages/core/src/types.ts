@@ -212,7 +212,6 @@ export interface ParentToChildHandoff {
   relatedDecisions: string[];
   references: HandoffReference[];
   constraints: string[];
-  hiddenLanguage: "en";
 }
 
 export interface ChildToParentReport {

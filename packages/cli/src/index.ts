@@ -19,6 +19,7 @@ import type {
 import {
   runDecisionRecord,
   runDriftAudit,
+  runArtifactRead,
   runGate,
   runGuard,
   runHandoffChildToParent,
@@ -160,6 +161,12 @@ cli.command("harness-init-template <rootDir> <outputPath>", "write a decision te
 cli.command("sync <configPath>", "sync managed artifacts from source of truth").action(async (configPath: string) => {
   printResult(await runSync(configPath));
 });
+
+cli.command("artifact-read <configPath> <artifactPath>", "read a .owox artifact through the owox CLI").action(
+  async (configPath: string, artifactPath: string) => {
+    printResult(await runArtifactRead(configPath, artifactPath));
+  }
+);
 
 cli.command("validate <configPath>", "validate source and managed artifacts").action(async (configPath: string) => {
   printResult(await runValidate(configPath));

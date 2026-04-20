@@ -10,6 +10,8 @@ export function createParentToChildHandoff(
   task: TaskData,
   input: CreateParentToChildInput = {}
 ): ParentToChildHandoff {
+  const references = input.references ?? task.references.map((path) => ({ path, purpose: "Task reference" }));
+
   return {
     kind: "parent_to_child",
     taskId: task.taskId,
@@ -20,10 +22,8 @@ export function createParentToChildHandoff(
     outOfScope: task.outOfScope,
     completionCriteria: task.acceptanceCriteria,
     relatedDecisions: task.resolvedDecisions,
-    references:
-      input.references ?? task.references.map((path) => ({ path, purpose: "Task reference" })),
-    constraints: input.constraints ?? [],
-    hiddenLanguage: "en"
+    references,
+    constraints: input.constraints ?? []
   };
 }
 

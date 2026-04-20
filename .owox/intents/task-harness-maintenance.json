@@ -1,0 +1,28 @@
+{
+  "intentId": "task-harness-maintenance",
+  "userGoal": "Remove obsolete config fields, improve generated subagent docs, and refactor generation/config code for maintainability.",
+  "successImage": "hiddenLanguage is removed from harness config and related source docs where it is only redundant configuration; generated subagent markdown is more specific and operationally useful; generation/config code is easier to extend and test; build, tests, and validate pass",
+  "nonGoals": [
+    "new adapters",
+    "behavior changes unrelated to harness config or generated AI-facing files"
+  ],
+  "mustKeep": [],
+  "tradeoffs": [],
+  "openQuestions": [],
+  "decisionPolicy": "ask_when_ambiguous",
+  "approvalPolicy": "auto_with_guard",
+  "requiredDocs": [
+    "docs/project/architecture.md",
+    "docs/project/tech-stack.md",
+    "docs/project/validation.md",
+    "docs/project/specs/cli/SPEC-generation-pipeline.md",
+    "docs/project/specs/shared/SPEC-integration-adapter-contracts.md"
+  ],
+  "confirmedDocs": [
+    "docs/project/architecture.md",
+    "docs/project/tech-stack.md",
+    "docs/project/validation.md",
+    "docs/project/specs/cli/SPEC-generation-pipeline.md",
+    "docs/project/specs/shared/SPEC-integration-adapter-contracts.md"
+  ]
+}

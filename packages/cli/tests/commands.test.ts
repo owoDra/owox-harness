@@ -3,6 +3,7 @@ import { dirname, join } from "node:path";
 import { tmpdir } from "node:os";
 import { describe, expect, test } from "vitest";
 import {
+  runArtifactRead,
   runDecisionRecord,
   runDriftAudit,
   runGate,
@@ -83,14 +84,19 @@ describe("cli commands", () => {
     const { rootDir, configPath } = await setupHarness();
 
     await expect(readFile(configPath, "utf8")).resolves.toContain("name: sample");
+    await expect(readFile(configPath, "utf8")).resolves.not.toContain("hiddenLanguage");
     await expect(readFile(join(rootDir, ".owox/project.md"), "utf8")).resolves.toContain("Managed Outputs");
     await expect(readFile(join(rootDir, "AGENTS.md"), "utf8")).resolves.toContain("owox sync");
+    await expect(readFile(join(rootDir, "AGENTS.md"), "utf8")).resolves.toContain("artifact-read");
     await expect(readFile(join(rootDir, ".codex/config.toml"), "utf8")).resolves.toContain("owox.harness.yaml");
     await expect(readFile(join(rootDir, ".codex/hooks/pre-tool.sh"), "utf8")).resolves.toContain("owox validate");
     await expect(readFile(join(rootDir, "CLAUDE.md"), "utf8")).resolves.toContain("owox validate");
-    await expect(readFile(join(rootDir, ".claude/subagents/discovery.md"), "utf8")).resolves.toContain("subagent");
+    await expect(readFile(join(rootDir, ".claude/subagents/discovery.md"), "utf8")).resolves.toContain("## Required owox Actions");
     await expect(readFile(join(rootDir, ".opencode/plugins/owox.json"), "utf8")).resolves.toContain("preTool");
+    await expect(readFile(join(rootDir, ".opencode/skills/task-implementation/SKILL.md"), "utf8")).resolves.toContain("artifact-read");
+    await expect(readFile(join(rootDir, ".opencodeignore"), "utf8")).resolves.toContain(".owox/");
     await expect(readFile(join(rootDir, ".github/copilot-instructions.md"), "utf8")).resolves.toContain("owox");
+    await expect(readFile(join(rootDir, ".copilotignore"), "utf8")).resolves.toContain(".owox/");
     await expect(readFile(join(rootDir, ".github/plugins/owox/plugin.json"), "utf8")).resolves.toContain("owox-plugin");
   });
 
@@ -436,6 +442,18 @@ describe("cli commands", () => {
       ok: false,
       data: {
         issues: expect.arrayContaining([expect.stringContaining("must be English-only AI markdown")])
+      }
+    });
+  });
+
+  test("artifact-read returns owox runtime artifact content", async () => {
+    const { configPath } = await setupHarness();
+
+    await expect(runArtifactRead(configPath, "project.md")).resolves.toMatchObject({
+      ok: true,
+      data: {
+        artifactPath: "project.md",
+        content: expect.stringContaining("# Project")
       }
     });
   });

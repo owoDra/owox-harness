@@ -1,0 +1,12 @@
+[
+  {
+    "check": "pnpm validate",
+    "passed": true,
+    "details": "lint, typecheck, and tests passed"
+  },
+  {
+    "check": "pnpm build",
+    "passed": true,
+    "details": "workspace build passed"
+  }
+]

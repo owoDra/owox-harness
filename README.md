@@ -135,7 +135,6 @@ project:
   profile: web
 
 source:
-  hiddenLanguage: en
   docsRoot: docs/project
 
 init:
@@ -175,14 +174,14 @@ taskDefaults:
 - `.owox/drift-audits/*.json`: drift audit result
 - `.owox/init-session.json`: consultative init session
 
-`AGENTS.md`、`CLAUDE.md`、`.codex/`、`.claude/`、`.opencode/`、`.github/` などは CLI 固有の rules / config / skill 生成物です。
+`AGENTS.md`、`CLAUDE.md`、`.codex/`、`.claude/`、`.opencode/`、`.github/` などは CLI 固有の rules / config / skill 生成物です。`.codexignore`、`.claudeignore`、`.opencodeignore`、`.copilotignore` は `.owox/` を直接 index しないための adapter ignore files です。
 
 ## OpenCode 日常運用
 
 このリポジトリでは OpenCode を primary CLI として使います。日常運用の最小手順は次です。
 
 1. `./owox validate owox.harness.yaml`
-2. 対象 task を `.owox/tasks/task-<name>.json` と `.owox/tasks/task-<name>.md` で確認する
+2. `./owox artifact-read owox.harness.yaml project.md` と必要に応じて `./owox artifact-read owox.harness.yaml tasks/task-current.json` で runtime artifact を確認する
 3. `./owox task-set-current owox.harness.yaml .owox/tasks/task-<name>.json`
 4. 必要なら `./owox intent-save ...` と `./owox decision-record ...` を更新する
 5. `./owox task-check-prerequisites owox.harness.yaml .owox/tasks/task-current.json planning`

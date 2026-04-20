@@ -23,6 +23,7 @@
 - `owox` を呼ぶ skill / custom agent / command 導線を提供する
 - verify / guard / gate を発火する hook または同等機構を接続する
 - optional MCP server 設定を扱えるようにする
+- `.owox/` を直接 index しないための adapter ignore file を扱えるようにする
 - CLI 固有差分を core へ漏らさない
 
 ## rules file 契約
@@ -54,6 +55,7 @@ rules file には、少なくとも次だけを書く方針とします。
 - visible files は project locale に従う
 - internal keys、hidden prompts、adapter 内部 state は英語を基本とする
 - AI-facing Markdown (`AGENTS.md`、`.opencode/` 配下の skills / agents / commands など) は英語を基本とする
+- `.owox/` 配下の runtime artifact は `owox` CLI を通して読む前提を優先する
 - locale 切替時も adapter ごとの内部契約は変えない
 
 ## adapter 差分の扱い

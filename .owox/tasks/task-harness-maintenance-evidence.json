@@ -1,0 +1,6 @@
+{
+  "id": "ev-harness-maintenance-validate",
+  "kind": "validation",
+  "summary": "pnpm validate passed after config cleanup, generator refactor, and subagent guide updates.",
+  "createdAt": "2026-04-20T16:52:00.000Z"
+}
