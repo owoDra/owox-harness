@@ -1,0 +1,13 @@
+{
+  "intentId": "intent-template",
+  "userGoal": "",
+  "successImage": "",
+  "nonGoals": [],
+  "mustKeep": [],
+  "tradeoffs": [],
+  "openQuestions": [],
+  "decisionPolicy": "ask_when_ambiguous",
+  "approvalPolicy": "human_gate_for_risky_changes",
+  "requiredDocs": [],
+  "confirmedDocs": []
+}

@@ -28,7 +28,6 @@ const repoFactSchema = z.object({
   scripts: z.array(z.string()),
   docs: z.array(z.string()),
   existingCliConfigs: z.array(z.string()),
-  hasLegacyHarnessArtifacts: z.boolean(),
   inferredLocale: z.enum(["ja", "en"]),
   inferredInitMode: initModeSchema
 });
@@ -168,6 +167,9 @@ function summarizeReference(path: string): string {
   if (path === "README.md") {
     return "Repository overview";
   }
+  if (path === ".owox/project.md") {
+    return "Existing owox project context";
+  }
   if (path === "AGENTS.md") {
     return "Existing agent rules file";
   }
@@ -202,7 +204,7 @@ function classifyReference(path: string): ReferenceDocument["classification"] {
   if (path.startsWith("docs/archive/") || path.includes("archive")) {
     return "archive";
   }
-  if (path === "AGENTS.md" || path.startsWith(".agents/")) {
+  if (path === ".owox/project.md" || path.startsWith(".owox/") || path === "AGENTS.md") {
     return "reference_only";
   }
   return "ignore";
@@ -210,7 +212,7 @@ function classifyReference(path: string): ReferenceDocument["classification"] {
 
 async function collectReferenceDocuments(rootDir: string): Promise<ReferenceDocument[]> {
   const discoveredDocs: string[] = [];
-  const queue = ["docs", ".agents"];
+  const queue = ["docs", ".owox"];
 
   while (queue.length > 0) {
     const current = queue.shift();
@@ -296,7 +298,6 @@ export async function scanRepoFacts(rootDir: string): Promise<RepoFacts> {
   }
 
   const docs = topLevel.filter((entry) => entry.startsWith("docs") || entry === "README.md");
-  const hasLegacyHarnessArtifacts = (await pathExists(resolve(rootDir, ".agents/project.md"))) || (await pathExists(resolve(rootDir, "AGENTS.md")));
   const repoShape = (await pathExists(resolve(rootDir, "pnpm-workspace.yaml"))) || topLevel.includes("packages/") ? "monorepo" : "single";
   const inferredInitMode: InitMode = topLevel.length === 0 || topLevel.every((entry) => entry === ".git/" || entry === ".owox/")
     ? "new_project"
@@ -316,10 +317,10 @@ export async function scanRepoFacts(rootDir: string): Promise<RepoFacts> {
           "go.mod",
           "README.md",
           "docs/project/index.md",
+          ".owox/project.md",
           "AGENTS.md",
-          ".agents/project.md",
           "CLAUDE.md",
-          "opencode.json",
+          ".opencode",
           ".github/copilot-instructions.md",
           ".codex/config.toml"
         ].map(async (candidate) => ((await pathExists(resolve(rootDir, candidate))) ? candidate : null))
@@ -331,12 +332,11 @@ export async function scanRepoFacts(rootDir: string): Promise<RepoFacts> {
     docs,
     existingCliConfigs: [
       ...(await Promise.all(
-        ["AGENTS.md", "CLAUDE.md", "opencode.json", ".github/copilot-instructions.md", ".codex/config.toml"].map(
+        ["AGENTS.md", "CLAUDE.md", ".opencode", ".github/copilot-instructions.md", ".codex/config.toml"].map(
           async (candidate) => ((await pathExists(resolve(rootDir, candidate))) ? candidate : null)
         )
       ))
     ].filter((value): value is string => value !== null),
-    hasLegacyHarnessArtifacts,
     inferredLocale: inferLocale(readme),
     inferredInitMode
   };

@@ -7,14 +7,18 @@ import type {
   CreateChildToParentInput,
   CreateParentToChildInput,
   CreateTaskInput,
+  DecisionRecord,
   EvidenceRecord,
   GateInput,
   GuardInput,
+  IntentData,
   TaskPatch,
   TaskState,
   TransitionContext
 } from "@owox-harness/core";
 import {
+  runDecisionRecord,
+  runDriftAudit,
   runGate,
   runGuard,
   runHandoffChildToParent,
@@ -29,11 +33,14 @@ import {
   runHarnessInitTemplate,
   runSync,
   runTaskCreate,
+  runTaskCheckPrerequisites,
   runTaskEvidence,
   runTaskLog,
   runTaskResolveGate,
+  runTaskSetCurrent,
   runTaskTransition,
   runTaskUpdate,
+  runIntentSave,
   runValidate,
   runVerify
 } from "./commands.js";
@@ -189,17 +196,46 @@ cli.command("task-log <configPath> <taskPath> <entry>", "append task activity lo
   }
 );
 
+cli.command("task-set-current <configPath> <taskPath>", "copy task JSON to .owox/tasks/task-current.json").action(
+  async (configPath: string, taskPath: string) => {
+    printResult(await runTaskSetCurrent(configPath, taskPath));
+  }
+);
+
 cli.command("task-resolve-gate <configPath> <taskPath> <summary>", "mark human gate resolved").action(
   async (configPath: string, taskPath: string, summary: string) => {
     printResult(await runTaskResolveGate(configPath, taskPath, summary));
   }
 );
 
+cli.command("intent-save <configPath> <inputPath>", "save intent artifact from JSON").action(
+  async (configPath: string, inputPath: string) => {
+    printResult(await runIntentSave(configPath, await readJsonFile<IntentData>(inputPath)));
+  }
+);
+
+cli.command("decision-record <configPath> <inputPath>", "append decision ledger record from JSON").action(
+  async (configPath: string, inputPath: string) => {
+    printResult(await runDecisionRecord(configPath, await readJsonFile<DecisionRecord>(inputPath)));
+  }
+);
+
+cli.command("task-check-prerequisites <configPath> <taskPath> <nextState>", "evaluate prerequisites for a target state").action(
+  async (configPath: string, taskPath: string, nextState: string) => {
+    printResult(await runTaskCheckPrerequisites(configPath, taskPath, nextState as TaskState));
+  }
+);
+
+cli.command("drift-audit <configPath> <taskPath>", "run drift audit for a task").action(async (configPath: string, taskPath: string) => {
+  printResult(await runDriftAudit(configPath, taskPath));
+});
+
 cli.command("verify <configPath> <taskPath> <checksPath>", "run verify against a task")
   .option("--acceptance", "mark acceptance criteria as satisfied")
-  .action(async (configPath: string, taskPath: string, checksPath: string, options: { acceptance?: boolean }) => {
+  .option("--intent", "mark intent criteria as satisfied")
+  .action(async (configPath: string, taskPath: string, checksPath: string, options: { acceptance?: boolean; intent?: boolean }) => {
     const checks = await readJsonFile<CheckResult[]>(checksPath);
-    printResult(await runVerify(configPath, taskPath, checks, Boolean(options.acceptance)));
+    printResult(await runVerify(configPath, taskPath, checks, Boolean(options.acceptance), options.intent ?? options.acceptance));
   });
 
 cli.command("guard <configPath> <inputPath>", "evaluate guard policy").action(async (configPath: string, inputPath: string) => {

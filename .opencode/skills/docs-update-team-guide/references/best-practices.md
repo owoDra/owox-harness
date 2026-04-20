@@ -22,7 +22,7 @@
 
 ## 更新時の作法
 
-- `.agents/project.md` の名称を基準に合わせる
+- `.owox/project.md` の名称を基準に合わせる
 - architecture や spec と境界が衝突しないか確認する
 - 境界変更がある場合は関連資料へ波及確認する
 

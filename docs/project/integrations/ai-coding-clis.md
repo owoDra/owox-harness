@@ -33,7 +33,7 @@
 | --- | --- | --- | --- | --- | --- |
 | Codex | `AGENTS.md`, `.codex/config.toml` | Skills | Hooks | MCP | skill で `owox` 導線、hooks で強制 |
 | Claude Code | `CLAUDE.md`, `.claude/settings.json` | Skills, subagents | Hooks | MCP | subagent 活用の主力候補 |
-| OpenCode | `AGENTS.md`, `opencode.json`, `.opencode/` | Skills, agents, commands | Plugins | MCP, custom tools | custom tool / command 連携が強い |
+| OpenCode | `AGENTS.md`, `.opencode/` | Skills, agents, commands | Plugins | MCP, custom tools | custom tool / command 連携が強い |
 | Copilot CLI | custom instructions, project files | Custom agents, skills | Hooks, plugins | MCP | enterprise-friendly な配布単位を持つ |
 
 ## Codex

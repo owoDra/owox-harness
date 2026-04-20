@@ -10,10 +10,21 @@ import {
 } from "@owox-harness/core";
 import type { HarnessConfig } from "./config.js";
 
+export function buildParentToChildPacket(task: TaskData, input: CreateParentToChildInput = {}): ParentToChildHandoff {
+  return createParentToChildHandoff(task, input);
+}
+
+export function buildChildToParentPacket(task: TaskData, input: CreateChildToParentInput): ChildToParentReport {
+  return createChildToParentReport(task, input);
+}
+
 function renderParentToChildMarkdown(config: HarnessConfig, handoff: ParentToChildHandoff): string {
   if (config.project.locale === "ja") {
     return [
       `# Handoff: ${handoff.title}`,
+      "",
+      "## Intent Summary",
+      handoff.intentSummary,
       "",
       "## 目的",
       handoff.objective,
@@ -27,6 +38,9 @@ function renderParentToChildMarkdown(config: HarnessConfig, handoff: ParentToChi
       "## 完了条件",
       ...handoff.completionCriteria.map((value) => `- ${value}`),
       "",
+      "## Related Decisions",
+      ...handoff.relatedDecisions.map((value) => `- ${value}`),
+      "",
       "## 参照資料",
       ...handoff.references.map((reference) => `- ${reference.path}: ${reference.purpose}`),
       "",
@@ -39,6 +53,9 @@ function renderParentToChildMarkdown(config: HarnessConfig, handoff: ParentToChi
   return [
     `# Handoff: ${handoff.title}`,
     "",
+    "## Intent Summary",
+    handoff.intentSummary,
+    "",
     "## Objective",
     handoff.objective,
     "",
@@ -50,6 +67,9 @@ function renderParentToChildMarkdown(config: HarnessConfig, handoff: ParentToChi
     "",
     "## Completion Criteria",
     ...handoff.completionCriteria.map((value) => `- ${value}`),
+    "",
+    "## Related Decisions",
+    ...handoff.relatedDecisions.map((value) => `- ${value}`),
     "",
     "## References",
     ...handoff.references.map((reference) => `- ${reference.path}: ${reference.purpose}`),
@@ -103,7 +123,7 @@ export function buildParentToChildMarkdown(
   task: TaskData,
   input: CreateParentToChildInput = {}
 ): string {
-  return renderParentToChildMarkdown(config, createParentToChildHandoff(task, input));
+  return renderParentToChildMarkdown(config, buildParentToChildPacket(task, input));
 }
 
 export function buildChildToParentMarkdown(
@@ -111,7 +131,7 @@ export function buildChildToParentMarkdown(
   task: TaskData,
   input: CreateChildToParentInput
 ): string {
-  return renderChildToParentMarkdown(config, createChildToParentReport(task, input));
+  return renderChildToParentMarkdown(config, buildChildToParentPacket(task, input));
 }
 
 export async function writeHandoff(filePath: string, content: string): Promise<void> {

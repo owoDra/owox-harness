@@ -10,7 +10,7 @@ argument-hint: "目的=<何を直すか> 進め方=<自走|対話>"
 
 ## 前提資料
 
-- `.agents/project.md`
+- `.owox/project.md`
 - `.opencode/skills/_shared/task-template.md`
 - `.opencode/skills/_shared/document-update-checklist.md`
 - `.opencode/skills/_shared/execution-modes.md`
@@ -24,7 +24,7 @@ argument-hint: "目的=<何を直すか> 進め方=<自走|対話>"
 
 ## やること
 
-1. 対象 `.agents/tasks/task-*.md` を作成または更新し、症状、再現条件、停止条件、回帰確認方法を明文化する
+1. 対象 `.owox/tasks/task-*.md` を作成または更新し、症状、再現条件、停止条件、回帰確認方法を明文化する
 2. 必要なら `question` で `目的`、`進め方`、症状の優先順位、互換性への影響許容、完了条件を確認する
 3. `.opencode/skills/_shared/execution-modes.md` を参照し、今回を `自走` か `対話` のどちらで進めるかと、どこで確認を挟むかを task に残す
 4. 症状を再現または確認する

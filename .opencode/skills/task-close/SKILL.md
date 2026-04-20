@@ -10,7 +10,7 @@ task の成果、未完了事項、残課題、更新済み正本、次アクシ
 
 ## 前提資料
 
-- `.agents/project.md`
+- `.owox/project.md`
 - `.opencode/skills/_shared/task-template.md`
 - `.opencode/skills/_shared/task-statuses.md`
 - `.opencode/skills/_shared/execution-modes.md`
@@ -22,7 +22,7 @@ task の成果、未完了事項、残課題、更新済み正本、次アクシ
 
 ## やること
 
-1. 対象 `.agents/tasks/task-*.md` を更新し、完了したこと、未完了事項、残課題、更新した正本、検証結果を整理する
+1. 対象 `.owox/tasks/task-*.md` を更新し、完了したこと、未完了事項、残課題、更新した正本、検証結果を整理する
 2. 必要なら `question` で `目的`、`進め方`、完了とみなす範囲や次アクションを確認する
 3. `.opencode/skills/_shared/execution-modes.md` を参照し、今回を `自走` か `対話` のどちらで進めるかと、どこで確認を挟むかを task に残す
 4. 完了条件を満たしているか確認する

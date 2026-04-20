@@ -3,8 +3,8 @@
 AI は原則として次の順で読む。
 
 1. `AGENTS.md`
-2. `.agents/project.md`
-3. 対象 `.agents/tasks/task-*.md`
+2. `.owox/project.md`
+3. 対象 `.owox/tasks/task-*.md`
 4. `docs/project/index.md`
 5. `docs/project/glossary/core.md`
 6. `docs/project/tech-stack.md`

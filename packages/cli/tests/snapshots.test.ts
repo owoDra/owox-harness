@@ -17,6 +17,7 @@ describe("generated artifact snapshots", () => {
       files
         .filter((file) => [
           "AGENTS.md",
+          ".owox/project.md",
           ".codex/config.toml",
           ".claude/subagents/discovery.md",
           ".opencode/plugins/owox.json",
@@ -26,11 +27,12 @@ describe("generated artifact snapshots", () => {
     );
 
     expect(sample).toEqual({
+      ".owox/project.md": "# Project\n\n## Name\nsnapshot-project\n\n## Description\nsnapshot-project harness configuration\n\n## Locale\nen\n\n## Profile\nweb\n\n## Source Of Truth\n- owox.harness.yaml\n- docs/project/\n\n## Managed Outputs\n- .owox/\n- AGENTS.md\n- CLAUDE.md\n- .github/copilot-instructions.md\n- codex adapter files\n- claude-code adapter files\n- opencode adapter files\n- copilot-cli adapter files\n",
       ".claude/subagents/discovery.md": "# discovery subagent\n\nUse this subagent for scoped discovery and report back through owox handoff/report flows.\n",
       ".codex/config.toml": "[project]\nname = \"snapshot-project\"\n\n[owox]\nconfig = \"owox.harness.yaml\"\nskill = \".codex/skills/owox/SKILL.md\"\n",
       ".github/plugins/owox/plugin.json": "{\n  \"name\": \"owox-plugin\",\n  \"agents\": [\n    \".github/agents/owox.agent.md\"\n  ],\n  \"skills\": [\n    \".github/skills/owox/SKILL.md\"\n  ],\n  \"hooks\": [\n    \".github/hooks/pre-command.sh\"\n  ]\n}\n",
-      ".opencode/plugins/owox.json": "{\n  \"name\": \"owox-plugin\",\n  \"hooks\": {\n    \"preTool\": \"owox validate owox.harness.yaml\",\n    \"postEdit\": \"owox sync owox.harness.yaml\"\n  }\n}\n",
-      "AGENTS.md": "## Read First\n\n1. `.agents/project.md`\n2. Target `.agents/tasks/task-*.md`\n3. `docs/project/index.md` when needed\n\n## Working Rules\n\n- Prefer `owox.harness.yaml` and `docs/project/` as source of truth\n- Do not treat generated artifacts as hand-edited source\n- Use `owox task create/update` and `owox validate` when starting task work\n- Run `owox verify` before task completion\n- Check `owox gate` for risky actions, design changes, external impact, and completion decisions\n- Use `owox sync` to regenerate managed artifacts\n"
+      ".opencode/plugins/owox.json": "{\n  \"name\": \"owox-plugin\",\n  \"hooks\": {\n    \"preTool\": \"owox validate owox.harness.yaml && (test ! -f .owox/tasks/task-current.json || owox task-check-prerequisites owox.harness.yaml .owox/tasks/task-current.json planning)\",\n    \"postEdit\": \"owox sync owox.harness.yaml\"\n  }\n}\n",
+      "AGENTS.md": "## Read First\n\n1. `.owox/project.md`\n2. Target `.owox/tasks/task-*.md` and `.owox/tasks/task-current.json` when needed\n3. `docs/project/index.md` when needed\n\n## Working Rules\n\n- Prefer `owox.harness.yaml` and `docs/project/` as source of truth\n- Do not treat generated artifacts as hand-edited source\n- Use `owox task-create`, `owox task-update`, `owox task-set-current`, `owox task-transition`, `owox task-check-prerequisites`, and `owox validate` when starting task work\n- Run `owox verify` before task completion\n- Use `owox intent-save` and `owox decision-record` for intent and decision artifacts\n- Run `owox drift-audit` before declaring completion\n- Check `owox gate` for risky actions, design changes, external impact, and completion decisions\n- Use `owox sync` to regenerate managed artifacts\n"
     });
   });
 });
@@ -47,7 +49,6 @@ describe("suggestion snapshots", () => {
         scripts: ["build", "test"],
         docs: ["README.md"],
         existingCliConfigs: ["CLAUDE.md"],
-        hasLegacyHarnessArtifacts: false,
         inferredLocale: "en",
         inferredInitMode: "existing_project"
       },

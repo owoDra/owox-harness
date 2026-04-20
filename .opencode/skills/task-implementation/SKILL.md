@@ -10,7 +10,7 @@ argument-hint: "目的=<何を実装するか> 進め方=<自走|対話>"
 
 ## 前提資料
 
-- `.agents/project.md`
+- `.owox/project.md`
 - `.opencode/skills/_shared/task-template.md`
 - `.opencode/skills/_shared/reference-order.md`
 - `.opencode/skills/_shared/document-update-checklist.md`
@@ -26,7 +26,7 @@ argument-hint: "目的=<何を実装するか> 進め方=<自走|対話>"
 
 ## やること
 
-1. 対象 `.agents/tasks/task-*.md` を作成または更新し、実装対象、対象外、不変条件、検証方法を明文化する
+1. 対象 `.owox/tasks/task-*.md` を作成または更新し、実装対象、対象外、不変条件、検証方法を明文化する
 2. 必要なら `question` で `目的`、`進め方`、変更可能範囲、完了条件を確認する
 3. `.opencode/skills/_shared/execution-modes.md` を参照し、今回を `自走` か `対話` のどちらで進めるかと、どこで確認を挟むかを task に残す
 4. 正本、既存コード、既存テストを読み、現状と変更差分を把握する

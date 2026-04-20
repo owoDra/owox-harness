@@ -6,11 +6,11 @@ argument-hint: "項目=<name|description|language|kind|subprojects|teams|integra
 
 ## 目的
 
-`.agents/project.md` を、現在のプロジェクト正本と整合する形で一貫して保守する。
+`.owox/project.md` を、現在のプロジェクト正本と整合する形で一貫して保守する。
 
 ## 前提資料
 
-- `.agents/project.md`
+- `.owox/project.md`
 - `.opencode/skills/harness-update-project/references/project.template.md`
 - `.opencode/skills/harness-update-project/references/best-practices.md`
 - `docs/project/glossary/core.md`
@@ -19,7 +19,7 @@ argument-hint: "項目=<name|description|language|kind|subprojects|teams|integra
 ## やること
 
 1. 必要なら `question` で更新対象、変更理由、追加、削除、改名の別を確認する
-2. `.agents/project.md` と関連正本を照合し、差分が必要か判断する
+2. `.owox/project.md` と関連正本を照合し、差分が必要か判断する
 3. `Name`、`Description`、`Language`、`Kind`、`Subprojects`、`Teams`、`Integrations` を更新する
 4. 新規 team を追加した場合は team guide の存在を確認する
 5. 新規 integration を追加した場合は integration 資料の存在を確認する
@@ -33,5 +33,5 @@ argument-hint: "項目=<name|description|language|kind|subprojects|teams|integra
 
 ## 確認事項
 
-- `.agents/project.md` と team / integration / subproject の正本が整合している
+- `.owox/project.md` と team / integration / subproject の正本が整合している
 - 影響範囲がある場合は関連資料の更新要否を確認した

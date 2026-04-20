@@ -18,6 +18,34 @@ const externalSuggestionProviderSchema = z.object({
   timeoutMs: z.number().int().positive().default(30000)
 });
 
+const generatedPathsSchema = z.preprocess(
+  (value) => {
+    if (!value || typeof value !== "object") {
+      return value;
+    }
+
+    const input = value as Record<string, unknown>;
+    if (input.owoxDir) {
+      return input;
+    }
+
+    if (typeof input.agentsDir === "string") {
+      return {
+        ...input,
+        owoxDir: input.agentsDir
+      };
+    }
+
+    return input;
+  },
+  z
+    .object({
+      owoxDir: z.string().min(1).default(".owox"),
+      taskDir: z.string().min(1).default(".owox/tasks")
+    })
+    .default({ owoxDir: ".owox", taskDir: ".owox/tasks" })
+);
+
 export const harnessConfigSchema = z.object({
   project: z.object({
     name: z.string().min(1),
@@ -54,7 +82,7 @@ export const harnessConfigSchema = z.object({
           trimOptionalSections: z.boolean().default(true),
           managedPaths: z.array(z.string().min(1)).default([
             "AGENTS.md",
-            ".agents/",
+            ".owox/",
             "docs/project/",
             ".codex/",
             ".claude/",
@@ -68,7 +96,7 @@ export const harnessConfigSchema = z.object({
           defaultMaxTokens: 800,
           splitThreshold: 1200,
           trimOptionalSections: true,
-          managedPaths: ["AGENTS.md", ".agents/", "docs/project/", ".codex/", ".claude/", ".opencode/", ".github/", "CLAUDE.md"],
+          managedPaths: ["AGENTS.md", ".owox/", "docs/project/", ".codex/", ".claude/", ".opencode/", ".github/", "CLAUDE.md"],
           overrides: []
         })
     })
@@ -77,25 +105,20 @@ export const harnessConfigSchema = z.object({
         defaultMaxTokens: 800,
         splitThreshold: 1200,
         trimOptionalSections: true,
-        managedPaths: ["AGENTS.md", ".agents/", "docs/project/", ".codex/", ".claude/", ".opencode/", ".github/", "CLAUDE.md"],
+        managedPaths: ["AGENTS.md", ".owox/", "docs/project/", ".codex/", ".claude/", ".opencode/", ".github/", "CLAUDE.md"],
         overrides: []
       }
     }),
-  generated: z
-    .object({
-      agentsDir: z.string().min(1).default(".agents"),
-      taskDir: z.string().min(1).default(".agents/tasks")
-    })
-    .default({ agentsDir: ".agents", taskDir: ".agents/tasks" }),
+  generated: generatedPathsSchema,
   adapters: z.array(adapterSchema).default(["codex", "claude-code", "opencode", "copilot-cli"]),
   policies: z
     .object({
-      protectedPaths: z.array(z.string().min(1)).default(["docs/project/", ".github/", ".claude/", ".codex/", ".opencode/"]),
+      protectedPaths: z.array(z.string().min(1)).default(["docs/project/", ".owox/", ".github/", ".claude/", ".codex/", ".opencode/"]),
       deniedActions: z.array(z.string().min(1)).default(["git reset --hard", "git checkout --", "rm -rf /"]),
       askActions: z.array(z.string().min(1)).default(["push", "release", "deploy"])
     })
     .default({
-      protectedPaths: ["docs/project/", ".github/", ".claude/", ".codex/", ".opencode/"],
+      protectedPaths: ["docs/project/", ".owox/", ".github/", ".claude/", ".codex/", ".opencode/"],
       deniedActions: ["git reset --hard", "git checkout --", "rm -rf /"],
       askActions: ["push", "release", "deploy"]
     }),

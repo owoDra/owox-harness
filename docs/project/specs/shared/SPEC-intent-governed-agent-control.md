@@ -159,9 +159,8 @@ child は packet に含まれない前提を暗黙採用してはいけません
 
 ### CLI 固有の生成ディレクトリ
 
-- `.claude/`、`.opencode/`、`.codex/`、`.github/`、`.agents/` など、各 CLI が読む設定や skill / agent 定義を置く
+- `.claude/`、`.opencode/`、`.codex/`、`.github/` など、各 CLI が読む設定や skill / agent 定義を置く
 - task state や hidden runtime artifact は置かない
-- `.agents/` はその一例であり、architecture 上の特別扱いをしない
 
 ## 失敗時の扱い
 

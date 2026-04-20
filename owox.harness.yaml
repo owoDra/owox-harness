@@ -1,0 +1,59 @@
+project:
+  name: owox-harness
+  description: Workflow-driven AI development harness generator and runtime
+  locale: ja
+  profile: web
+
+source:
+  hiddenLanguage: en
+  docsRoot: docs/project
+
+init:
+  mode: existing_project
+  sourceOfTruthPolicy: hybrid
+  managedArtifactsPolicy: safe_minimum
+  suggestionProvider: builtin
+
+contentBudgets:
+  documents:
+    defaultMaxTokens: 2400
+    splitThreshold: 3200
+    trimOptionalSections: true
+    managedPaths:
+      - AGENTS.md
+      - .owox/
+      - docs/project/
+      - .opencode/
+    overrides:
+      - path: AGENTS.md
+        maxTokens: 400
+      - pathPrefix: docs/project/
+        maxTokens: 2600
+
+generated:
+  owoxDir: .owox
+  taskDir: .owox/tasks
+
+adapters:
+  - opencode
+
+policies:
+  protectedPaths:
+    - docs/project/
+    - .owox/
+    - .opencode/
+  deniedActions:
+    - git reset --hard
+    - git checkout --
+    - rm -rf /
+  askActions:
+    - push
+    - release
+    - deploy
+
+taskDefaults:
+  requiredChecks:
+    - pnpm validate
+    - pnpm build
+  references:
+    - docs/project/index.md

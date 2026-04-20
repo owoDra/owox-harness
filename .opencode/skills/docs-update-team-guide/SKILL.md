@@ -24,7 +24,7 @@ argument-hint: "チーム=<team> 役割=<役割> 担当範囲=<担当範囲>"
 2. 既存 guide と関連資料を確認し、名称と責務境界をそろえる
 3. `<team>-guide.md` を作成または更新する
 4. `.opencode/skills/_shared/document-reference-rules.md` に従い、`docs/project/teams/index.md` を必ず更新する
-5. 新規 team の場合は `.agents/project.md` 更新要否を確認する
+5. 新規 team の場合は `.owox/project.md` 更新要否を確認する
 
 ## ルール
 
@@ -37,5 +37,5 @@ argument-hint: "チーム=<team> 役割=<役割> 担当範囲=<担当範囲>"
 
 - 役割、担当範囲、ルール、固有知識が分かれている
 - `docs/project/teams/index.md` を更新した
-- `.agents/project.md` 更新要否を確認した
+- `.owox/project.md` 更新要否を確認した
 - architecture との境界が崩れていない

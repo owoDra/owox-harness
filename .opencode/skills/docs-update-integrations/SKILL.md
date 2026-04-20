@@ -25,7 +25,7 @@ argument-hint: "外部サービス=<name> 種別=<api|service|platform|tool> 担
 2. 既存 integration 資料と重複がないか調べる
 3. `<integration>.md` を作成または更新する
 4. `.opencode/skills/_shared/document-reference-rules.md` に従い、`docs/project/integrations/index.md` を必ず更新する
-5. 新規 integration の場合は `.agents/project.md` 更新要否を確認する
+5. 新規 integration の場合は `.owox/project.md` 更新要否を確認する
 6. requirement / spec / validation / ADR / tech-stack 影響を確認する
 
 ## ルール
@@ -41,4 +41,4 @@ argument-hint: "外部サービス=<name> 種別=<api|service|platform|tool> 担
 - 役割と担当チームが明確である
 - 制約と障害時の扱いが記録されている
 - `docs/project/integrations/index.md` を更新した
-- `.agents/project.md` 更新要否を確認した
+- `.owox/project.md` 更新要否を確認した

@@ -13,7 +13,7 @@
 - 配置ルールが守られているか
 - 命名と ID がルールどおりか
 - 相互参照が成立しているか
-- `.agents/` と `docs/project/` の責務が混ざっていないか
+- `.owox/`、CLI 固有生成物、`docs/project/` の責務が混ざっていないか
 - front matter や状態値がルールどおりか
 - active / archive の配置が妥当か
 - skill が最新の入口パスに追従しているか

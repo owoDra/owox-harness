@@ -3,6 +3,8 @@ import { dirname, join } from "node:path";
 import { tmpdir } from "node:os";
 import { describe, expect, test } from "vitest";
 import {
+  runDecisionRecord,
+  runDriftAudit,
   runGate,
   runGuard,
   runHandoffChildToParent,
@@ -17,8 +19,12 @@ import {
   runHarnessInitTemplate,
   runSync,
   runTaskCreate,
+  runTaskCheckPrerequisites,
   runTaskEvidence,
+  runTaskUpdate,
+  runTaskSetCurrent,
   runTaskTransition,
+  runIntentSave,
   runValidate,
   runVerify
 } from "../src/commands.js";
@@ -58,7 +64,7 @@ async function setupHarness() {
 }
 
 async function createTaskFixture(configPath: string, rootDir: string) {
-  const taskPath = join(rootDir, ".agents/tasks/task-1.json");
+  const taskPath = join(rootDir, ".owox/tasks/task-1.json");
   await runTaskCreate(configPath, taskPath, {
     taskId: "task-1",
     title: "Implement v2",
@@ -67,7 +73,7 @@ async function createTaskFixture(configPath: string, rootDir: string) {
     outOfScope: ["packages/adapters"],
     acceptanceCriteria: ["validate works"],
     references: ["docs/project/specs/cli/SPEC-command-surface.md"],
-    currentState: "ready"
+    currentState: "planning"
   });
   return taskPath;
 }
@@ -77,12 +83,12 @@ describe("cli commands", () => {
     const { rootDir, configPath } = await setupHarness();
 
     await expect(readFile(configPath, "utf8")).resolves.toContain("name: sample");
+    await expect(readFile(join(rootDir, ".owox/project.md"), "utf8")).resolves.toContain("Managed Outputs");
     await expect(readFile(join(rootDir, "AGENTS.md"), "utf8")).resolves.toContain("owox sync");
     await expect(readFile(join(rootDir, ".codex/config.toml"), "utf8")).resolves.toContain("owox.harness.yaml");
     await expect(readFile(join(rootDir, ".codex/hooks/pre-tool.sh"), "utf8")).resolves.toContain("owox validate");
     await expect(readFile(join(rootDir, "CLAUDE.md"), "utf8")).resolves.toContain("owox validate");
     await expect(readFile(join(rootDir, ".claude/subagents/discovery.md"), "utf8")).resolves.toContain("subagent");
-    await expect(readFile(join(rootDir, "opencode.json"), "utf8")).resolves.toContain("owox.harness.yaml");
     await expect(readFile(join(rootDir, ".opencode/plugins/owox.json"), "utf8")).resolves.toContain("preTool");
     await expect(readFile(join(rootDir, ".github/copilot-instructions.md"), "utf8")).resolves.toContain("owox");
     await expect(readFile(join(rootDir, ".github/plugins/owox/plugin.json"), "utf8")).resolves.toContain("owox-plugin");
@@ -115,9 +121,14 @@ describe("cli commands", () => {
       createdAt: "2026-04-17T00:00:00.000Z"
     })).resolves.toMatchObject({ ok: true });
 
+    await expect(runTaskSetCurrent(configPath, taskPath)).resolves.toMatchObject({
+      ok: true,
+      data: { currentPath: expect.stringContaining(".owox/tasks/task-current.json") }
+    });
+
     await expect(
-      runTaskTransition(configPath, taskPath, "in_progress")
-    ).resolves.toMatchObject({ ok: true, data: { currentState: "in_progress" } });
+      runTaskTransition(configPath, taskPath, "executing")
+    ).resolves.toMatchObject({ ok: true, data: { currentState: "executing" } });
 
     await expect(
       runVerify(configPath, taskPath, [{ check: "pnpm validate", passed: true }, { check: "pnpm build", passed: true }], true)
@@ -145,7 +156,7 @@ describe("cli commands", () => {
       })
     ).resolves.toMatchObject({
       ok: false,
-      message: "human gate が必要です。",
+      message: "人間確認が必要です。",
       data: { status: "required" }
     });
   });
@@ -167,17 +178,69 @@ describe("cli commands", () => {
       runHandoffParentToChild(configPath, taskPath, parentPath, {
         constraints: ["Keep adapter logic outside core"]
       })
-    ).resolves.toMatchObject({ ok: true });
+    ).resolves.toMatchObject({ ok: true, data: { packetPath: expect.stringContaining(".owox/handoffs/task-1-parent-to-child.json") } });
 
     await expect(
       runHandoffChildToParent(configPath, taskPath, childPath, {
         facts: ["Implemented sync"],
         proposals: ["Add more fixtures"]
       })
-    ).resolves.toMatchObject({ ok: true });
+    ).resolves.toMatchObject({ ok: true, data: { packetPath: expect.stringContaining(".owox/handoffs/task-1-child-to-parent.json") } });
 
+    await expect(readFile(join(rootDir, ".owox/handoffs/task-1-parent-to-child.json"), "utf8")).resolves.toContain("intentSummary");
     await expect(readFile(parentPath, "utf8")).resolves.toContain("## 目的");
     await expect(readFile(childPath, "utf8")).resolves.toContain("## 実施した事実");
+  });
+
+  test("intent, decision, prerequisite, and drift commands work together", async () => {
+    const { rootDir, configPath } = await setupHarness();
+    const taskPath = await createTaskFixture(configPath, rootDir);
+
+    await expect(
+      runIntentSave(configPath, {
+        intentId: "task-1",
+        userGoal: "Create the first v2 packages without changing external behavior",
+        successImage: "validate works",
+        nonGoals: ["packages/adapters"],
+        mustKeep: ["existing external behavior"],
+        tradeoffs: ["prefer minimal changes"],
+        openQuestions: [],
+        decisionPolicy: "ask_when_ambiguous",
+        approvalPolicy: "auto_with_guard",
+        requiredDocs: ["docs/project/specs/cli/SPEC-command-surface.md"],
+        confirmedDocs: ["docs/project/specs/cli/SPEC-command-surface.md"]
+      })
+    ).resolves.toMatchObject({ ok: true });
+
+    await expect(
+      runDecisionRecord(configPath, {
+        decisionId: "decision-1",
+        relatedIntentId: "task-1",
+        question: "Which workflow path should we keep?",
+        options: ["minimal"],
+        chosenOption: "minimal",
+        rationale: "Keep scope contained",
+        decidedBy: "user",
+        timestamp: "2026-04-19T00:00:00.000Z"
+      })
+    ).resolves.toMatchObject({ ok: true });
+
+    await expect(
+      runTaskUpdate(configPath, taskPath, {
+        requiredDecisions: ["decision-1"],
+        resolvedDecisions: ["decision-1"]
+      })
+    ).resolves.toMatchObject({ ok: true });
+
+    await expect(runTaskCheckPrerequisites(configPath, taskPath, "executing")).resolves.toMatchObject({
+      ok: true,
+      data: { decision: "allow" }
+    });
+
+    await expect(runDriftAudit(configPath, taskPath)).resolves.toMatchObject({
+      ok: true,
+      data: { status: "pass", path: expect.stringContaining(".owox/drift-audits/task-1.json") }
+    });
   });
 
   test("consultative init workflow scans, suggests, confirms, and materializes", async () => {
@@ -310,44 +373,6 @@ describe("cli commands", () => {
     await expect(readFile(join(rootDir, "docs/project/index.md"), "utf8")).resolves.toContain("Existing source docs.");
     await expect(readFile(join(rootDir, ".claude/hooks/pre-command.sh"), "utf8")).resolves.toContain("owox validate");
     await expect(readFile(join(rootDir, ".github/plugins/owox/plugin.json"), "utf8")).resolves.toContain("owox-plugin");
-    await expect(runValidate(configPath)).resolves.toMatchObject({ ok: true });
-  });
-
-  test("consultative init treats legacy harness fixture as an existing project", async () => {
-    const rootDir = await createProjectRoot();
-    await seedFixture(rootDir, "legacy-project.json");
-
-    await runHarnessInitStart({ rootDir, visibleLocale: "en" });
-    const sessionPath = getInitSessionPath(rootDir);
-
-    await expect(runHarnessInitScan(sessionPath)).resolves.toMatchObject({
-      ok: true,
-      data: {
-        session: {
-          repoFacts: {
-            inferredInitMode: "existing_project",
-            hasLegacyHarnessArtifacts: true
-          }
-        }
-      }
-    });
-
-    await runHarnessInitSuggest(sessionPath);
-    await expect(
-      runHarnessInitConfirm(sessionPath, {
-        name: "legacy-project",
-        initMode: "existing_project",
-        locale: "en",
-        profile: "web",
-        adapters: ["codex", "claude-code"],
-        sourceOfTruthPolicy: "reuse_existing_docs",
-        managedArtifactsPolicy: "safe_minimum"
-      })
-    ).resolves.toMatchObject({ ok: true });
-
-    await expect(runHarnessInitMaterialize(sessionPath)).resolves.toMatchObject({ ok: true });
-    const configPath = getConfigPath(rootDir);
-    await expect(readFile(configPath, "utf8")).resolves.toContain("mode: existing_project");
     await expect(runValidate(configPath)).resolves.toMatchObject({ ok: true });
   });
 

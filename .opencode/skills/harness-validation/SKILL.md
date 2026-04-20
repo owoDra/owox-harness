@@ -6,12 +6,11 @@ argument-hint: "範囲=<all|skills|tasks|docs> 進め方=<自走|対話>"
 
 ## 目的
 
-`.agents/` と `docs/project/` の存在、配置、命名、相互参照、責務分離、project 定義との整合を確認し、修正が必要な箇所を整理する。
+`.owox/`、CLI 固有生成物、`docs/project/` の存在、配置、命名、相互参照、責務分離、project 定義との整合を確認し、修正が必要な箇所を整理する。
 
 ## 前提資料
 
-- `.agents/project.md`
-- `.agents/scripts/validate_harness.sh`
+- `.owox/project.md`
 - `.opencode/skills/harness-validation/references/best-practices.md`
 - `docs/project/index.md`
 - `docs/project/glossary/core.md`
@@ -22,7 +21,7 @@ argument-hint: "範囲=<all|skills|tasks|docs> 進め方=<自走|対話>"
 1. 必要なら `question` で `範囲`、`進め方`、完了条件、確認対象外を確認する
 2. 必須資料の存在を確認する
 3. 配置ルール、命名規則、見出し、front matter、相互参照、責務分離、index 参照リストと実体の整合を確認する
-4. `.agents/scripts/validate_harness.sh` を使って機械検査を実行する
+4. `pnpm validate` または `owox validate` を使って機械検査を実行する
 5. 問題なし、不整合、判断保留、推奨する次 task を整理する
 
 ## ルール
@@ -37,5 +36,5 @@ argument-hint: "範囲=<all|skills|tasks|docs> 進め方=<自走|対話>"
 - 必須資料の存在確認を行った
 - 配置、命名、参照、責務分離を確認した
 - index 参照リストと実体の整合を確認した
-- `validate_harness.sh` の結果を整理した
+- 機械検査の結果を整理した
 - 推奨する次 task まで整理した

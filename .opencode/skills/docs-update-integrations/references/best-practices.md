@@ -23,7 +23,7 @@
 
 ## 更新時の作法
 
-- `.agents/project.md` の名称とそろえる
+- `.owox/project.md` の名称とそろえる
 - 用語集の命名を優先する
 - 制約変更があれば validation や ADR の更新要否も確認する
 

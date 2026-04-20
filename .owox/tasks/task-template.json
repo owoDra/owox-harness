@@ -1,0 +1,25 @@
+{
+  "intentId": "task-template",
+  "intentSummary": "Describe the user goal and must-keep constraints.",
+  "taskId": "task-template",
+  "title": "",
+  "objective": "",
+  "scope": [],
+  "outOfScope": [],
+  "acceptanceCriteria": [],
+  "requiredDocs": [],
+  "confirmedDocs": [],
+  "currentState": "intake",
+  "requiredDecisions": [],
+  "resolvedDecisions": [],
+  "requiredChecks": [
+    "pnpm validate",
+    "pnpm build"
+  ],
+  "humanGate": "none",
+  "attachedEvidence": [],
+  "references": [
+    "docs/project/index.md"
+  ],
+  "activityLog": []
+}

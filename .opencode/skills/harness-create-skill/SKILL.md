@@ -9,7 +9,7 @@ description: ハーネスに新しい skill を追加するときに使用する
 
 ## 前提資料
 
-- `.agents/project.md`
+- `.owox/project.md`
 - `.opencode/skills/harness-create-skill/references/SKILL.example.md`
 - 既存の `.opencode/skills/*/SKILL.md`
 - `docs/project/glossary/core.md`

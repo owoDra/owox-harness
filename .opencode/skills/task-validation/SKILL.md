@@ -10,7 +10,7 @@ argument-hint: "目的=<何を検証するか> 進め方=<自走|対話>"
 
 ## 前提資料
 
-- `.agents/project.md`
+- `.owox/project.md`
 - `.opencode/skills/_shared/task-template.md`
 - `.opencode/skills/_shared/execution-modes.md`
 - `.opencode/skills/_shared/request-user-input-policy.md`
@@ -23,7 +23,7 @@ argument-hint: "目的=<何を検証するか> 進め方=<自走|対話>"
 
 ## やること
 
-1. 対象 `.agents/tasks/task-*.md` を作成または更新し、検証対象、合格条件、証跡の取り方、停止条件を明文化する
+1. 対象 `.owox/tasks/task-*.md` を作成または更新し、検証対象、合格条件、証跡の取り方、停止条件を明文化する
 2. 必要なら `question` で `目的`、`進め方`、優先検証項目や合格条件の解釈を確認する
 3. `.opencode/skills/_shared/execution-modes.md` を参照し、今回を `自走` か `対話` のどちらで進めるかと、どこで確認を挟むかを task に残す
 4. validation と関連正本に沿って検証を実施する

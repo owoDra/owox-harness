@@ -1,11 +1,13 @@
 import { mkdir, writeFile } from "node:fs/promises";
-import { dirname } from "node:path";
+import { dirname, join } from "node:path";
 import {
   appendActivity,
   appendEvidence,
   createTask,
+  evaluateDriftAudit,
   evaluateGate,
   evaluateGuard,
+  evaluatePrerequisites,
   evaluateVerify,
   resolveHumanGate,
   transitionTask,
@@ -14,9 +16,11 @@ import {
   type CreateChildToParentInput,
   type CreateParentToChildInput,
   type CreateTaskInput,
+  type DecisionRecord,
   type EvidenceRecord,
   type GateInput,
   type GuardInput,
+  type IntentData,
   type TaskPatch,
   type TaskState,
   type TransitionContext
@@ -30,7 +34,13 @@ import {
   saveHarnessConfig
 } from "./config.js";
 import { syncGeneratedFiles, validateGeneratedFiles, validateProjectDocs } from "./generation.js";
-import { buildChildToParentMarkdown, buildParentToChildMarkdown, writeHandoff } from "./handoff.js";
+import {
+  buildChildToParentMarkdown,
+  buildChildToParentPacket,
+  buildParentToChildMarkdown,
+  buildParentToChildPacket,
+  writeHandoff
+} from "./handoff.js";
 import {
   buildDecisionTemplate,
   createInitSession,
@@ -46,6 +56,14 @@ import {
   type StartInitSessionInput
 } from "./init-workflow.js";
 import { getMessages } from "./messages.js";
+import {
+  appendDecisionRecord,
+  loadDecisionLedger,
+  loadIntent,
+  saveDriftAudit,
+  saveIntent,
+  validateRuntimeArtifacts
+} from "./runtime-artifacts.js";
 import { loadTaskFile, saveTaskFile } from "./task-file.js";
 
 export interface CommandResult<T> {
@@ -198,10 +216,12 @@ export async function runValidate(configPath: string): Promise<CommandResult<{ c
     const issues = await validateGeneratedFiles(rootDir, config);
     const projectDocIssues = await validateProjectDocs(rootDir, config);
     const initIssues = await validateInitSession(getInitSessionPath(rootDir));
+    const runtimeIssues = await validateRuntimeArtifacts(rootDir, config);
     const allIssues = [
       ...issues.map((issue) => issue.message),
       ...projectDocIssues.map((issue) => issue.message),
-      ...initIssues.map((issue) => issue.message)
+      ...initIssues.map((issue) => issue.message),
+      ...runtimeIssues
     ];
 
     if (allIssues.length > 0) {
@@ -230,14 +250,32 @@ export async function runValidate(configPath: string): Promise<CommandResult<{ c
 
 export async function runTaskCreate(configPath: string, taskPath: string, input: CreateTaskInput) {
   const { config, messages } = await loadConfigAndMessages(configPath);
+  const rootDir = getRootDirFromConfigPath(configPath);
+  const requiredDocs = input.requiredDocs ?? input.references ?? [];
+  const confirmedDocs = input.confirmedDocs ?? requiredDocs;
   const task = createTask({
     ...input,
+    requiredDocs,
+    confirmedDocs,
     requiredChecks: input.requiredChecks ?? config.taskDefaults.requiredChecks,
     references: input.references ?? config.taskDefaults.references
   });
 
   await mkdir(dirname(taskPath), { recursive: true });
   await saveTaskFile(taskPath, task);
+  await saveIntent(rootDir, config, {
+    intentId: task.intentId,
+    userGoal: task.intentSummary || task.objective,
+    successImage: task.acceptanceCriteria.join("; "),
+    nonGoals: task.outOfScope,
+    mustKeep: [],
+    tradeoffs: [],
+    openQuestions: [],
+    decisionPolicy: "ask_when_ambiguous",
+    approvalPolicy: task.humanGate === "required" ? "human_gate_required" : "auto_with_guard",
+    requiredDocs,
+    confirmedDocs
+  });
 
   return {
     ok: true,
@@ -259,14 +297,53 @@ export async function runTaskUpdate(configPath: string, taskPath: string, patch:
   } satisfies CommandResult<typeof nextTask>;
 }
 
+export async function runTaskSetCurrent(configPath: string, taskPath: string) {
+  const { config, messages } = await loadConfigAndMessages(configPath);
+  const rootDir = getRootDirFromConfigPath(configPath);
+  const task = await loadTaskFile(taskPath);
+  const currentPath = join(rootDir, config.generated.taskDir, "task-current.json");
+  await mkdir(dirname(currentPath), { recursive: true });
+  await saveTaskFile(currentPath, task);
+
+  return {
+    ok: true,
+    message: messages.taskUpdated,
+    data: { currentPath, task }
+  } satisfies CommandResult<{ currentPath: string; task: typeof task }>;
+}
+
 export async function runTaskTransition(
   configPath: string,
   taskPath: string,
   nextState: TaskState,
   context: TransitionContext = {}
 ) {
-  const { messages } = await loadConfigAndMessages(configPath);
+  const { config, messages } = await loadConfigAndMessages(configPath);
+  const rootDir = getRootDirFromConfigPath(configPath);
   const task = await loadTaskFile(taskPath);
+  const prerequisite = evaluatePrerequisites({
+    task,
+    nextState,
+    intent: await loadIntent(rootDir, config, task.intentId),
+    decisions: await loadDecisionLedger(rootDir, config)
+  });
+
+  if (prerequisite.decision === "deny") {
+    return {
+      ok: false,
+      message: messages.prerequisiteBlocked,
+      data: prerequisite
+    } satisfies CommandResult<typeof prerequisite>;
+  }
+
+  if (prerequisite.decision === "ask") {
+    return {
+      ok: false,
+      message: messages.gateRequired,
+      data: prerequisite
+    } satisfies CommandResult<typeof prerequisite>;
+  }
+
   const nextTask = transitionTask(task, nextState, context);
 
   await saveTaskFile(taskPath, nextTask);
@@ -317,15 +394,76 @@ export async function runTaskResolveGate(configPath: string, taskPath: string, s
   } satisfies CommandResult<typeof nextTask>;
 }
 
+export async function runIntentSave(configPath: string, intent: IntentData) {
+  const { config, messages } = await loadConfigAndMessages(configPath);
+  const rootDir = getRootDirFromConfigPath(configPath);
+  const path = await saveIntent(rootDir, config, intent);
+
+  return {
+    ok: true,
+    message: messages.intentSaved,
+    data: { path, intent }
+  } satisfies CommandResult<{ path: string; intent: IntentData }>;
+}
+
+export async function runDecisionRecord(configPath: string, decision: DecisionRecord) {
+  const { config, messages } = await loadConfigAndMessages(configPath);
+  const rootDir = getRootDirFromConfigPath(configPath);
+  const path = await appendDecisionRecord(rootDir, config, decision);
+
+  return {
+    ok: true,
+    message: messages.decisionRecorded,
+    data: { path, decision }
+  } satisfies CommandResult<{ path: string; decision: DecisionRecord }>;
+}
+
+export async function runTaskCheckPrerequisites(configPath: string, taskPath: string, nextState: TaskState) {
+  const { config, messages } = await loadConfigAndMessages(configPath);
+  const rootDir = getRootDirFromConfigPath(configPath);
+  const task = await loadTaskFile(taskPath);
+  const result = evaluatePrerequisites({
+    task,
+    nextState,
+    intent: await loadIntent(rootDir, config, task.intentId),
+    decisions: await loadDecisionLedger(rootDir, config)
+  });
+
+  return {
+    ok: result.decision === "allow",
+    message: result.decision === "allow" ? messages.prerequisiteAllow : result.decision === "ask" ? messages.gateRequired : messages.prerequisiteBlocked,
+    data: result
+  } satisfies CommandResult<typeof result>;
+}
+
+export async function runDriftAudit(configPath: string, taskPath: string) {
+  const { config, messages } = await loadConfigAndMessages(configPath);
+  const rootDir = getRootDirFromConfigPath(configPath);
+  const task = await loadTaskFile(taskPath);
+  const result = evaluateDriftAudit({
+    task,
+    intent: await loadIntent(rootDir, config, task.intentId),
+    decisions: await loadDecisionLedger(rootDir, config)
+  });
+  const path = await saveDriftAudit(rootDir, config, task.taskId, result);
+
+  return {
+    ok: result.status === "pass",
+    message: result.status === "pass" ? messages.driftPass : messages.driftFail,
+    data: { path, ...result }
+  } satisfies CommandResult<{ path: string; status: string; findings: typeof result.findings }>;
+}
+
 export async function runVerify(
   configPath: string,
   taskPath: string,
   checkResults: CheckResult[],
-  acceptanceSatisfied: boolean
+  acceptanceSatisfied: boolean,
+  intentSatisfied = acceptanceSatisfied
 ) {
   const { config, messages } = await loadConfigAndMessages(configPath);
   const task = await loadTaskFile(taskPath);
-  const result = evaluateVerify({ task, checkResults, acceptanceSatisfied });
+  const result = evaluateVerify({ task, checkResults, acceptanceSatisfied, intentSatisfied });
 
   const message =
     result.status === "pass"
@@ -341,7 +479,13 @@ export async function runVerify(
       ...result,
       locale: config.project.locale
     }
-  } satisfies CommandResult<{ status: string; reasons: string[]; locale: HarnessConfig["project"]["locale"] }>;
+  } satisfies CommandResult<{
+    status: string;
+    executionStatus: string;
+    intentStatus: string;
+    reasons: string[];
+    locale: HarnessConfig["project"]["locale"];
+  }>;
 }
 
 export async function runGuard(configPath: string, input: GuardInput) {
@@ -393,15 +537,19 @@ export async function runHandoffParentToChild(
 ) {
   const { config } = await loadConfigAndMessages(configPath);
   const task = await loadTaskFile(taskPath);
+  const packet = buildParentToChildPacket(task, input);
   const content = buildParentToChildMarkdown(config, task, input);
+  const packetPath = join(getRootDirFromConfigPath(configPath), config.generated.owoxDir, "handoffs", `${task.taskId}-parent-to-child.json`);
   await mkdir(dirname(outputPath), { recursive: true });
   await writeHandoff(outputPath, content);
+  await mkdir(dirname(packetPath), { recursive: true });
+  await writeFile(packetPath, `${JSON.stringify(packet, null, 2)}\n`, "utf8");
 
   return {
     ok: true,
     message: config.project.locale === "ja" ? "handoff を出力しました。" : "Handoff written.",
-    data: { outputPath }
-  } satisfies CommandResult<{ outputPath: string }>;
+    data: { outputPath, packetPath }
+  } satisfies CommandResult<{ outputPath: string; packetPath: string }>;
 }
 
 export async function runHandoffChildToParent(
@@ -412,13 +560,17 @@ export async function runHandoffChildToParent(
 ) {
   const { config } = await loadConfigAndMessages(configPath);
   const task = await loadTaskFile(taskPath);
+  const packet = buildChildToParentPacket(task, input);
   const content = buildChildToParentMarkdown(config, task, input);
+  const packetPath = join(getRootDirFromConfigPath(configPath), config.generated.owoxDir, "handoffs", `${task.taskId}-child-to-parent.json`);
   await mkdir(dirname(outputPath), { recursive: true });
   await writeHandoff(outputPath, content);
+  await mkdir(dirname(packetPath), { recursive: true });
+  await writeFile(packetPath, `${JSON.stringify(packet, null, 2)}\n`, "utf8");
 
   return {
     ok: true,
     message: config.project.locale === "ja" ? "report を出力しました。" : "Report written.",
-    data: { outputPath }
-  } satisfies CommandResult<{ outputPath: string }>;
+    data: { outputPath, packetPath }
+  } satisfies CommandResult<{ outputPath: string; packetPath: string }>;
 }

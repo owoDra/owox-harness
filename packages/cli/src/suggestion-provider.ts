@@ -30,7 +30,7 @@ function inferAdapters(facts: RepoFacts): Array<"codex" | "claude-code" | "openc
     if (facts.existingCliConfigs.includes("CLAUDE.md")) {
       detected.push("claude-code");
     }
-    if (facts.existingCliConfigs.includes("opencode.json")) {
+    if (facts.existingCliConfigs.includes(".opencode")) {
       detected.push("opencode");
     }
     if (facts.existingCliConfigs.includes(".github/copilot-instructions.md")) {
@@ -63,7 +63,7 @@ export const builtinSuggestionProvider: SuggestionProvider = {
         ),
         reasons: ["Derived from detected repository files and existing project artifacts."],
         risks: ["Misclassification is possible when the repository is only partially initialized."],
-        openQuestions: ["Should existing legacy harness files be ignored or removed manually?"]
+        openQuestions: ["Should existing generated workflow files be kept or regenerated?"]
       },
       {
         topic: "name",

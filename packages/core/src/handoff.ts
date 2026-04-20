@@ -14,10 +14,12 @@ export function createParentToChildHandoff(
     kind: "parent_to_child",
     taskId: task.taskId,
     title: task.title,
+    intentSummary: task.intentSummary,
     objective: task.objective,
     scope: task.scope,
     outOfScope: task.outOfScope,
     completionCriteria: task.acceptanceCriteria,
+    relatedDecisions: task.resolvedDecisions,
     references:
       input.references ?? task.references.map((path) => ({ path, purpose: "Task reference" })),
     constraints: input.constraints ?? [],

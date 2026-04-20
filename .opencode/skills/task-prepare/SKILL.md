@@ -10,12 +10,12 @@ argument-hint: "目的=<今回の依頼> 進め方=<自走|対話>"
 
 ## 初期化例外
 
-- `.agents/project.md` が未初期化、または placeholder のままなら `harness-init` を先に使う
+- `.owox/project.md` が未初期化、または placeholder のままなら `harness-init` を先に使う
 - `harness-init` の完了後に、この skill 相当の整理へ戻る
 
 ## 前提資料
 
-- `.agents/project.md`
+- `.owox/project.md`
 - `.opencode/skills/_shared/task-template.md`
 - `.opencode/skills/_shared/execution-modes.md`
 - `.opencode/skills/_shared/request-user-input-policy.md`
@@ -42,7 +42,7 @@ argument-hint: "目的=<今回の依頼> 進め方=<自走|対話>"
    - 不具合修正なら `task-fix`
    - レビューなら `task-review`
    - 検証なら `task-validation`
-5. `.agents/tasks/task-<short-title>.md` を作成または更新し、後続 skill へ引き継ぐ
+5. `.owox/tasks/task-<short-title>.md` を作成または更新し、後続 skill へ引き継ぐ
 
 ## ルール
 

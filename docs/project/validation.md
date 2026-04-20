@@ -73,6 +73,15 @@
 - 必読 docs 未確認で `planning` や `executing` へ進まない
 - required checks 未定義で `done` へ進まない
 - required evidence 未添付で `done` へ進まない
+- `task-check-prerequisites` が `allow` / `ask` / `deny` を返す
+- hidden artifact の intent / decision ledger 不足を検出できる
+
+### V-5b. intent / decision / drift artifacts
+
+- `.owox/intents/` に intent artifact が保存される
+- `.owox/decisions/ledger.json` に decision record が保存される
+- `.owox/drift-audits/` に drift audit 結果が保存される
+- drift audit が intent / decision / evidence のずれを検出できる
 
 ### V-6. 多言語境界
 
@@ -81,6 +90,8 @@
 - locale 切替で internal key が崩れない
 
 ## P0: adapter ごとに確認したい項目
+
+実機確認の手順、期待結果、残す証跡は repo 直下の `Checklist.md` を参照します。
 
 ### V-7. Codex adapter
 
@@ -147,11 +158,6 @@
 - 文書ひな型
 - CLI adapter files
 - locale rendered docs
-
-### V-16. legacy coexistence
-
-- 既存 legacy harness files があっても consultative init が壊れない
-- generated outputs と legacy files の責務が混ざらない
 
 ## 失敗時の扱い
 

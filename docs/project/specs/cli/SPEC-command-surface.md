@@ -8,7 +8,12 @@
 
 - `harness-init`
 - `task`
+- `task-set-current`
+- `intent-save`
+- `decision-record`
+- `task-check-prerequisites`
 - `verify`
+- `drift-audit`
 - `guard`
 - `gate`
 - `handoff`
@@ -47,11 +52,37 @@
 - intent と required decisions を参照して prerequisite を評価する
 - task 契約を満たさない更新を拒否する
 
+### `task-set-current`
+
+- 指定 task を `.owox/tasks/task-current.json` へ反映する
+- hook / plugin が参照する current task pointer を更新する
+
+### `intent-save`
+
+- `.owox/` 配下の intent artifact を作成または更新する
+- task が参照する上位意図を hidden artifact として保持する
+
+### `decision-record`
+
+- `.owox/` 配下の decision ledger を更新する
+- required decision の resolved 前提を機械可読に残す
+
+### `task-check-prerequisites`
+
+- target state に対する prerequisite enforcement を評価する
+- 少なくとも `allow`、`ask`、`deny` を返す
+- `deny` の場合は state progression を止める
+
 ### `verify`
 
 - acceptance criteria と required checks を評価する
 - execution verify と intent verify を評価する
 - evidence を task に紐づける
+
+### `drift-audit`
+
+- task、intent、decision ledger、handoff、evidence のずれを検査する
+- 結果を `.owox/` 配下の audit artifact として保存できる
 
 ### `guard`
 
@@ -102,6 +133,7 @@
 - エラー分類が上位資料と矛盾しない
 - `harness-init` と `sync` が source of truth を起点に動く
 - consultative init が中断・再開できる
+- prerequisite command と drift audit が hidden artifact を正しく参照する
 
 ## 関連資料
 

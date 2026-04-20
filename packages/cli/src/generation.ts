@@ -50,16 +50,18 @@ function renderAgentsMd(config: HarnessConfig): string {
     return [
       "## 最初に読むもの",
       "",
-      `1. \`${config.generated.agentsDir}/project.md\``,
-      `2. 対象の \`${config.generated.taskDir}/task-*.md\``,
+      `1. \`${config.generated.owoxDir}/project.md\``,
+      `2. 対象の \`${config.generated.taskDir}/task-*.md\` と必要なら \`${config.generated.taskDir}/task-current.json\``,
       `3. 必要に応じて \`${config.source.docsRoot}/index.md\``,
       "",
       "## 作業ルール",
       "",
       `- source of truth は \`owox.harness.yaml\` と \`${config.source.docsRoot}/\` を優先する`,
       "- generated artifacts を手編集の正本として扱わない",
-      "- task 開始時は `owox task create/update` と `owox validate` を使う",
+      "- task 開始時は `owox task-create` / `owox task-update` / `owox task-set-current` / `owox task-transition`、`owox task-check-prerequisites`、`owox validate` を使う",
       "- task 完了前は `owox verify` を実行する",
+      "- 重要判断は `owox decision-record`、意図更新は `owox intent-save` を使う",
+      "- 完了前に `owox drift-audit` を実行する",
       "- 危険操作、設計変更、外部影響、完了判断では `owox gate` を確認する",
       "- generated artifacts の再同期は `owox sync` を使う",
       ""
@@ -69,20 +71,38 @@ function renderAgentsMd(config: HarnessConfig): string {
   return [
     "## Read First",
     "",
-    `1. \`${config.generated.agentsDir}/project.md\``,
-    `2. Target \`${config.generated.taskDir}/task-*.md\``,
+    `1. \`${config.generated.owoxDir}/project.md\``,
+    `2. Target \`${config.generated.taskDir}/task-*.md\` and \`${config.generated.taskDir}/task-current.json\` when needed`,
     `3. \`${config.source.docsRoot}/index.md\` when needed`,
     "",
     "## Working Rules",
     "",
     `- Prefer \`owox.harness.yaml\` and \`${config.source.docsRoot}/\` as source of truth`,
     "- Do not treat generated artifacts as hand-edited source",
-    "- Use `owox task create/update` and `owox validate` when starting task work",
+    "- Use `owox task-create`, `owox task-update`, `owox task-set-current`, `owox task-transition`, `owox task-check-prerequisites`, and `owox validate` when starting task work",
     "- Run `owox verify` before task completion",
+    "- Use `owox intent-save` and `owox decision-record` for intent and decision artifacts",
+    "- Run `owox drift-audit` before declaring completion",
     "- Check `owox gate` for risky actions, design changes, external impact, and completion decisions",
     "- Use `owox sync` to regenerate managed artifacts",
     ""
   ].join("\n");
+}
+
+function collectRulesFiles(config: HarnessConfig): string[] {
+  const rulesFiles: string[] = [];
+
+  if (config.adapters.includes("codex") || config.adapters.includes("opencode")) {
+    rulesFiles.push("AGENTS.md");
+  }
+  if (config.adapters.includes("claude-code")) {
+    rulesFiles.push("CLAUDE.md");
+  }
+  if (config.adapters.includes("copilot-cli")) {
+    rulesFiles.push(".github/copilot-instructions.md");
+  }
+
+  return rulesFiles;
 }
 
 function renderAgentsProject(config: HarnessConfig): string {
@@ -106,38 +126,38 @@ function renderAgentsProject(config: HarnessConfig): string {
     `- ${config.source.docsRoot}/`,
     "",
     "## Managed Outputs",
-    `- ${config.generated.agentsDir}/`,
-    "- AGENTS.md",
+    `- ${config.generated.owoxDir}/`,
+    ...collectRulesFiles(config).map((path) => `- ${path}`),
     ...config.adapters.map((adapter) => `- ${adapter} adapter files`),
     ""
   ].join("\n");
 }
 
 function renderTaskTemplate(config: HarnessConfig): string {
-  return [
-    "# Task",
-    "",
-    "## Objective",
-    "",
-    "## State",
-    "draft",
-    "",
-    "## Scope",
-    "- ",
-    "",
-    "## Out Of Scope",
-    "- ",
-    "",
-    "## Acceptance Criteria",
-    "- ",
-    "",
-    "## Required Checks",
-    ...config.taskDefaults.requiredChecks.map((check) => `- ${check}`),
-    "",
-    "## References",
-    ...config.taskDefaults.references.map((reference) => `- ${reference}`),
-    ""
-  ].join("\n");
+  return `${JSON.stringify(
+    {
+      intentId: "task-template",
+      intentSummary: "Describe the user goal and must-keep constraints.",
+      taskId: "task-template",
+      title: "",
+      objective: "",
+      scope: [],
+      outOfScope: [],
+      acceptanceCriteria: [],
+      requiredDocs: [],
+      confirmedDocs: [],
+      currentState: "intake",
+      requiredDecisions: [],
+      resolvedDecisions: [],
+      requiredChecks: config.taskDefaults.requiredChecks,
+      humanGate: "none",
+      attachedEvidence: [],
+      references: config.taskDefaults.references,
+      activityLog: []
+    },
+    null,
+    2
+  )}\n`;
 }
 
 function renderDocsIndex(config: HarnessConfig): string {
@@ -196,8 +216,10 @@ function renderCodexFiles(config: HarnessConfig): GeneratedFile[] {
         "# Skill: owox workflow",
         "",
         "- Run `owox validate owox.harness.yaml` before substantial work.",
-        "- Use `owox task create/update/transition` to manage task state.",
+        "- Use `owox task-create`, `owox task-update`, `owox task-set-current`, `owox task-transition`, and `owox task-check-prerequisites` to manage task state.",
+        "- Use `owox intent-save` and `owox decision-record` to keep hidden artifacts current.",
         "- Run `owox verify` before completion.",
+        "- Run `owox drift-audit` before completion.",
         "- Use `owox sync` after source changes.",
         ""
       ].join("\n")
@@ -209,6 +231,7 @@ function renderCodexFiles(config: HarnessConfig): GeneratedFile[] {
         "#!/usr/bin/env bash",
         "set -eu",
         "owox validate owox.harness.yaml >/dev/null",
+        `if [ -f "${config.generated.taskDir}/task-current.json" ]; then owox task-check-prerequisites owox.harness.yaml ${config.generated.taskDir}/task-current.json planning >/dev/null; fi`,
         ""
       ].join("\n")
     },
@@ -218,7 +241,9 @@ function renderCodexFiles(config: HarnessConfig): GeneratedFile[] {
       content: [
         "#!/usr/bin/env bash",
         "set -eu",
-        "owox verify owox.harness.yaml .agents/tasks/task-current.json checks.json --acceptance >/dev/null || true",
+        `if [ -f "${config.generated.taskDir}/task-current.json" ]; then owox task-check-prerequisites owox.harness.yaml ${config.generated.taskDir}/task-current.json done >/dev/null; fi`,
+        `if [ -f "${config.generated.taskDir}/task-current.json" ] && [ -f "checks.json" ]; then owox verify owox.harness.yaml ${config.generated.taskDir}/task-current.json checks.json --acceptance >/dev/null; fi`,
+        `if [ -f "${config.generated.taskDir}/task-current.json" ]; then owox drift-audit owox.harness.yaml ${config.generated.taskDir}/task-current.json >/dev/null; fi`,
         ""
       ].join("\n")
     }
@@ -236,8 +261,11 @@ function renderClaudeFiles(config: HarnessConfig): GeneratedFile[] {
         "Use `owox` for deterministic workflow actions.",
         "",
         "- `owox validate owox.harness.yaml`",
-        "- `owox task create/update/transition`",
+        "- `owox task-create` / `owox task-update` / `owox task-set-current` / `owox task-transition`",
+        "- `owox task-check-prerequisites`",
+        "- `owox intent-save` / `owox decision-record`",
         "- `owox verify`",
+        "- `owox drift-audit`",
         "- `owox sync`",
         ""
       ].join("\n")
@@ -280,7 +308,13 @@ function renderClaudeFiles(config: HarnessConfig): GeneratedFile[] {
     {
       relativePath: ".claude/hooks/pre-command.sh",
       mode: "managed",
-      content: ["#!/usr/bin/env bash", "set -eu", "owox validate owox.harness.yaml >/dev/null", ""].join("\n")
+      content: [
+        "#!/usr/bin/env bash",
+        "set -eu",
+        "owox validate owox.harness.yaml >/dev/null",
+        `if [ -f "${config.generated.taskDir}/task-current.json" ]; then owox task-check-prerequisites owox.harness.yaml ${config.generated.taskDir}/task-current.json planning >/dev/null; fi`,
+        ""
+      ].join("\n")
     }
   ];
 }
@@ -288,17 +322,12 @@ function renderClaudeFiles(config: HarnessConfig): GeneratedFile[] {
 function renderOpenCodeFiles(config: HarnessConfig): GeneratedFile[] {
   return [
     {
-      relativePath: "opencode.json",
-      mode: "managed",
-      content: `${JSON.stringify({ owoxConfig: "owox.harness.yaml", docsRoot: config.source.docsRoot }, null, 2)}\n`
-    },
-    {
       relativePath: ".opencode/agents/owox.md",
       mode: "managed",
       content: [
         "# owox agent",
         "",
-        "Use this agent for task orchestration, verification, handoff, sync, and validation.",
+        "Use this agent for task orchestration, prerequisite checks, verification, handoff, sync, and validation.",
         ""
       ].join("\n")
     },
@@ -306,8 +335,11 @@ function renderOpenCodeFiles(config: HarnessConfig): GeneratedFile[] {
       relativePath: ".opencode/commands/owox-task.md",
       mode: "managed",
       content: [
-        "Run `owox task create/update/transition` for task lifecycle changes.",
+        "Run `owox task-create`, `owox task-update`, `owox task-set-current`, and `owox task-transition` for task lifecycle changes.",
+        "Run `owox task-check-prerequisites` before moving to planning, executing, or done.",
+        "Run `owox intent-save` and `owox decision-record` when intent or decisions change.",
         "Run `owox verify` before declaring completion.",
+        "Run `owox drift-audit` before declaring completion.",
         ""
       ].join("\n")
     },
@@ -318,7 +350,7 @@ function renderOpenCodeFiles(config: HarnessConfig): GeneratedFile[] {
         {
           name: "owox-plugin",
           hooks: {
-            preTool: "owox validate owox.harness.yaml",
+            preTool: `owox validate owox.harness.yaml && (test ! -f ${config.generated.taskDir}/task-current.json || owox task-check-prerequisites owox.harness.yaml ${config.generated.taskDir}/task-current.json planning)`,
             postEdit: "owox sync owox.harness.yaml"
           }
         },
@@ -368,7 +400,10 @@ function renderCopilotFiles(): GeneratedFile[] {
         "# Skill: owox workflow",
         "",
         "- Validate before work.",
-        "- Manage tasks through `owox task ...`.",
+        "- Manage tasks through `owox task-create`, `owox task-update`, `owox task-set-current`, and `owox task-transition`.",
+        "- Check prerequisites through `owox task-check-prerequisites`.",
+        "- Persist intent and decisions through `owox intent-save` and `owox decision-record`.",
+        "- Audit drift through `owox drift-audit`.",
         "- Regenerate managed files through `owox sync`.",
         ""
       ].join("\n")
@@ -376,7 +411,13 @@ function renderCopilotFiles(): GeneratedFile[] {
     {
       relativePath: ".github/hooks/pre-command.sh",
       mode: "managed",
-      content: ["#!/usr/bin/env bash", "set -eu", "owox validate owox.harness.yaml >/dev/null", ""].join("\n")
+      content: [
+        "#!/usr/bin/env bash",
+        "set -eu",
+        "owox validate owox.harness.yaml >/dev/null",
+        "if [ -f \".owox/tasks/task-current.json\" ]; then owox task-check-prerequisites owox.harness.yaml .owox/tasks/task-current.json planning >/dev/null; fi",
+        ""
+      ].join("\n")
     },
     {
       relativePath: ".github/plugins/owox/plugin.json",
@@ -586,9 +627,10 @@ function enforceDocumentBudget(config: HarnessConfig, files: GeneratedFile[]): G
 
 export function renderGeneratedFiles(config: HarnessConfig): GeneratedFile[] {
   const files: GeneratedFile[] = [
-    { relativePath: "AGENTS.md", mode: "managed", content: renderAgentsMd(config) },
-    { relativePath: `${config.generated.agentsDir}/project.md`, mode: "managed", content: renderAgentsProject(config) },
-    { relativePath: `${config.generated.taskDir}/task-template.md`, mode: "managed", content: renderTaskTemplate(config) },
+    { relativePath: `${config.generated.owoxDir}/project.md`, mode: "managed", content: renderAgentsProject(config) },
+    { relativePath: `${config.generated.taskDir}/task-template.json`, mode: "managed", content: renderTaskTemplate(config) },
+    { relativePath: `${config.generated.owoxDir}/intents/intent-template.json`, mode: "managed", content: `${JSON.stringify({ intentId: "intent-template", userGoal: "", successImage: "", nonGoals: [], mustKeep: [], tradeoffs: [], openQuestions: [], decisionPolicy: "ask_when_ambiguous", approvalPolicy: "human_gate_for_risky_changes", requiredDocs: [], confirmedDocs: [] }, null, 2)}\n` },
+    { relativePath: `${config.generated.owoxDir}/decisions/ledger.json`, mode: "managed", content: "[]\n" },
     { relativePath: `${config.source.docsRoot}/index.md`, mode: "if_missing", content: renderDocsIndex(config) },
     { relativePath: `${config.source.docsRoot}/glossary/core.md`, mode: "if_missing", content: renderGlossary(config) },
     { relativePath: `${config.source.docsRoot}/requirements/index.md`, mode: "if_missing", content: renderSimpleDoc("# Requirements", "Track project goals and scope here.") },
@@ -599,6 +641,10 @@ export function renderGeneratedFiles(config: HarnessConfig): GeneratedFile[] {
     { relativePath: `${config.source.docsRoot}/tech-stack.md`, mode: "if_missing", content: renderSimpleDoc("# Tech Stack", "Capture adopted technologies and version policies here.") },
     { relativePath: `${config.source.docsRoot}/validation.md`, mode: "if_missing", content: renderSimpleDoc("# Validation", "List the validation expectations and checks here.") }
   ];
+
+  if (config.adapters.includes("codex") || config.adapters.includes("opencode")) {
+    files.push({ relativePath: "AGENTS.md", mode: "managed", content: renderAgentsMd(config) });
+  }
 
   if (config.adapters.includes("codex")) {
     files.push(...renderCodexFiles(config));

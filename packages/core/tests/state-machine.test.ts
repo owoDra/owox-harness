@@ -4,8 +4,10 @@ import {
   createChildToParentReport,
   createParentToChildHandoff,
   createTask,
+  evaluateDriftAudit,
   evaluateGate,
   evaluateGuard,
+  evaluatePrerequisites,
   evaluateVerify,
   resolveHumanGate,
   canTransitionTask,
@@ -14,7 +16,7 @@ import {
 } from "../src/index.js";
 
 describe("task state machine", () => {
-  test("allows draft to ready when required fields are present", () => {
+  test("allows intake to intent_clarifying when required fields are present", () => {
     const task = createTask({
       taskId: "task-1",
       title: "Start v2",
@@ -25,10 +27,10 @@ describe("task state machine", () => {
       references: ["docs/project/specs/core/SPEC-task-state-machine.md"]
     });
 
-    expect(canTransitionTask(task, "ready")).toEqual({ ok: true, errors: [] });
+    expect(canTransitionTask(task, "intent_clarifying")).toEqual({ ok: true, errors: [] });
   });
 
-  test("rejects ready to in_progress without required checks", () => {
+  test("rejects planning to executing without required checks", () => {
     const task = createTask({
       taskId: "task-2",
       title: "Start implementation",
@@ -36,13 +38,14 @@ describe("task state machine", () => {
       scope: ["packages/core"],
       outOfScope: ["adapters"],
       acceptanceCriteria: ["tests exist"],
+      intentSummary: "Ship the implementation safely",
       references: ["docs/project/specs/core/SPEC-task-state-machine.md"],
-      currentState: "ready"
+      currentState: "planning"
     });
 
-    expect(canTransitionTask(task, "in_progress")).toEqual({
+    expect(canTransitionTask(task, "executing")).toEqual({
       ok: false,
-      errors: ["requiredChecks are required before in_progress"]
+      errors: ["requiredChecks are required before executing"]
     });
   });
 
@@ -137,6 +140,8 @@ describe("policy evaluation", () => {
 
     expect(evaluateVerify({ task, checkResults: [], acceptanceSatisfied: true })).toEqual({
       status: "blocked",
+      executionStatus: "blocked",
+      intentStatus: "pass",
       reasons: ["missing required check result: pnpm test"]
     });
   });
@@ -162,7 +167,90 @@ describe("policy evaluation", () => {
       })
     ).toEqual({
       status: "required",
+      gateType: "architecture_gate",
       reason: "human gate required for change type: design"
     });
+  });
+
+  test("evaluates prerequisites and drift audit", () => {
+    const task = createTask({
+      taskId: "task-7",
+      title: "Ship feature",
+      objective: "Implement the feature",
+      intentSummary: "Implement the feature without changing external behavior",
+      scope: ["packages/cli"],
+      outOfScope: ["packages/core"],
+      acceptanceCriteria: ["tests pass"],
+      requiredDocs: ["docs/project/specs/cli/SPEC-command-surface.md"],
+      confirmedDocs: ["docs/project/specs/cli/SPEC-command-surface.md"],
+      requiredDecisions: ["decision-1"],
+      resolvedDecisions: ["decision-1"],
+      requiredChecks: ["pnpm test"],
+      references: ["docs/project/specs/cli/SPEC-command-surface.md"],
+      currentState: "planning"
+    });
+
+    const prerequisite = evaluatePrerequisites({
+      task,
+      nextState: "executing",
+      intent: {
+        intentId: task.intentId,
+        userGoal: "Implement the feature without changing external behavior",
+        successImage: "tests pass",
+        nonGoals: [],
+        mustKeep: [],
+        tradeoffs: [],
+        openQuestions: [],
+        decisionPolicy: "ask_when_ambiguous",
+        approvalPolicy: "auto_with_guard",
+        requiredDocs: task.requiredDocs,
+        confirmedDocs: task.confirmedDocs
+      },
+      decisions: [
+        {
+          decisionId: "decision-1",
+          relatedIntentId: task.intentId,
+          question: "Which adapter path?",
+          options: ["keep current"],
+          chosenOption: "keep current",
+          rationale: "Minimize scope",
+          decidedBy: "user",
+          timestamp: "2026-04-19T00:00:00.000Z"
+        }
+      ]
+    });
+
+    expect(prerequisite.decision).toBe("allow");
+
+    const drift = evaluateDriftAudit({
+      task,
+      intent: {
+        intentId: task.intentId,
+        userGoal: "Implement the feature without changing external behavior",
+        successImage: "tests pass",
+        nonGoals: [],
+        mustKeep: [],
+        tradeoffs: [],
+        openQuestions: [],
+        decisionPolicy: "ask_when_ambiguous",
+        approvalPolicy: "auto_with_guard",
+        requiredDocs: task.requiredDocs,
+        confirmedDocs: task.confirmedDocs
+      },
+      decisions: [
+        {
+          decisionId: "decision-1",
+          relatedIntentId: task.intentId,
+          question: "Which adapter path?",
+          options: ["keep current"],
+          chosenOption: "keep current",
+          rationale: "Minimize scope",
+          decidedBy: "user",
+          timestamp: "2026-04-19T00:00:00.000Z"
+        }
+      ]
+    });
+
+    expect(drift.status).toBe("pass");
   });
 });

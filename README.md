@@ -5,9 +5,10 @@
 ## 何ができるか
 
 - `owox.harness.yaml` を正本として project 設定を管理できる
-- `AGENTS.md`、`.agents/`、adapter 向け設定やルールファイルを生成できる
+- `.owox/` に AI 専用 artifact を集約し、CLI 向け rules file / 設定 / skill ディレクトリを生成できる
 - Codex / Claude Code / OpenCode / Copilot CLI 向け生成物を出力できる
 - task を状態遷移つきで管理できる
+- intent / decision / prerequisite / drift audit を hidden artifact として管理できる
 - `verify` / `guard` / `gate` で決定的な判定を実行できる
 - parent-child handoff と report を生成できる
 - 生成物の差分逸脱を `validate` で検知し、`sync` で再生成できる
@@ -51,7 +52,7 @@ node packages/cli/dist/index.js validate ./example/owox.harness.yaml
 これは次をまとめて行います。
 
 - `owox.harness.yaml` 生成
-- `.agents/` と `AGENTS.md` 生成
+- `.owox/`、CLI 向け rules file、adapter 向け生成物の生成
 - 文書ひな型の生成
 - adapter 向け生成物の生成
 - validate
@@ -98,10 +99,18 @@ node packages/cli/dist/index.js harness-init-materialize ./example
 
 - `task-create <configPath> <taskPath> <inputPath>`
 - `task-update <configPath> <taskPath> <patchPath>`
+- `task-set-current <configPath> <taskPath>`
+- `task-check-prerequisites <configPath> <taskPath> <nextState>`
 - `task-transition <configPath> <taskPath> <nextState>`
 - `task-evidence <configPath> <taskPath> <evidencePath>`
 - `task-log <configPath> <taskPath> <entry>`
 - `task-resolve-gate <configPath> <taskPath> <summary>`
+
+### intent / decision / audit
+
+- `intent-save <configPath> <inputPath>`
+- `decision-record <configPath> <inputPath>`
+- `drift-audit <configPath> <taskPath>`
 
 ### 判定
 
@@ -136,8 +145,8 @@ init:
   suggestionProvider: builtin
 
 generated:
-  agentsDir: .agents
-  taskDir: .agents/tasks
+  owoxDir: .owox
+  taskDir: .owox/tasks
 
 adapters:
   - codex
@@ -150,6 +159,37 @@ taskDefaults:
     - pnpm validate
     - pnpm build
 ```
+
+実ファイルの例は `owox.harness.example.yaml` を参照してください。
+
+## `.owox/` の役割
+
+`owox-harness` v2 では `.owox/` が AI 専用 artifact の保存先です。典型的には次を置きます。
+
+- `.owox/project.md`: agent-facing project context
+- `.owox/tasks/*.md`: task context cache
+- `.owox/tasks/*.json`: runtime task records
+- `.owox/intents/*.json`: intent artifact
+- `.owox/decisions/ledger.json`: decision ledger
+- `.owox/handoffs/*.json`: handoff packet
+- `.owox/drift-audits/*.json`: drift audit result
+- `.owox/init-session.json`: consultative init session
+
+`AGENTS.md`、`CLAUDE.md`、`.codex/`、`.claude/`、`.opencode/`、`.github/` などは CLI 固有の rules / config / skill 生成物です。
+
+## OpenCode 日常運用
+
+このリポジトリでは OpenCode を primary CLI として使います。日常運用の最小手順は次です。
+
+1. `./owox validate owox.harness.yaml`
+2. 対象 task を `.owox/tasks/task-<name>.json` と `.owox/tasks/task-<name>.md` で確認する
+3. `./owox task-set-current owox.harness.yaml .owox/tasks/task-<name>.json`
+4. 必要なら `./owox intent-save ...` と `./owox decision-record ...` を更新する
+5. `./owox task-check-prerequisites owox.harness.yaml .owox/tasks/task-current.json planning`
+6. OpenCode で作業する
+7. 完了前に `./owox verify ...` と `./owox drift-audit ...` を実行する
+
+`task-current.json` は hook / plugin が参照する current task pointer です。OpenCode で作業を始める前に、現在作業する task JSON を `task-set-current` で反映してください。
 
 ## 外部提案プロバイダー
 
@@ -188,11 +228,12 @@ contentBudgets:
 
 ## 現在の到達点
 
-- 相談型初期化は legacy harness 共存 / monorepo / 既存文書 fixture で検証済み
+- 相談型初期化は monorepo / 既存文書 fixture で検証済み
 - 生成される adapter / 実行環境向け出力の固定テストがある
 - 外部提案プロバイダーの command 実行と判断テンプレート出力がある
 - 文書ひな型は `requirements/specs/adr/patterns/validation/architecture/tech-stack` まで生成できる
 - Markdown の壊れたリンク検証がある
+- prerequisite enforcement、intent artifact、decision ledger、drift audit がある
 - Changesets による version / publish 導線がある
 
 ## まだ主に残るもの
@@ -214,5 +255,6 @@ pnpm release:publish
 ## 資料
 
 - プロジェクト正本: `docs/project/index.md`
-- エージェント向け project 定義: `.agents/project.md`
+- AI 向け project context: `.owox/project.md`
+- 設定例: `owox.harness.example.yaml`
 - 実機確認チェックリスト: `Checklist.md`

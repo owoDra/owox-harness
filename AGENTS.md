@@ -1,21 +1,16 @@
 ## 最初に読むもの
 
-1. `.agents/project.md`
-2. 対象の `.agents/tasks/task-*.md`
+1. `.owox/project.md`
+2. 対象の `.owox/tasks/task-*.md` と必要なら `.owox/tasks/task-current.json`
 3. 必要に応じて `docs/project/index.md`
-
-## 責務の境界
-
-- `.agents/`: AI 専用の制約、作業手順、skill、task 文脈キャッシュ
-- `docs/project/`: 人間向けのプロジェクト正本
 
 ## 作業ルール
 
-- まず `.agents/project.md` を読む
-- 対象 task がある場合は `.agents/tasks/task-*.md` を読む
-- `docs/project/index.md` から必要なカテゴリ `index.md` と個票へ降りる
-- 必読用語は `docs/project/glossary/core.md` を優先する
-- archive は明示的に必要な場合だけ読む
-- 不要な全文走査と重複読書を避ける
-- 正本が不足している場合は決め打ちで進めず、必要な更新 task に戻す
-- `question` ツールが使えない場合は通常メッセージで確認し、確認結果を task に転記する
+- source of truth は `owox.harness.yaml` と `docs/project/` を優先する
+- generated artifacts を手編集の正本として扱わない
+- task 開始時は `owox task-create` / `owox task-update` / `owox task-set-current` / `owox task-transition`、`owox task-check-prerequisites`、`owox validate` を使う
+- task 完了前は `owox verify` を実行する
+- 重要判断は `owox decision-record`、意図更新は `owox intent-save` を使う
+- 完了前に `owox drift-audit` を実行する
+- 危険操作、設計変更、外部影響、完了判断では `owox gate` を確認する
+- generated artifacts の再同期は `owox sync` を使う
