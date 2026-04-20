@@ -1,15 +1,9 @@
 # Validation
 
-## 仕様整合性
+## Purpose
 
-- いつ行うか:
-- 何で検証するか:
-- 期待する結果:
-- 問題があった際にどうするか:
+## Core Checks
 
-## 回帰防止
+## Adapter Checks
 
-- いつ行うか:
-- 何で検証するか:
-- 期待する結果:
-- 問題があった際にどうするか:
+## Evidence Expectations

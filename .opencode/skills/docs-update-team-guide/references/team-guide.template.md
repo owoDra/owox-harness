@@ -1,11 +1,11 @@
-# <Team> Guide
+# Team Guide: <team>
 
-## 役割
+## Mission
 
-## 担当範囲
+## Responsibilities
 
-## ルール
+## Interfaces
 
-## 固有知識
+## Rules
 
-## 関連資料
+## References

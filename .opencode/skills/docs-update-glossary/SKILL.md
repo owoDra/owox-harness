@@ -1,40 +1,42 @@
 ---
 name: docs-update-glossary
-description: プロジェクトの用語集に用語を追加、統合、正規化するときに使用する
-argument-hint: "用語=<用語> 定義=<定義> 別名=<別名>"
+description: Use when adding, merging, or normalizing glossary terms.
+argument-hint: "goal=<term change> path=<target file>"
 ---
 
-## 目的
+## Purpose
 
-プロジェクト資料で使う用語の意味を一箇所に集約し、同義語の乱立や曖昧な命名を防ぐ。
+Keep project terminology consistent and easy to reference from other source documents.
 
-## 前提資料
+## Read First
 
+- `.owox/project.md`
 - `docs/project/index.md`
-- `docs/project/glossary/index.md`
-- `docs/project/glossary/core.md`
-- `.opencode/skills/_shared/document-reference-rules.md`
-- `.opencode/skills/docs-update-glossary/references/best-practices.md`
-- 関連 requirement / spec / ADR / architecture
+- `owox.harness.yaml`
+- the relevant `.owox/tasks/task-*.md` file and `.owox/tasks/task-current.json` when present
+- the matching requirement, spec, ADR, pattern, validation, or team guide for this scope
 
-## やること
+## What To Do
 
-1. 必要なら `question` で追加、更新したい用語と背景を確認する
-2. 既存用語、表記揺れ、別名を調べる
-3. `core.md` に置くべきか、分野別ファイルに置くべきか判断する
-4. 定義を追加または更新し、必要なら他資料の表記統一を行う
-5. `.opencode/skills/_shared/document-reference-rules.md` に従い、`docs/project/glossary/index.md` を必ず更新する
+1. Run `owox validate owox.harness.yaml` before substantial work if the harness state may have changed.
+2. Create or update the task record with `owox task-create`, `owox task-update`, `owox task-set-current`, and `owox task-transition`.
+3. Run `owox task-check-prerequisites` before moving into planning, execution, or done.
+4. Read the relevant source documents and collect only the facts needed for this scope.
+5. Do the skill-specific work, keeping scope, constraints, and evidence explicit in the task file.
+6. When intent or decisions change, persist them with `owox intent-save` and `owox decision-record`.
+7. Run `owox verify` before completion and `owox drift-audit` before closing or handing work back.
+8. Run `owox sync owox.harness.yaml` after changing managed source material that affects generated artifacts.
 
-## ルール
+## Rules
 
-- 用語集は一般辞書ではなく、このプロジェクトでの意味を固定する場所として扱う
-- 1 用語 1 概念を基本にする
-- 参照の書き方は `.opencode/skills/_shared/document-reference-rules.md` に従う
-- 実装詳細や一時運用メモを定義に混ぜない
+- Keep AI-facing Markdown in English.
+- Prefer source-of-truth documents over generated artifacts.
+- Do not skip human gates for risky, architectural, or externally visible changes.
+- Record assumptions, open questions, and residual risk instead of hiding them.
 
-## 確認事項
+## Checks
 
-- 類義語と既存項目を確認した
-- 先頭文だけで意味が通る定義になっている
-- core と分野別ファイルの置き分けが妥当である
-- `docs/project/glossary/index.md` を更新した
+- The task state is current in `owox`.
+- The relevant source documents were consulted.
+- Required verification and evidence are recorded.
+- Any follow-up actions or open questions are explicit.

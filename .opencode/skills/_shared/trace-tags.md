@@ -1,19 +1,12 @@
-# trace tag 基本ルール
+# Trace Tags
 
-重要な変更箇所では、必要に応じてコードやテストから正本を追えるようにする。
+Use short inline references when work must point back to source-of-truth material.
 
-代表的なタグ:
+Examples:
 
-- `@req <REQ-ID>`
-- `@spec <SPEC-ID>`
-- `@adr <ADR-ID>`
-- `@test <path-or-id>`
-- `@invariant <text>`
-- `@reason <text>`
+- `REQ: REQ-harness-v2-foundation`
+- `SPEC: SPEC-generation-pipeline`
+- `ADR: ADR-004-intent-governed-agent-control`
+- `VAL: validation.md#V-9`
 
-ルール:
-
-- 処理説明ではなく、意図と根拠を残す
-- 重要な関数、クラス、モジュール、設定に付ける
-- 行ごとに乱用しない
-- 実装とズレた古いタグを残さない
+Trace tags should explain why a change exists, not restate the code.

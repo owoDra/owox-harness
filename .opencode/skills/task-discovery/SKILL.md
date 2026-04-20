@@ -1,49 +1,42 @@
 ---
 name: task-discovery
-description: 調査、現状把握、影響範囲整理が主目的の task を開始し、後続判断に使える結果へ整理するときに使用する
-argument-hint: "目的=<何を明らかにしたいか> 進め方=<自走|対話>"
+description: Use when discovery, current-state analysis, or impact mapping is the primary goal.
+argument-hint: "goal=<what to learn> mode=<autonomous|interactive>"
 ---
 
-## 目的
+## Purpose
 
-実装や資料更新に入る前に、現状、制約、影響範囲、論点、未確定事項を整理し、次の意思決定に使える調査結果を残す。
+Collect facts, constraints, affected areas, and open questions before implementation or review begins.
 
-## 前提資料
+## Read First
 
 - `.owox/project.md`
-- `.opencode/skills/_shared/task-template.md`
-- `.opencode/skills/_shared/reference-order.md`
-- `.opencode/skills/_shared/execution-modes.md`
-- `.opencode/skills/_shared/request-user-input-policy.md`
 - `docs/project/index.md`
-- `docs/project/glossary/core.md`
-- `docs/project/tech-stack.md`
-- `docs/project/patterns/index.md`
-- `docs/project/architecture.md` が存在する場合は参照する
+- `owox.harness.yaml`
+- the relevant `.owox/tasks/task-*.md` file and `.owox/tasks/task-current.json` when present
+- the matching requirement, spec, ADR, pattern, validation, or team guide for this scope
 
-## やること
+## What To Do
 
-1. 対象 `.owox/tasks/task-*.md` を作成または更新し、調査対象、対象外、停止条件を明文化する
-2. 必要なら `question` で `目的`、`進め方`、調査しない範囲、完了条件を確認する
-3. `.opencode/skills/_shared/execution-modes.md` を参照し、今回を `自走` か `対話` のどちらで進めるかと、どこで確認を挟むかを task に残す
-4. 正本を優先して読み、事実として確認できたことを収集する
-5. 影響を受ける資料、コード、テスト、外部依存を整理する
-6. 事実、推測、未解決事項、次に必要な判断を分けて task に残す
-7. 後続に推奨する skill を整理する
+1. Run `owox validate owox.harness.yaml` before substantial work if the harness state may have changed.
+2. Create or update the task record with `owox task-create`, `owox task-update`, `owox task-set-current`, and `owox task-transition`.
+3. Run `owox task-check-prerequisites` before moving into planning, execution, or done.
+4. Read the relevant source documents and collect only the facts needed for this scope.
+5. Do the skill-specific work, keeping scope, constraints, and evidence explicit in the task file.
+6. When intent or decisions change, persist them with `owox intent-save` and `owox decision-record`.
+7. Run `owox verify` before completion and `owox drift-audit` before closing or handing work back.
+8. Run `owox sync owox.harness.yaml` after changing managed source material that affects generated artifacts.
 
-## ルール
+## Rules
 
-- 事実と推測を混ぜない
-- 調査の途中で実装へ踏み込まない
-- `docs/project/tech-stack.md` と `docs/project/patterns/index.md` を読み飛ばさない
-- archive は必要になった場合だけ読む
-- 必要な確認は `question` を使う
+- Keep AI-facing Markdown in English.
+- Prefer source-of-truth documents over generated artifacts.
+- Do not skip human gates for risky, architectural, or externally visible changes.
+- Record assumptions, open questions, and residual risk instead of hiding them.
 
-## 確認事項
+## Checks
 
-- 調査対象と対象外が明確である
-- 目的と進め方が明確である
-- 事実、推測、未解決事項が分かれている
-- `docs/project/tech-stack.md` と `docs/project/patterns/index.md` を参照した
-- 影響範囲が task に残っている
-- 次に進む skill が提案されている
+- The task state is current in `owox`.
+- The relevant source documents were consulted.
+- Required verification and evidence are recorded.
+- Any follow-up actions or open questions are explicit.

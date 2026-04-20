@@ -87,6 +87,7 @@
 
 - visible output が project locale に従う
 - hidden context が英語ベースで維持される
+- AI-facing Markdown (`AGENTS.md`、`.opencode/`、handoff Markdown など) が英語で維持される
 - locale 切替で internal key が崩れない
 
 ## P0: adapter ごとに確認したい項目

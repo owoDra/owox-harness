@@ -1,24 +1,9 @@
----
-status: <下書き|提案中|採用|非推奨|保管>
-related:
-  - <関連資料IDまたはパス>
-subproject: <必要な場合のみ>
----
+# Pattern: <name>
 
-# <title>
+## Purpose
 
-## 目的
+## When To Use
 
-## 適用範囲
+## Structure
 
-## 適用しない範囲
-
-## パターン
-
-## 適用条件
-
-## 例外 / 逸脱条件
-
-## 根拠
-
-## 関連資料
+## Tradeoffs

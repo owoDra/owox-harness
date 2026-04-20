@@ -1,22 +1,20 @@
 # Project
 
 ## Name
-<project-name>
 
 ## Description
-<project-description>
 
-## Language
-<language>
+## Locale
 
-## Kind
-<simple | monorepo>
+## Profile
 
-## Subprojects
-- `<code>`: <description>
+## Source Of Truth
 
-## Teams
-- `<code>`: <description>
+- owox.harness.yaml
+- docs/project/
 
-## Integrations
-- `<code>`: <description>
+## Managed Outputs
+
+- .owox/
+- AGENTS.md
+- adapter files

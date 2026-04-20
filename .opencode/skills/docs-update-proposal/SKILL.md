@@ -1,47 +1,42 @@
 ---
 name: docs-update-proposal
-description: 設計草案、構成変更案、移行案を追加、更新、正規化するときに使用する
-argument-hint: "テーマ=<提案テーマ> 対象範囲=<対象範囲> 目的=<解決したい課題>"
+description: Use when adding or revising a proposal, migration plan, or change plan.
+argument-hint: "goal=<proposal change> path=<target file>"
 ---
 
-## 目的
+## Purpose
 
-正式仕様の前段階にある設計草案や提案を、採否判断と正式化に使える形で記録する。
+Describe a candidate direction clearly enough for review, iteration, and later archival.
 
-## 前提資料
+## Read First
 
+- `.owox/project.md`
 - `docs/project/index.md`
-- `docs/project/glossary/core.md`
-- `docs/project/proposals/index.md`
-- `.opencode/skills/_shared/document-reference-rules.md`
-- `.opencode/skills/_shared/document-update-checklist.md`
-- `.opencode/skills/docs-update-proposal/references/proposal.template.md`
-- `.opencode/skills/docs-update-proposal/references/best-practices.md`
-- 必要に応じて `docs/project/architecture.md`
-- 関連する research / requirement / spec / ADR / pattern
+- `owox.harness.yaml`
+- the relevant `.owox/tasks/task-*.md` file and `.owox/tasks/task-current.json` when present
+- the matching requirement, spec, ADR, pattern, validation, or team guide for this scope
 
-## やること
+## What To Do
 
-1. 必要なら `question` で背景、提案内容、対象範囲、非目標、採否判断に必要な材料を確認する
-2. 既存の `docs/project/proposals/active/` と `archive/` を確認し、重複や置換対象がないか調べる
-3. 背景、提案内容、代替案、利点、リスク、未確定事項を整理する
-4. `active/proposal-<topic>.md` を作成または更新する
-5. `.opencode/skills/_shared/document-reference-rules.md` に従い、`docs/project/proposals/index.md` を必ず更新する
-6. 採用後に requirement / spec / ADR へ昇格すべき内容を整理し、提案時点でも ADR 更新または作成が必要か確認する
-7. 参照優先度を落とす proposal は `archive/` へ移し、`docs/project/proposals/index.md` も同じ変更で更新する
+1. Run `owox validate owox.harness.yaml` before substantial work if the harness state may have changed.
+2. Create or update the task record with `owox task-create`, `owox task-update`, `owox task-set-current`, and `owox task-transition`.
+3. Run `owox task-check-prerequisites` before moving into planning, execution, or done.
+4. Read the relevant source documents and collect only the facts needed for this scope.
+5. Do the skill-specific work, keeping scope, constraints, and evidence explicit in the task file.
+6. When intent or decisions change, persist them with `owox intent-save` and `owox decision-record`.
+7. Run `owox verify` before completion and `owox drift-audit` before closing or handing work back.
+8. Run `owox sync owox.harness.yaml` after changing managed source material that affects generated artifacts.
 
-## ルール
+## Rules
 
-- proposal は採用済み正本ではなく、採否判断前の草案として扱う
-- 代替案と不採用理由を省略しない
-- 未確定事項を曖昧にぼかさない
-- 参照の書き方は `.opencode/skills/_shared/document-reference-rules.md` に従う
-- ハーネス運用ルールを proposal に書かない
+- Keep AI-facing Markdown in English.
+- Prefer source-of-truth documents over generated artifacts.
+- Do not skip human gates for risky, architectural, or externally visible changes.
+- Record assumptions, open questions, and residual risk instead of hiding them.
 
-## 確認事項
+## Checks
 
-- 背景、提案内容、代替案、利点、リスクがある
-- 未確定事項が明示されている
-- `docs/project/proposals/index.md` を更新した
-- requirement / spec / ADR への昇格候補と ADR 更新要否を整理した
-- active と archive の配置が妥当である
+- The task state is current in `owox`.
+- The relevant source documents were consulted.
+- Required verification and evidence are recorded.
+- Any follow-up actions or open questions are explicit.

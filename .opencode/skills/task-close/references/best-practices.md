@@ -1,29 +1,7 @@
-# task-close のベストプラクティス
+# Best Practices
 
-## 基本原則
-
-- 完了条件で閉じる
-- 残課題を隠さない
-- 更新済み正本と検証を整理する
-- 次 task にそのまま渡せる形で終える
-
-## 推奨フロー
-
-1. 完了条件の充足を確認する
-2. 完了したことと未完了事項を分ける
-3. 更新済み正本と検証結果を整理する
-4. 次アクションまたは次に読むものを残す
-
-## 停止して確認すべきケース
-
-- 完了条件を満たしていない
-- 高優先度の残課題がある
-- 引き継ぎ先が不明
-- 追加の正本更新が必要
-
-## 良い成果物の条件
-
-- 何が終わったかが短く分かる
-- 何が残っているかが明確
-- 更新済み正本と検証が追える
-- 次 task にそのまま渡せる
+- Start from the canonical source document, not a generated derivative.
+- Keep edits small, explicit, and traceable to the request.
+- Update the matching index file when you add, rename, or archive a document.
+- Run `owox validate owox.harness.yaml` after material doc or harness changes.
+- Record unresolved questions instead of guessing.

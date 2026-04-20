@@ -1,40 +1,42 @@
 ---
 name: harness-validation
-description: ハーネスとプロジェクト資料の配置、命名、参照、責務分離の整合性を確認するときに使用する
-argument-hint: "範囲=<all|skills|tasks|docs> 進め方=<自走|対話>"
+description: Use when validating harness layout, naming, references, and responsibility boundaries.
+argument-hint: "scope=<all|skills|tasks|docs> mode=<autonomous|interactive>"
 ---
 
-## 目的
+## Purpose
 
-`.owox/`、CLI 固有生成物、`docs/project/` の存在、配置、命名、相互参照、責務分離、project 定義との整合を確認し、修正が必要な箇所を整理する。
+Check harness integrity and report mismatches before they drift into runtime failures.
 
-## 前提資料
+## Read First
 
 - `.owox/project.md`
-- `.opencode/skills/harness-validation/references/best-practices.md`
 - `docs/project/index.md`
-- `docs/project/glossary/core.md`
-- `docs/project/architecture.md` が存在する場合は参照する
+- `owox.harness.yaml`
+- the relevant `.owox/tasks/task-*.md` file and `.owox/tasks/task-current.json` when present
+- the matching requirement, spec, ADR, pattern, validation, or team guide for this scope
 
-## やること
+## What To Do
 
-1. 必要なら `question` で `範囲`、`進め方`、完了条件、確認対象外を確認する
-2. 必須資料の存在を確認する
-3. 配置ルール、命名規則、見出し、front matter、相互参照、責務分離、index 参照リストと実体の整合を確認する
-4. `pnpm validate` または `owox validate` を使って機械検査を実行する
-5. 問題なし、不整合、判断保留、推奨する次 task を整理する
+1. Run `owox validate owox.harness.yaml` before substantial work if the harness state may have changed.
+2. Create or update the task record with `owox task-create`, `owox task-update`, `owox task-set-current`, and `owox task-transition`.
+3. Run `owox task-check-prerequisites` before moving into planning, execution, or done.
+4. Read the relevant source documents and collect only the facts needed for this scope.
+5. Do the skill-specific work, keeping scope, constraints, and evidence explicit in the task file.
+6. When intent or decisions change, persist them with `owox intent-save` and `owox decision-record`.
+7. Run `owox verify` before completion and `owox drift-audit` before closing or handing work back.
+8. Run `owox sync owox.harness.yaml` after changing managed source material that affects generated artifacts.
 
-## ルール
+## Rules
 
-- 事実、推測、提案を分けて記録する
-- 不整合を見つけても、勝手に正しい方を決め打ちしない
-- 配置ルール確認では `Kind` を起点にする
-- スコープ外の不整合は参考情報として分ける
+- Keep AI-facing Markdown in English.
+- Prefer source-of-truth documents over generated artifacts.
+- Do not skip human gates for risky, architectural, or externally visible changes.
+- Record assumptions, open questions, and residual risk instead of hiding them.
 
-## 確認事項
+## Checks
 
-- 必須資料の存在確認を行った
-- 配置、命名、参照、責務分離を確認した
-- index 参照リストと実体の整合を確認した
-- 機械検査の結果を整理した
-- 推奨する次 task まで整理した
+- The task state is current in `owox`.
+- The relevant source documents were consulted.
+- Required verification and evidence are recorded.
+- Any follow-up actions or open questions are explicit.

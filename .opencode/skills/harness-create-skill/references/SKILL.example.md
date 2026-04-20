@@ -1,17 +1,31 @@
 ---
 name: <skill-name>
-description: <use-when>
-argument-hint: <arguments>
+description: <when to use it>
+argument-hint: "goal=<why> mode=<autonomous|interactive>"
 ---
 
-## 目的
+## Purpose
 
-## 前提資料
+<State the outcome this skill should produce.>
 
-## やること
+## Read First
 
-1. <step>
+- .owox/project.md
+- docs/project/index.md
+- the source documents that define this workflow
 
-## ルール
+## What To Do
 
-## 確認事項
+1. Run `owox validate owox.harness.yaml` before changing managed harness material.
+2. Keep task state current through the `owox` CLI.
+3. Define the workflow, constraints, and required checks clearly.
+
+## Rules
+
+- Keep AI-facing Markdown in English.
+- Route workflow control through the `owox` CLI.
+
+## Checks
+
+- The skill scope is explicit.
+- The required `owox` commands are named.

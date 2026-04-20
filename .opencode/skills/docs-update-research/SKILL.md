@@ -1,46 +1,42 @@
 ---
 name: docs-update-research
-description: 技術調査、制約調査、実現性確認を追加、更新、正規化するときに使用する
-argument-hint: "テーマ=<調査テーマ> 対象範囲=<対象範囲> 目的=<明らかにしたいこと>"
+description: Use when adding or revising technical research or feasibility notes.
+argument-hint: "goal=<research topic> path=<target file>"
 ---
 
-## 目的
+## Purpose
 
-正式な要求や仕様の前段階にある技術調査を、後続判断に使える形で記録する。
+Record investigated facts, constraints, and conclusions that inform later decisions.
 
-## 前提資料
+## Read First
 
+- `.owox/project.md`
 - `docs/project/index.md`
-- `docs/project/glossary/core.md`
-- `docs/project/research/index.md`
-- `.opencode/skills/_shared/document-reference-rules.md`
-- `.opencode/skills/_shared/document-update-checklist.md`
-- `.opencode/skills/docs-update-research/references/research.template.md`
-- `.opencode/skills/docs-update-research/references/best-practices.md`
-- 必要に応じて `docs/project/architecture.md`
-- 関連する proposal / requirement / spec / ADR / integration
+- `owox.harness.yaml`
+- the relevant `.owox/tasks/task-*.md` file and `.owox/tasks/task-current.json` when present
+- the matching requirement, spec, ADR, pattern, validation, or team guide for this scope
 
-## やること
+## What To Do
 
-1. 必要なら `question` で調査テーマ、比較観点、対象範囲、完了条件を確認する
-2. 既存の `docs/project/research/` を確認し、重複調査や更新対象がないか調べる
-3. 技術比較、制約、実現性、未確定事項を整理する
-4. `research-<topic>.md` を作成または更新する
-5. `.opencode/skills/_shared/document-reference-rules.md` に従い、`docs/project/research/index.md` を必ず更新する
-6. 重要判断が固まった場合は proposal または ADR への昇格要否を確認する
+1. Run `owox validate owox.harness.yaml` before substantial work if the harness state may have changed.
+2. Create or update the task record with `owox task-create`, `owox task-update`, `owox task-set-current`, and `owox task-transition`.
+3. Run `owox task-check-prerequisites` before moving into planning, execution, or done.
+4. Read the relevant source documents and collect only the facts needed for this scope.
+5. Do the skill-specific work, keeping scope, constraints, and evidence explicit in the task file.
+6. When intent or decisions change, persist them with `owox intent-save` and `owox decision-record`.
+7. Run `owox verify` before completion and `owox drift-audit` before closing or handing work back.
+8. Run `owox sync owox.harness.yaml` after changing managed source material that affects generated artifacts.
 
-## ルール
+## Rules
 
-- research は結論を決め打ちする場ではなく、判断材料を整理する場として扱う
-- 比較軸がある場合は先に明示する
-- 事実と推測を混ぜない
-- 参照の書き方は `.opencode/skills/_shared/document-reference-rules.md` に従う
-- 採用済み仕様や正式要求を research に書かない
+- Keep AI-facing Markdown in English.
+- Prefer source-of-truth documents over generated artifacts.
+- Do not skip human gates for risky, architectural, or externally visible changes.
+- Record assumptions, open questions, and residual risk instead of hiding them.
 
-## 確認事項
+## Checks
 
-- 調査対象と比較軸が明確である
-- 分かったことと未確定事項が分かれている
-- 次に必要な判断が書かれている
-- `docs/project/research/index.md` を更新した
-- proposal / ADR への昇格要否を確認した
+- The task state is current in `owox`.
+- The relevant source documents were consulted.
+- Required verification and evidence are recorded.
+- Any follow-up actions or open questions are explicit.

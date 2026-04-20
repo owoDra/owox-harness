@@ -1,62 +1,42 @@
 ---
 name: task-prepare
-description: ユーザーからの依頼を受けて、対象範囲、禁止事項、完了条件を整理し、次に使う task 系 skill を決めるときに使用する
-argument-hint: "目的=<今回の依頼> 進め方=<自走|対話>"
+description: Use when you need to capture a new request, define scope, and choose the next owox-driven task flow.
+argument-hint: "goal=<what to prepare> mode=<autonomous|interactive>"
 ---
 
-## 目的
+## Purpose
 
-依頼内容の認識ずれを減らし、この turn で何を達成するかを明確にしてから後続 task に渡す。
+Turn an incoming request into a concrete task contract and select the right next skill.
 
-## 初期化例外
-
-- `.owox/project.md` が未初期化、または placeholder のままなら `harness-init` を先に使う
-- `harness-init` の完了後に、この skill 相当の整理へ戻る
-
-## 前提資料
+## Read First
 
 - `.owox/project.md`
-- `.opencode/skills/_shared/task-template.md`
-- `.opencode/skills/_shared/execution-modes.md`
-- `.opencode/skills/_shared/request-user-input-policy.md`
 - `docs/project/index.md`
-- `docs/project/glossary/core.md`
-- `docs/project/tech-stack.md`
-- `docs/project/patterns/index.md`
-- `docs/project/architecture.md` が存在する場合は参照する
+- `owox.harness.yaml`
+- the relevant `.owox/tasks/task-*.md` file and `.owox/tasks/task-current.json` when present
+- the matching requirement, spec, ADR, pattern, validation, or team guide for this scope
 
-## やること
+## What To Do
 
-1. 依頼内容を読み、達成したいこと、禁止事項、曖昧な点を切り分ける
-2. 必要なら `question` で次を確認する
-   - 今回の目的
-   - 進め方を `自走` と `対話` のどちらにするか
-   - 何を変えたいか
-   - どこまで変えてよいか
-   - 何を変えてはいけないか
-   - 完了条件は何か
-3. `.opencode/skills/_shared/execution-modes.md` を参照し、後続 task をどう進めるかと、どこで確認を挟むかを task に記録する
-4. 対象 task に対応する skill を選ぶ
-   - 調査中心なら `task-discovery`
-   - 実装中心なら `task-implementation`
-   - 不具合修正なら `task-fix`
-   - レビューなら `task-review`
-   - 検証なら `task-validation`
-5. `.owox/tasks/task-<short-title>.md` を作成または更新し、後続 skill へ引き継ぐ
+1. Run `owox validate owox.harness.yaml` before substantial work if the harness state may have changed.
+2. Create or update the task record with `owox task-create`, `owox task-update`, `owox task-set-current`, and `owox task-transition`.
+3. Run `owox task-check-prerequisites` before moving into planning, execution, or done.
+4. Read the relevant source documents and collect only the facts needed for this scope.
+5. Do the skill-specific work, keeping scope, constraints, and evidence explicit in the task file.
+6. When intent or decisions change, persist them with `owox intent-save` and `owox decision-record`.
+7. Run `owox verify` before completion and `owox drift-audit` before closing or handing work back.
+8. Run `owox sync owox.harness.yaml` after changing managed source material that affects generated artifacts.
 
-## ルール
+## Rules
 
-- task は進捗メモではなく文脈キャッシュとして扱う
-- 未確定事項を確定前提に混ぜない
-- 実装や編集に入る前に対象範囲と対象外を明文化する
-- `docs/project/tech-stack.md` と `docs/project/patterns/index.md` を読み飛ばさない
-- 必要な確認を通常会話だけで済ませず、可能なら `question` を使う
+- Keep AI-facing Markdown in English.
+- Prefer source-of-truth documents over generated artifacts.
+- Do not skip human gates for risky, architectural, or externally visible changes.
+- Record assumptions, open questions, and residual risk instead of hiding them.
 
-## 確認事項
+## Checks
 
-- 次に使う task 系 skill が明確である
-- 目的と進め方が task に書かれている
-- 対象範囲と対象外が分かれている
-- 完了条件が task に書かれている
-- `docs/project/tech-stack.md` と `docs/project/patterns/index.md` を参照した
-- 後続が最初に読む task が更新されている
+- The task state is current in `owox`.
+- The relevant source documents were consulted.
+- Required verification and evidence are recorded.
+- Any follow-up actions or open questions are explicit.

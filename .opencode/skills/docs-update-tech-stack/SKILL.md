@@ -1,42 +1,42 @@
 ---
 name: docs-update-tech-stack
-description: 採用技術とバージョン方針を追加、更新、正規化するときに使用する
-argument-hint: "技術分類=<技術名> 採用スタック=<採用スタック> バージョン=<バージョン> 判断記録=<ADR参照>"
+description: Use when adding or revising adopted technologies or version policies.
+argument-hint: "goal=<tech-stack change> path=<target file>"
 ---
 
-## 目的
+## Purpose
 
-技術スタックの採用状況を役割単位で見返しやすく整理し、各採用判断を ADR と結び付ける。
+Keep the canonical technology inventory and version policy current.
 
-## 前提資料
+## Read First
 
+- `.owox/project.md`
 - `docs/project/index.md`
-- `docs/project/glossary/core.md`
-- `docs/project/tech-stack.md`
-- `.opencode/skills/_shared/document-reference-rules.md`
-- `.opencode/skills/_shared/document-update-checklist.md`
-- `.opencode/skills/docs-update-tech-stack/references/best-practices.md`
-- 関連 ADR / architecture / requirement / spec / validation
+- `owox.harness.yaml`
+- the relevant `.owox/tasks/task-*.md` file and `.owox/tasks/task-current.json` when present
+- the matching requirement, spec, ADR, pattern, validation, or team guide for this scope
 
-## やること
+## What To Do
 
-1. 必要なら `question` で更新対象、採用スタック、バージョン、対象範囲を確認する
-2. 既存表と重複や表記揺れがないか調べる
-3. `docs/project/tech-stack.md` を更新する
-4. `.opencode/skills/_shared/document-reference-rules.md` に従い、`docs/project/index.md` を必ず更新する
-5. 採用判断に対応する ADR の有無を確認し、必要なら ADR を更新または作成する
+1. Run `owox validate owox.harness.yaml` before substantial work if the harness state may have changed.
+2. Create or update the task record with `owox task-create`, `owox task-update`, `owox task-set-current`, and `owox task-transition`.
+3. Run `owox task-check-prerequisites` before moving into planning, execution, or done.
+4. Read the relevant source documents and collect only the facts needed for this scope.
+5. Do the skill-specific work, keeping scope, constraints, and evidence explicit in the task file.
+6. When intent or decisions change, persist them with `owox intent-save` and `owox decision-record`.
+7. Run `owox verify` before completion and `owox drift-audit` before closing or handing work back.
+8. Run `owox sync owox.harness.yaml` after changing managed source material that affects generated artifacts.
 
-## ルール
+## Rules
 
-- 技術名は役割を書く
-- 採用スタックは具体的な製品名やライブラリ名を書く
-- バージョン粒度を表内でそろえる
-- 参照の書き方は `.opencode/skills/_shared/document-reference-rules.md` に従う
-- ADR 参照なしの採用判断を残さない
+- Keep AI-facing Markdown in English.
+- Prefer source-of-truth documents over generated artifacts.
+- Do not skip human gates for risky, architectural, or externally visible changes.
+- Record assumptions, open questions, and residual risk instead of hiding them.
 
-## 確認事項
+## Checks
 
-- 更新対象と対象範囲が明確である
-- `docs/project/index.md` を更新した
-- ADR 参照の有無と更新要否を確認した
-- 表の粒度がそろっている
+- The task state is current in `owox`.
+- The relevant source documents were consulted.
+- Required verification and evidence are recorded.
+- Any follow-up actions or open questions are explicit.

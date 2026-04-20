@@ -18,38 +18,7 @@ export function buildChildToParentPacket(task: TaskData, input: CreateChildToPar
   return createChildToParentReport(task, input);
 }
 
-function renderParentToChildMarkdown(config: HarnessConfig, handoff: ParentToChildHandoff): string {
-  if (config.project.locale === "ja") {
-    return [
-      `# Handoff: ${handoff.title}`,
-      "",
-      "## Intent Summary",
-      handoff.intentSummary,
-      "",
-      "## 目的",
-      handoff.objective,
-      "",
-      "## 対象範囲",
-      ...handoff.scope.map((value) => `- ${value}`),
-      "",
-      "## 対象外",
-      ...handoff.outOfScope.map((value) => `- ${value}`),
-      "",
-      "## 完了条件",
-      ...handoff.completionCriteria.map((value) => `- ${value}`),
-      "",
-      "## Related Decisions",
-      ...handoff.relatedDecisions.map((value) => `- ${value}`),
-      "",
-      "## 参照資料",
-      ...handoff.references.map((reference) => `- ${reference.path}: ${reference.purpose}`),
-      "",
-      "## 制約",
-      ...handoff.constraints.map((value) => `- ${value}`),
-      ""
-    ].join("\n");
-  }
-
+function renderParentToChildMarkdown(_config: HarnessConfig, handoff: ParentToChildHandoff): string {
   return [
     `# Handoff: ${handoff.title}`,
     "",
@@ -80,26 +49,7 @@ function renderParentToChildMarkdown(config: HarnessConfig, handoff: ParentToChi
   ].join("\n");
 }
 
-function renderChildToParentMarkdown(config: HarnessConfig, report: ChildToParentReport): string {
-  if (config.project.locale === "ja") {
-    return [
-      `# Report: ${report.title}`,
-      "",
-      "## 実施した事実",
-      ...report.facts.map((value) => `- ${value}`),
-      "",
-      "## 未確定事項",
-      ...report.openQuestions.map((value) => `- ${value}`),
-      "",
-      "## 提案",
-      ...report.proposals.map((value) => `- ${value}`),
-      "",
-      "## Evidence",
-      ...report.evidence.map((item) => `- ${item.kind}: ${item.summary}`),
-      ""
-    ].join("\n");
-  }
-
+function renderChildToParentMarkdown(_config: HarnessConfig, report: ChildToParentReport): string {
   return [
     `# Report: ${report.title}`,
     "",

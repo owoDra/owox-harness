@@ -1,43 +1,42 @@
 ---
 name: docs-update-architecture
-description: プロジェクト全体の不変条件、責務分離、設計方針を追加、更新、改訂するときに使用する
-argument-hint: "変更対象=<変更対象> 理由=<理由>"
+description: Use when updating project-wide architecture boundaries, invariants, or design policy.
+argument-hint: "goal=<what to update> path=<target file>"
 ---
 
-## 目的
+## Purpose
 
-共通の不変条件、責務分離、設計方針を一貫して保守し、関連資料と実装への波及を見落とさないようにする。
+Keep the architecture source of truth aligned with current system boundaries and invariants.
 
-## 前提資料
+## Read First
 
+- `.owox/project.md`
 - `docs/project/index.md`
-- `docs/project/glossary/core.md`
-- `docs/project/architecture.md`
-- `.opencode/skills/_shared/document-reference-rules.md`
-- `.opencode/skills/_shared/document-update-checklist.md`
-- `.opencode/skills/docs-update-architecture/references/best-practices.md`
-- `.opencode/skills/docs-update-architecture/references/architecture.template.md`
-- 関連 spec / ADR / validation / tech-stack
+- `owox.harness.yaml`
+- the relevant `.owox/tasks/task-*.md` file and `.owox/tasks/task-current.json` when present
+- the matching requirement, spec, ADR, pattern, validation, or team guide for this scope
 
-## やること
+## What To Do
 
-1. 必要なら `question` で変更意図、背景、影響範囲を確認する
-2. 変更対象が architecture に書くべき内容か判断する
-3. `docs/project/architecture.md` を更新する
-4. `.opencode/skills/_shared/document-reference-rules.md` に従い、`docs/project/index.md` を必ず更新する
-5. spec / code / test / validation / tech-stack への影響を確認する
-6. 重要判断がある場合は ADR 更新または作成の要否を確認する
+1. Run `owox validate owox.harness.yaml` before substantial work if the harness state may have changed.
+2. Create or update the task record with `owox task-create`, `owox task-update`, `owox task-set-current`, and `owox task-transition`.
+3. Run `owox task-check-prerequisites` before moving into planning, execution, or done.
+4. Read the relevant source documents and collect only the facts needed for this scope.
+5. Do the skill-specific work, keeping scope, constraints, and evidence explicit in the task file.
+6. When intent or decisions change, persist them with `owox intent-save` and `owox decision-record`.
+7. Run `owox verify` before completion and `owox drift-audit` before closing or handing work back.
+8. Run `owox sync owox.harness.yaml` after changing managed source material that affects generated artifacts.
 
-## ルール
+## Rules
 
-- チーム固有ルールや一時運用は書かない
-- architecture の変更を文書修正だけで終わらせない
-- 参照の書き方は `.opencode/skills/_shared/document-reference-rules.md` に従う
-- 新しい原則が既存原則と衝突しないか確認する
+- Keep AI-facing Markdown in English.
+- Prefer source-of-truth documents over generated artifacts.
+- Do not skip human gates for risky, architectural, or externally visible changes.
+- Record assumptions, open questions, and residual risk instead of hiding them.
 
-## 確認事項
+## Checks
 
-- 不変条件、責務分離、設計方針のどこを変えたか明確である
-- `docs/project/index.md` を更新した
-- spec / validation / tech-stack 影響を確認した
-- 必要な ADR 更新または作成を検討した
+- The task state is current in `owox`.
+- The relevant source documents were consulted.
+- Required verification and evidence are recorded.
+- Any follow-up actions or open questions are explicit.

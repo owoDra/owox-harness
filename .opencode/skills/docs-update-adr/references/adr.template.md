@@ -1,19 +1,11 @@
----
-id: ADR-<NNN>-<short-title>
-status: <下書き|提案中|採用|非推奨|保管>
-related:
-  - <関連資料IDまたはパス>
-subproject: <必要な場合のみ>
----
+# ADR: <title>
 
-# <title>
+## Status
 
-## 背景
+proposed
 
-## 判断
+## Context
 
-## 代替案
+## Decision
 
-## 結果
-
-## 関連資料
+## Consequences

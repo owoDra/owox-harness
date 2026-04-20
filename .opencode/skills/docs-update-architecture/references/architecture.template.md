@@ -1,13 +1,11 @@
 # Architecture
 
-## 目的
+## Purpose
 
-## 読むべき場面
+## Summary
 
-## 不変条件
+## Invariants
 
-## 責務分離
+## Boundaries
 
-## 設計方針
-
-## 関連資料
+## Related Documents

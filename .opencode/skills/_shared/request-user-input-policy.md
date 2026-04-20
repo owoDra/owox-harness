@@ -1,18 +1,10 @@
-# question 方針
+# Request User Input Policy
 
-ユーザー確認が必要な場合は `question` を使う。
+Ask the user when any of these conditions apply.
 
-確認が必要な代表例:
+- The intent is ambiguous and would change the implementation path.
+- A design, scope, or external behavior change may be required.
+- A risky operation needs a human gate.
+- Required documents or decisions are still unresolved.
 
-- 依頼内容に複数の解釈がある
-- 変更範囲や禁止事項が曖昧
-- 高リスク変更や破壊的変更が必要
-- 仕様変更や採否判断が必要
-- task の完了条件が揺れる
-
-確認時のルール:
-
-- 何を確認したいかを短く絞る
-- `なし` と `未定` を分けて扱う
-- 回答結果は task の `確定前提` または `未確定事項` に反映する
-- 通常メッセージで確認した場合も、同じ粒度で task に記録する
+When the path is clear, continue autonomously and keep the task state current through the `owox` CLI.

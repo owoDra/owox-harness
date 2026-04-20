@@ -1,33 +1,33 @@
 # Task
 
-## 目的
+## Objective
 
-## 状態
+## Status
 
-## 依頼内容
+## Request
 
-## 確定前提
+## Confirmed Assumptions
 
-## 未確定事項
+## Open Questions
 
-## 対象範囲
+## Scope
 
-## 対象外
+## Out Of Scope
 
-## 守るべき不変条件
+## Must-Keep Invariants
 
-## 参照する正本
+## Source Documents To Read
 
-## 今回読まなくてよい資料
+## Documents You Can Skip This Time
 
-## 実施方針
+## Execution Plan
 
-## 実施手順
+## Steps
 
-## 検証項目
+## Validation Checks
 
-## 完了条件
+## Completion Criteria
 
-## 進捗記録
+## Progress Log
 
-## 次に読むもの
+## Read Next

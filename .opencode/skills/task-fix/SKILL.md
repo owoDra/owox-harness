@@ -1,50 +1,42 @@
 ---
 name: task-fix
-description: 不具合修正、レビュー指摘対応、失敗修正が主目的の task を開始し、原因調査から回帰確認まで進めるときに使用する
-argument-hint: "目的=<何を直すか> 進め方=<自走|対話>"
+description: Use when bug fixing, failure recovery, or review follow-up is the primary goal.
+argument-hint: "goal=<what to fix> mode=<autonomous|interactive>"
 ---
 
-## 目的
+## Purpose
 
-症状の確認、原因特定、修正、回帰確認を行い、必要な正本更新まで含めて修正を完了させる。
+Diagnose the failure, apply the smallest correct fix, and confirm the regression is covered.
 
-## 前提資料
+## Read First
 
 - `.owox/project.md`
-- `.opencode/skills/_shared/task-template.md`
-- `.opencode/skills/_shared/document-update-checklist.md`
-- `.opencode/skills/_shared/execution-modes.md`
-- `.opencode/skills/_shared/request-user-input-policy.md`
 - `docs/project/index.md`
-- `docs/project/glossary/core.md`
-- `docs/project/tech-stack.md`
-- `docs/project/patterns/index.md`
-- `docs/project/architecture.md` が存在する場合は参照する
-- 関連 requirement / spec / ADR / validation / code / test
+- `owox.harness.yaml`
+- the relevant `.owox/tasks/task-*.md` file and `.owox/tasks/task-current.json` when present
+- the matching requirement, spec, ADR, pattern, validation, or team guide for this scope
 
-## やること
+## What To Do
 
-1. 対象 `.owox/tasks/task-*.md` を作成または更新し、症状、再現条件、停止条件、回帰確認方法を明文化する
-2. 必要なら `question` で `目的`、`進め方`、症状の優先順位、互換性への影響許容、完了条件を確認する
-3. `.opencode/skills/_shared/execution-modes.md` を参照し、今回を `自走` か `対話` のどちらで進めるかと、どこで確認を挟むかを task に残す
-4. 症状を再現または確認する
-5. 原因候補を絞り、根本原因を特定する
-6. 最小限の修正を行い、関連テストと回帰確認を実施する
-7. 必要な正本更新要否を確認し、task に記録する
+1. Run `owox validate owox.harness.yaml` before substantial work if the harness state may have changed.
+2. Create or update the task record with `owox task-create`, `owox task-update`, `owox task-set-current`, and `owox task-transition`.
+3. Run `owox task-check-prerequisites` before moving into planning, execution, or done.
+4. Read the relevant source documents and collect only the facts needed for this scope.
+5. Do the skill-specific work, keeping scope, constraints, and evidence explicit in the task file.
+6. When intent or decisions change, persist them with `owox intent-save` and `owox decision-record`.
+7. Run `owox verify` before completion and `owox drift-audit` before closing or handing work back.
+8. Run `owox sync owox.harness.yaml` after changing managed source material that affects generated artifacts.
 
-## ルール
+## Rules
 
-- 再現または症状確認なしに修正を始めない
-- 症状、原因、修正、回帰確認を分けて記録する
-- 仕様問題を実装だけで隠さない
-- `docs/project/tech-stack.md` と `docs/project/patterns/index.md` を読み飛ばさない
-- 高リスク変更が必要なら `question` を使う
+- Keep AI-facing Markdown in English.
+- Prefer source-of-truth documents over generated artifacts.
+- Do not skip human gates for risky, architectural, or externally visible changes.
+- Record assumptions, open questions, and residual risk instead of hiding them.
 
-## 確認事項
+## Checks
 
-- 症状と再現条件が明確である
-- 目的と進め方が明確である
-- 原因が整理されている
-- `docs/project/tech-stack.md` と `docs/project/patterns/index.md` を参照した
-- 回帰確認方法と結果が残っている
-- 正本更新の要否を確認した
+- The task state is current in `owox`.
+- The relevant source documents were consulted.
+- Required verification and evidence are recorded.
+- Any follow-up actions or open questions are explicit.

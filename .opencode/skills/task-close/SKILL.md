@@ -1,46 +1,42 @@
 ---
 name: task-close
-description: task 完了時に成果、未完了事項、更新した正本、次アクションを整理して閉じるときに使用する
-argument-hint: "目的=<何を閉じるか> 進め方=<自走|対話>"
+description: Use when closing a task and organizing outcomes, remaining work, and next actions.
+argument-hint: "goal=<what to close> mode=<autonomous|interactive>"
 ---
 
-## 目的
+## Purpose
 
-task の成果、未完了事項、残課題、更新済み正本、次アクションを整理し、再開や引き継ぎが可能な状態で閉じる。
+Finalize the task record so another agent or human can resume or audit the work cleanly.
 
-## 前提資料
+## Read First
 
 - `.owox/project.md`
-- `.opencode/skills/_shared/task-template.md`
-- `.opencode/skills/_shared/task-statuses.md`
-- `.opencode/skills/_shared/execution-modes.md`
-- `.opencode/skills/_shared/request-user-input-policy.md`
 - `docs/project/index.md`
-- `docs/project/tech-stack.md`
-- `docs/project/patterns/index.md`
-- 関連する requirement / spec / ADR / validation / code / test / docs
+- `owox.harness.yaml`
+- the relevant `.owox/tasks/task-*.md` file and `.owox/tasks/task-current.json` when present
+- the matching requirement, spec, ADR, pattern, validation, or team guide for this scope
 
-## やること
+## What To Do
 
-1. 対象 `.owox/tasks/task-*.md` を更新し、完了したこと、未完了事項、残課題、更新した正本、検証結果を整理する
-2. 必要なら `question` で `目的`、`進め方`、完了とみなす範囲や次アクションを確認する
-3. `.opencode/skills/_shared/execution-modes.md` を参照し、今回を `自走` か `対話` のどちらで進めるかと、どこで確認を挟むかを task に残す
-4. 完了条件を満たしているか確認する
-5. `状態` を適切な値へ更新し、`次に読むもの` を残す
+1. Run `owox validate owox.harness.yaml` before substantial work if the harness state may have changed.
+2. Create or update the task record with `owox task-create`, `owox task-update`, `owox task-set-current`, and `owox task-transition`.
+3. Run `owox task-check-prerequisites` before moving into planning, execution, or done.
+4. Read the relevant source documents and collect only the facts needed for this scope.
+5. Do the skill-specific work, keeping scope, constraints, and evidence explicit in the task file.
+6. When intent or decisions change, persist them with `owox intent-save` and `owox decision-record`.
+7. Run `owox verify` before completion and `owox drift-audit` before closing or handing work back.
+8. Run `owox sync owox.harness.yaml` after changing managed source material that affects generated artifacts.
 
-## ルール
+## Rules
 
-- 完了と未完了を混ぜない
-- 完了条件未達なら完了扱いにしない
-- 残課題は曖昧にぼかさない
-- `docs/project/tech-stack.md` と `docs/project/patterns/index.md` を読み飛ばさない
-- 次の作業で最初に読む情報を残す
+- Keep AI-facing Markdown in English.
+- Prefer source-of-truth documents over generated artifacts.
+- Do not skip human gates for risky, architectural, or externally visible changes.
+- Record assumptions, open questions, and residual risk instead of hiding them.
 
-## 確認事項
+## Checks
 
-- 完了したことと未完了事項が分離されている
-- 目的と進め方が明確である
-- 更新済み正本と検証結果が整理されている
-- `docs/project/tech-stack.md` と `docs/project/patterns/index.md` を参照した
-- 次アクションまたは次に読むものが残っている
-- task の状態が最終化されている
+- The task state is current in `owox`.
+- The relevant source documents were consulted.
+- Required verification and evidence are recorded.
+- Any follow-up actions or open questions are explicit.

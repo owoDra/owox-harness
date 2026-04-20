@@ -1,34 +1,7 @@
-# team guide 更新のベストプラクティス
+# Best Practices
 
-## 何を書くか
-
-- そのチームが最終責任を持つ役割
-- 他チームとの境界
-- 継続的に守るルール
-- チーム固有の知識
-
-## 書かないほうがよいもの
-
-- 全チーム共通の不変条件
-- 一回限りの task メモ
-- ハーネスによって決まるルール
-
-## 良い guide の条件
-
-- チームの責務が 1 文で説明できる
-- 境界が明確で、他チームとの受け渡しが読める
-- ルールが行動に落ちる形で書かれている
-- 固有知識が必要な人にだけ効く内容になっている
-
-## 更新時の作法
-
-- `.owox/project.md` の名称を基準に合わせる
-- architecture や spec と境界が衝突しないか確認する
-- 境界変更がある場合は関連資料へ波及確認する
-
-## team guide で落としやすい観点
-
-- 役割と担当範囲の混同
-- 全体原則を team guide に書いてしまうこと
-- 他チームとの受け渡し条件が曖昧なこと
-- 固有知識が運用手順書になりすぎること
+- Start from the canonical source document, not a generated derivative.
+- Keep edits small, explicit, and traceable to the request.
+- Update the matching index file when you add, rename, or archive a document.
+- Run `owox validate owox.harness.yaml` after material doc or harness changes.
+- Record unresolved questions instead of guessing.

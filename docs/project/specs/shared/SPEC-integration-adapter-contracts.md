@@ -53,6 +53,7 @@ rules file には、少なくとも次だけを書く方針とします。
 
 - visible files は project locale に従う
 - internal keys、hidden prompts、adapter 内部 state は英語を基本とする
+- AI-facing Markdown (`AGENTS.md`、`.opencode/` 配下の skills / agents / commands など) は英語を基本とする
 - locale 切替時も adapter ごとの内部契約は変えない
 
 ## adapter 差分の扱い

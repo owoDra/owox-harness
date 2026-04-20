@@ -1,17 +1,11 @@
-# <title>
+# Proposal: <title>
 
-## 背景
+## Problem
 
-## 提案内容
+## Proposed Change
 
-## 代替案
+## Alternatives
 
-## 利点
+## Risks
 
-## リスク
-
-## 未確定事項
-
-## 正式化先候補
-
-## 関連資料
+## Rollout

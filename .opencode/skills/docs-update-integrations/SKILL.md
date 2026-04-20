@@ -1,44 +1,42 @@
 ---
 name: docs-update-integrations
-description: 外部 API やサービスの資料を追加、更新、正規化するときに使用する
-argument-hint: "外部サービス=<name> 種別=<api|service|platform|tool> 担当=<team>"
+description: Use when adding or revising external integration documentation.
+argument-hint: "goal=<integration change> path=<target file>"
 ---
 
-## 目的
+## Purpose
 
-外部依存の役割、接続境界、制約、運用上の注意点を正本として整理する。
+Document external API or tool boundaries, assumptions, and constraints in the canonical integration docs.
 
-## 前提資料
+## Read First
 
+- `.owox/project.md`
 - `docs/project/index.md`
-- `docs/project/glossary/core.md`
-- `docs/project/integrations/index.md`
-- `.opencode/skills/_shared/document-reference-rules.md`
-- `.opencode/skills/_shared/document-update-checklist.md`
-- `.opencode/skills/docs-update-integrations/references/integration.template.md`
-- `.opencode/skills/docs-update-integrations/references/best-practices.md`
-- 関連 requirement / spec / ADR / architecture / validation / tech-stack
+- `owox.harness.yaml`
+- the relevant `.owox/tasks/task-*.md` file and `.owox/tasks/task-current.json` when present
+- the matching requirement, spec, ADR, pattern, validation, or team guide for this scope
 
-## やること
+## What To Do
 
-1. 必要なら `question` で integration 名、役割、担当チーム、制約を確認する
-2. 既存 integration 資料と重複がないか調べる
-3. `<integration>.md` を作成または更新する
-4. `.opencode/skills/_shared/document-reference-rules.md` に従い、`docs/project/integrations/index.md` を必ず更新する
-5. 新規 integration の場合は `.owox/project.md` 更新要否を確認する
-6. requirement / spec / validation / ADR / tech-stack 影響を確認する
+1. Run `owox validate owox.harness.yaml` before substantial work if the harness state may have changed.
+2. Create or update the task record with `owox task-create`, `owox task-update`, `owox task-set-current`, and `owox task-transition`.
+3. Run `owox task-check-prerequisites` before moving into planning, execution, or done.
+4. Read the relevant source documents and collect only the facts needed for this scope.
+5. Do the skill-specific work, keeping scope, constraints, and evidence explicit in the task file.
+6. When intent or decisions change, persist them with `owox intent-save` and `owox decision-record`.
+7. Run `owox verify` before completion and `owox drift-audit` before closing or handing work back.
+8. Run `owox sync owox.harness.yaml` after changing managed source material that affects generated artifacts.
 
-## ルール
+## Rules
 
-- 機密値そのものは書かない
-- 役割と接続境界を先に書く
-- 1 外部サービス = 1 integrations 個票を守る
-- 参照の書き方は `.opencode/skills/_shared/document-reference-rules.md` に従う
-- 認証、制約、障害時の扱いを省略しない
+- Keep AI-facing Markdown in English.
+- Prefer source-of-truth documents over generated artifacts.
+- Do not skip human gates for risky, architectural, or externally visible changes.
+- Record assumptions, open questions, and residual risk instead of hiding them.
 
-## 確認事項
+## Checks
 
-- 役割と担当チームが明確である
-- 制約と障害時の扱いが記録されている
-- `docs/project/integrations/index.md` を更新した
-- `.owox/project.md` 更新要否を確認した
+- The task state is current in `owox`.
+- The relevant source documents were consulted.
+- Required verification and evidence are recorded.
+- Any follow-up actions or open questions are explicit.

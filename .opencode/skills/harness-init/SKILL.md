@@ -1,41 +1,42 @@
 ---
 name: harness-init
-description: テンプレート状態のハーネスを対象プロジェクト向けに初期化するときに使用する
+description: Use when initializing a project harness or resuming consultative harness setup.
+argument-hint: "scope=<new|existing> mode=<autonomous|interactive>"
 ---
 
-## 目的
+## Purpose
 
-placeholder の `.owox/project.md` を確定させ、必要最小限のプロジェクト正本を初期化して、後続 task が進められる状態を作る。
+Guide harness initialization decisions and materialize the initial owox-managed artifacts safely.
 
-## 前提資料
+## Read First
 
 - `.owox/project.md`
-- `.opencode/skills/_shared/task-template.md`
-- `.opencode/skills/_shared/request-user-input-policy.md`
-- `.opencode/skills/harness-init/references/init-questionnaire.md`
-- `.opencode/skills/harness-init/references/project.template.md`
 - `docs/project/index.md`
+- `owox.harness.yaml`
+- the relevant `.owox/tasks/task-*.md` file and `.owox/tasks/task-current.json` when present
+- the matching requirement, spec, ADR, pattern, validation, or team guide for this scope
 
-## やること
+## What To Do
 
-1. `.owox/tasks/task-harness-init.md` を作成し、初期化の文脈キャッシュにする
-2. 固定アンケートに沿って `question` で必須項目を確認する
-3. `.owox/project.md` の placeholder を確定値へ置き換える
-4. `Kind` が `monorepo` の場合は必要な `docs/project/specs/<subproject>/index.md` を作成する
-5. glossary、tech-stack、integrations、architecture、validation、team guide の初期化要否を段階的に確認する
-6. `none` と `tbd` を分けて task に記録する
-7. 初期化後に `harness-validation` で整合性確認を行う
+1. Run `owox validate owox.harness.yaml` before substantial work if the harness state may have changed.
+2. Create or update the task record with `owox task-create`, `owox task-update`, `owox task-set-current`, and `owox task-transition`.
+3. Run `owox task-check-prerequisites` before moving into planning, execution, or done.
+4. Read the relevant source documents and collect only the facts needed for this scope.
+5. Do the skill-specific work, keeping scope, constraints, and evidence explicit in the task file.
+6. When intent or decisions change, persist them with `owox intent-save` and `owox decision-record`.
+7. Run `owox verify` before completion and `owox drift-audit` before closing or handing work back.
+8. Run `owox sync owox.harness.yaml` after changing managed source material that affects generated artifacts.
 
-## ルール
+## Rules
 
-- 既存 placeholder を確定するまでは project 固有情報として扱わない
-- 必須項目に未確認のまま残さない
-- `none` と `未定` を混同しない
-- docs/project にはプロジェクト正本だけを書く
+- Keep AI-facing Markdown in English.
+- Prefer source-of-truth documents over generated artifacts.
+- Do not skip human gates for risky, architectural, or externally visible changes.
+- Record assumptions, open questions, and residual risk instead of hiding them.
 
-## 確認事項
+## Checks
 
-- `.owox/project.md` が確定値へ更新されている
-- 必須アンケートに未確認項目が残っていない
-- `none` と `tbd` が分かれている
-- 後続 task が開始できる最低限の正本がある
+- The task state is current in `owox`.
+- The relevant source documents were consulted.
+- Required verification and evidence are recorded.
+- Any follow-up actions or open questions are explicit.

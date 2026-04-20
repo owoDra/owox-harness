@@ -20,6 +20,13 @@ export interface ValidationIssue {
   message: string;
 }
 
+const englishOnlyAiMarkdownSingles = ["AGENTS.md", "CLAUDE.md", ".github/copilot-instructions.md"] as const;
+const englishOnlyAiMarkdownDirs = [".opencode", ".claude", ".codex", ".github/agents", ".github/skills", ".owox/handoffs"] as const;
+
+function containsJapaneseCharacters(content: string): boolean {
+  return /[ぁ-んァ-ヶ一-龯]/.test(content);
+}
+
 async function collectMarkdownFiles(rootDir: string, relativeDir: string): Promise<string[]> {
   const absoluteDir = resolve(rootDir, relativeDir);
   try {
@@ -46,28 +53,6 @@ interface DocumentBudget {
 }
 
 function renderAgentsMd(config: HarnessConfig): string {
-  if (config.project.locale === "ja") {
-    return [
-      "## 最初に読むもの",
-      "",
-      `1. \`${config.generated.owoxDir}/project.md\``,
-      `2. 対象の \`${config.generated.taskDir}/task-*.md\` と必要なら \`${config.generated.taskDir}/task-current.json\``,
-      `3. 必要に応じて \`${config.source.docsRoot}/index.md\``,
-      "",
-      "## 作業ルール",
-      "",
-      `- source of truth は \`owox.harness.yaml\` と \`${config.source.docsRoot}/\` を優先する`,
-      "- generated artifacts を手編集の正本として扱わない",
-      "- task 開始時は `owox task-create` / `owox task-update` / `owox task-set-current` / `owox task-transition`、`owox task-check-prerequisites`、`owox validate` を使う",
-      "- task 完了前は `owox verify` を実行する",
-      "- 重要判断は `owox decision-record`、意図更新は `owox intent-save` を使う",
-      "- 完了前に `owox drift-audit` を実行する",
-      "- 危険操作、設計変更、外部影響、完了判断では `owox gate` を確認する",
-      "- generated artifacts の再同期は `owox sync` を使う",
-      ""
-    ].join("\n");
-  }
-
   return [
     "## Read First",
     "",
@@ -737,6 +722,31 @@ export async function validateGeneratedFiles(rootDir: string, config: HarnessCon
           path: file.relativePath,
           code: "token_limit",
           message: `${file.relativePath} exceeds token budget (${tokenCount} > ${budget.maxTokens})`
+        });
+      }
+    }
+  }
+
+  for (const relativePath of englishOnlyAiMarkdownSingles) {
+    const current = await readIfExists(resolve(rootDir, relativePath));
+    if (current !== null && containsJapaneseCharacters(current)) {
+      issues.push({
+        path: relativePath,
+        code: "mismatch",
+        message: `${relativePath} must be English-only AI markdown`
+      });
+    }
+  }
+
+  for (const relativeDir of englishOnlyAiMarkdownDirs) {
+    const markdownFiles = await collectMarkdownFiles(rootDir, relativeDir);
+    for (const relativePath of markdownFiles) {
+      const current = await readIfExists(resolve(rootDir, relativePath));
+      if (current !== null && containsJapaneseCharacters(current)) {
+        issues.push({
+          path: relativePath,
+          code: "mismatch",
+          message: `${relativePath} must be English-only AI markdown`
         });
       }
     }

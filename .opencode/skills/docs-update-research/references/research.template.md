@@ -1,15 +1,11 @@
-# <title>
+# Research: <topic>
 
-## 目的
+## Question
 
-## 調査対象
+## Facts
 
-## 比較軸
+## Constraints
 
-## 分かったこと
+## Findings
 
-## 未確定事項
-
-## 次に必要な判断
-
-## 関連資料
+## Recommendation

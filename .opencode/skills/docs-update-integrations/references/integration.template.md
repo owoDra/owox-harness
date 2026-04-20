@@ -1,13 +1,11 @@
-# <Integration>
+# <Integration Name>
 
-## 役割
+## Role
 
-## 接続境界
+## Connection Boundary
 
-## 認証 / 権限
+## Authentication / Permissions
 
-## 制約
+## Constraints
 
-## 障害時の扱い
-
-## 関連資料
+## Failure Handling

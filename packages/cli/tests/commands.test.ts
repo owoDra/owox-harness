@@ -188,8 +188,8 @@ describe("cli commands", () => {
     ).resolves.toMatchObject({ ok: true, data: { packetPath: expect.stringContaining(".owox/handoffs/task-1-child-to-parent.json") } });
 
     await expect(readFile(join(rootDir, ".owox/handoffs/task-1-parent-to-child.json"), "utf8")).resolves.toContain("intentSummary");
-    await expect(readFile(parentPath, "utf8")).resolves.toContain("## 目的");
-    await expect(readFile(childPath, "utf8")).resolves.toContain("## 実施した事実");
+    await expect(readFile(parentPath, "utf8")).resolves.toContain("## Objective");
+    await expect(readFile(childPath, "utf8")).resolves.toContain("## Facts");
   });
 
   test("intent, decision, prerequisite, and drift commands work together", async () => {
@@ -422,6 +422,20 @@ describe("cli commands", () => {
       ok: false,
       data: {
         issues: expect.arrayContaining([expect.stringContaining("links to missing document")])
+      }
+    });
+  });
+
+  test("validate rejects non-English AI markdown", async () => {
+    const { rootDir, configPath } = await setupHarness();
+    const skillPath = join(rootDir, ".opencode/skills/demo/SKILL.md");
+    await mkdir(dirname(skillPath), { recursive: true });
+    await writeFile(skillPath, "# Skill\n\n日本語の説明です。\n", "utf8");
+
+    await expect(runValidate(configPath)).resolves.toMatchObject({
+      ok: false,
+      data: {
+        issues: expect.arrayContaining([expect.stringContaining("must be English-only AI markdown")])
       }
     });
   });

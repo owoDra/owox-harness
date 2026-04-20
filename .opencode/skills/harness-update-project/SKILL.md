@@ -1,37 +1,42 @@
 ---
 name: harness-update-project
-description: ハーネス用の project.md を追加、更新、正規化するときに使用する
-argument-hint: "項目=<name|description|language|kind|subprojects|teams|integrations> 変更内容=<内容>"
+description: Use when updating the canonical .owox project summary to reflect current project facts.
+argument-hint: "goal=<what changed> mode=<autonomous|interactive>"
 ---
 
-## 目的
+## Purpose
 
-`.owox/project.md` を、現在のプロジェクト正本と整合する形で一貫して保守する。
+Refresh the project summary while preserving the boundary between source docs and generated runtime context.
 
-## 前提資料
+## Read First
 
 - `.owox/project.md`
-- `.opencode/skills/harness-update-project/references/project.template.md`
-- `.opencode/skills/harness-update-project/references/best-practices.md`
-- `docs/project/glossary/core.md`
-- 関連する `docs/project/teams/`、`docs/project/integrations/`、`docs/project/architecture.md`、`docs/project/tech-stack.md`
+- `docs/project/index.md`
+- `owox.harness.yaml`
+- the relevant `.owox/tasks/task-*.md` file and `.owox/tasks/task-current.json` when present
+- the matching requirement, spec, ADR, pattern, validation, or team guide for this scope
 
-## やること
+## What To Do
 
-1. 必要なら `question` で更新対象、変更理由、追加、削除、改名の別を確認する
-2. `.owox/project.md` と関連正本を照合し、差分が必要か判断する
-3. `Name`、`Description`、`Language`、`Kind`、`Subprojects`、`Teams`、`Integrations` を更新する
-4. 新規 team を追加した場合は team guide の存在を確認する
-5. 新規 integration を追加した場合は integration 資料の存在を確認する
-6. `Kind` や `Subprojects` の変更がある場合は docs/project の配置影響を確認する
+1. Run `owox validate owox.harness.yaml` before substantial work if the harness state may have changed.
+2. Create or update the task record with `owox task-create`, `owox task-update`, `owox task-set-current`, and `owox task-transition`.
+3. Run `owox task-check-prerequisites` before moving into planning, execution, or done.
+4. Read the relevant source documents and collect only the facts needed for this scope.
+5. Do the skill-specific work, keeping scope, constraints, and evidence explicit in the task file.
+6. When intent or decisions change, persist them with `owox intent-save` and `owox decision-record`.
+7. Run `owox verify` before completion and `owox drift-audit` before closing or handing work back.
+8. Run `owox sync owox.harness.yaml` after changing managed source material that affects generated artifacts.
 
-## ルール
+## Rules
 
-- 見出し名と順序を変えない
-- 名称だけでなく役割説明も更新する
-- 他の正本と食い違う状態で放置しない
+- Keep AI-facing Markdown in English.
+- Prefer source-of-truth documents over generated artifacts.
+- Do not skip human gates for risky, architectural, or externally visible changes.
+- Record assumptions, open questions, and residual risk instead of hiding them.
 
-## 確認事項
+## Checks
 
-- `.owox/project.md` と team / integration / subproject の正本が整合している
-- 影響範囲がある場合は関連資料の更新要否を確認した
+- The task state is current in `owox`.
+- The relevant source documents were consulted.
+- Required verification and evidence are recorded.
+- Any follow-up actions or open questions are explicit.
