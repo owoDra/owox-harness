@@ -10,9 +10,9 @@ Use this agent when the work needs deterministic workflow control through the `o
 
 ## Required owox Actions
 
-- Prefer `owox validate`, `owox task-*`, `owox verify`, `owox drift-audit`, and `owox sync` over ad-hoc workflow handling.
-- Read runtime artifacts through `owox artifact-read` instead of opening `.owox/` directly.
-- Use `owox gate` when risky, architectural, or externally visible changes are involved.
+- Prefer `owox validate`, `owox task new`, `owox task save`, `owox task show`, `owox task current`, `owox task done`, and `owox sync` over ad-hoc workflow handling.
+- Read managed runtime and docs content through `owox read`, `owox list`, and `owox search` instead of opening files directly.
+- Let `owox` block risky or out-of-order task actions instead of bypassing failed checks.
 
 ## Expected Output
 

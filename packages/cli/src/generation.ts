@@ -1,7 +1,8 @@
-import { mkdir, readFile, readdir, writeFile } from "node:fs/promises";
+import { mkdir, readFile, readdir, rm, writeFile } from "node:fs/promises";
 import { dirname, resolve } from "node:path";
 import type { HarnessConfig } from "./config.js";
-import { renderAdapterFiles, renderAgentsMd, collectRulesFiles } from "./generated-adapters.js";
+import { renderAdapterFiles } from "./generated-adapters.js";
+import { renderAgentsMd, collectRulesFiles } from "./generated-adapter-common.js";
 import { createGeneratedFile, createJsonFile, type GeneratedFile, type SyncResult, type ValidationIssue } from "./generated-file.js";
 import { renderMarkdown } from "./markdown.js";
 
@@ -13,6 +14,7 @@ interface DocumentBudget {
 
 const ENGLISH_ONLY_AI_MARKDOWN_SINGLES = ["AGENTS.md", "CLAUDE.md", ".github/copilot-instructions.md"] as const;
 const ENGLISH_ONLY_AI_MARKDOWN_DIRS = [".opencode", ".claude", ".codex", ".github/agents", ".github/skills", ".owox/handoffs"] as const;
+const ALL_ADAPTERS: HarnessConfig["adapters"] = ["codex", "claude-code", "opencode", "copilot-cli"];
 const AI_MARKDOWN_PATTERN = /[ぁ-んァ-ヶ一-龯]/;
 
 async function collectMarkdownFiles(rootDir: string, relativeDir: string): Promise<string[]> {
@@ -281,6 +283,18 @@ function renderBaseFiles(config: HarnessConfig): GeneratedFile[] {
   ];
 }
 
+function renderAllKnownManagedFiles(config: HarnessConfig): GeneratedFile[] {
+  const allConfig: HarnessConfig = {
+    ...config,
+    adapters: [...ALL_ADAPTERS]
+  };
+
+  const files = renderBaseFiles(config);
+  files.push(createGeneratedFile("AGENTS.md", renderAgentsMd(allConfig)));
+  files.push(...renderAdapterFiles(allConfig));
+  return files.filter((file) => file.mode === "managed");
+}
+
 export function renderGeneratedFiles(config: HarnessConfig): GeneratedFile[] {
   const files = renderBaseFiles(config);
   if (config.adapters.includes("codex") || config.adapters.includes("opencode")) {
@@ -303,7 +317,24 @@ export async function syncGeneratedFiles(rootDir: string, config: HarnessConfig)
   const unchanged: string[] = [];
   const createdIfMissing: string[] = [];
 
-  for (const file of renderGeneratedFiles(config)) {
+  const desiredManagedFiles = renderGeneratedFiles(config);
+  const desiredManagedPaths = new Set(desiredManagedFiles.filter((file) => file.mode === "managed").map((file) => file.relativePath));
+  const knownManagedPaths = new Set(renderAllKnownManagedFiles(config).map((file) => file.relativePath));
+
+  for (const relativePath of knownManagedPaths) {
+    if (desiredManagedPaths.has(relativePath)) {
+      continue;
+    }
+
+    const absolutePath = resolve(rootDir, relativePath);
+    const current = await readIfExists(absolutePath);
+    if (current !== null) {
+      await rm(absolutePath, { force: true });
+      written.push(relativePath);
+    }
+  }
+
+  for (const file of desiredManagedFiles) {
     const absolutePath = resolve(rootDir, file.relativePath);
     const current = await readIfExists(absolutePath);
 
@@ -353,6 +384,58 @@ async function collectEnglishOnlyAiMarkdownIssues(rootDir: string): Promise<Vali
   return issues;
 }
 
+async function collectDirectOwoxReadIssues(rootDir: string): Promise<ValidationIssue[]> {
+  const issues: ValidationIssue[] = [];
+  const aiMarkdownRoots = ["AGENTS.md", "CLAUDE.md", ".opencode", ".claude", ".codex", ".github"];
+
+  for (const root of aiMarkdownRoots) {
+    const relativePaths = root.endsWith(".md") ? [root] : await collectMarkdownFiles(rootDir, root);
+    for (const relativePath of relativePaths) {
+      const content = await readIfExists(resolve(rootDir, relativePath));
+      if (!content) {
+        continue;
+      }
+
+      const hasDirectReadInstruction = content.split("\n").some((line) => {
+        const mentionsManagedDirectRead = /(read|open|inspect|check|review)[^\n]*(`?\.owox\/|`?docs\/project\/)/i.test(line);
+        return mentionsManagedDirectRead && !/do not read|instead of|only through|through `owox|through owox/i.test(line);
+      });
+
+      if (hasDirectReadInstruction) {
+        issues.push({
+          path: relativePath,
+          code: "mismatch",
+          message: `${relativePath} must not instruct direct reads from managed docs or .owox; use owox read/list/search/write instead`
+        });
+      }
+    }
+  }
+
+  return issues;
+}
+
+async function collectInactiveAdapterArtifactIssues(rootDir: string, config: HarnessConfig): Promise<ValidationIssue[]> {
+  const issues: ValidationIssue[] = [];
+  const desiredManagedPaths = new Set(renderGeneratedFiles(config).filter((file) => file.mode === "managed").map((file) => file.relativePath));
+
+  for (const file of renderAllKnownManagedFiles(config)) {
+    if (desiredManagedPaths.has(file.relativePath)) {
+      continue;
+    }
+
+    const current = await readIfExists(resolve(rootDir, file.relativePath));
+    if (current !== null) {
+      issues.push({
+        path: file.relativePath,
+        code: "mismatch",
+        message: `${file.relativePath} is present for an inactive adapter and should be removed by sync`
+      });
+    }
+  }
+
+  return issues;
+}
+
 export async function validateGeneratedFiles(rootDir: string, config: HarnessConfig): Promise<ValidationIssue[]> {
   const issues: ValidationIssue[] = [];
 
@@ -379,6 +462,8 @@ export async function validateGeneratedFiles(rootDir: string, config: HarnessCon
   }
 
   issues.push(...(await collectEnglishOnlyAiMarkdownIssues(rootDir)));
+  issues.push(...(await collectDirectOwoxReadIssues(rootDir)));
+  issues.push(...(await collectInactiveAdapterArtifactIssues(rootDir, config)));
   return issues;
 }
 

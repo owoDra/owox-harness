@@ -11,7 +11,7 @@ Use this agent for structured discovery that ends in a concise fact set and expl
 ## Required owox Actions
 
 - Use the active task context instead of creating side channels for scope.
-- Read runtime artifacts through `owox artifact-read` instead of opening `.owox/` directly.
+- Read managed runtime and docs content through `owox read`, `owox list`, and `owox search` instead of opening files directly.
 - Return findings in a form the parent can record through `owox` handoff or task updates.
 
 ## Expected Output

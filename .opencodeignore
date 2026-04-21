@@ -1,2 +1,3 @@
-# Exclude owox runtime artifacts from direct agent indexing.
+# Exclude owox-managed sources from direct agent indexing.
 .owox/
+docs/project/

@@ -1,4 +1,4 @@
-import { readFile, writeFile } from "node:fs/promises";
+import { access, readFile, writeFile } from "node:fs/promises";
 import { dirname, resolve } from "node:path";
 import { parse, stringify } from "yaml";
 import { z } from "zod";
@@ -149,6 +149,24 @@ export interface InitConfigInput {
 
 export function getConfigPath(rootDir: string): string {
   return resolve(rootDir, "owox.harness.yaml");
+}
+
+export async function findConfigPath(startDir = process.cwd()): Promise<string> {
+  let currentDir = resolve(startDir);
+
+  while (true) {
+    const candidate = getConfigPath(currentDir);
+    try {
+      await access(candidate);
+      return candidate;
+    } catch {
+      const parentDir = dirname(currentDir);
+      if (parentDir === currentDir) {
+        throw new Error("owox.harness.yaml not found from current directory upward");
+      }
+      currentDir = parentDir;
+    }
+  }
 }
 
 export async function loadHarnessConfig(filePath: string): Promise<HarnessConfig> {

@@ -4,4 +4,4 @@
 - Use relative links that resolve from the current document.
 - Reference source-of-truth documents, not generated runtime artifacts.
 - Keep titles stable and descriptive so `owox validate` can detect broken references quickly.
-- Treat `.owox/` as runtime state; inspect it only through `owox artifact-read` or other dedicated `owox` commands.
+- Treat `.owox/` and `docs/project/` as owox-managed content; inspect or update them only through `owox read`, `owox list`, `owox search`, or `owox write`.

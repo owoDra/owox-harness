@@ -1,7 +1,7 @@
 {
   "name": "owox-plugin",
   "hooks": {
-    "preTool": "owox validate owox.harness.yaml && (test ! -f .owox/tasks/task-current.json || owox task-check-prerequisites owox.harness.yaml .owox/tasks/task-current.json planning)",
-    "postEdit": "owox sync owox.harness.yaml"
+    "preTool": "owox validate",
+    "postEdit": "owox sync"
   }
 }

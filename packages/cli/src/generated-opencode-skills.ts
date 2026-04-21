@@ -10,19 +10,19 @@ interface SkillDefinition {
 
 const SHARED_FILES: Record<string, string> = {
   ".opencode/skills/_shared/task-template.md": `# Task\n\n## Objective\n\n## Status\n\n## Request\n\n## Confirmed Assumptions\n\n## Open Questions\n\n## Scope\n\n## Out Of Scope\n\n## Must-Keep Invariants\n\n## Source Documents To Read\n\n## Documents You Can Skip This Time\n\n## Execution Plan\n\n## Steps\n\n## Validation Checks\n\n## Completion Criteria\n\n## Progress Log\n\n## Read Next\n`,
-  ".opencode/skills/_shared/execution-modes.md": `# Execution Modes\n\n## Autonomous\n\nUse this mode when the request is clear, the allowed scope is explicit, and you can complete the work end-to-end without repeated user confirmation. Record checkpoints in the task file and keep using the \`owox\` CLI for task state, verification, and sync.\n\n## Interactive\n\nUse this mode when requirements, scope, or risk boundaries are unclear. Ask focused questions, record the answers in the task file, and do not move to later task states until \`owox task-check-prerequisites\` allows it.\n`,
+  ".opencode/skills/_shared/execution-modes.md": `# Execution Modes\n\n## Autonomous\n\nUse this mode when the request is clear, the allowed scope is explicit, and you can complete the work end-to-end without repeated user confirmation. Record checkpoints through \`owox task save\` and keep using the \`owox\` CLI for task state, verification, and sync.\n\n## Interactive\n\nUse this mode when requirements, scope, or risk boundaries are unclear. Ask focused questions, record the answers through \`owox task save\`, and let \`owox\` block invalid task progression automatically.\n`,
   ".opencode/skills/_shared/task-statuses.md": `# Task Statuses\n\n- \`intake\`: request captured, intent still incomplete\n- \`intent_clarifying\`: gathering missing intent and constraints\n- \`intent_confirmed\`: intent is explicit enough to plan\n- \`planning\`: task contract and checks are being prepared\n- \`executing\`: implementation or document work is in progress\n- \`verifying\`: evidence and required checks are being evaluated\n- \`awaiting_human_gate\`: blocked on a required human decision\n- \`done\`: verified and closed\n- \`blocked\`: cannot continue without missing input, evidence, or permission\n`,
-  ".opencode/skills/_shared/reference-order.md": `# Reference Order\n\nRead sources in this order unless the task says otherwise.\n\n1. \`owox artifact-read owox.harness.yaml project.md\`\n2. \`owox artifact-read owox.harness.yaml tasks/task-current.json\` when an active task exists\n3. \`docs/project/index.md\`\n4. the most relevant requirement, spec, ADR, pattern, validation, or team guide\n5. code and tests directly affected by the task\n\nDo not read files under \`.owox/\` directly. Use the \`owox\` CLI as the access path for runtime artifacts.\n`,
+  ".opencode/skills/_shared/reference-order.md": `# Reference Order\n\nRead sources in this order unless the task says otherwise.\n\n1. \`owox read project\`\n2. \`owox list\` when you need to discover available runtime artifacts or managed docs\n3. \`owox read task\` when an active task exists\n4. \`owox read docs/index.md\`\n5. the most relevant requirement, spec, ADR, pattern, validation, or team guide through \`owox read\` or \`owox search\`\n6. code and tests directly affected by the task\n\nDo not read files under \`.owox/\` or \`docs/project/\` directly. Use the \`owox\` CLI as the access path for managed artifacts.\n`,
   ".opencode/skills/_shared/request-user-input-policy.md": `# Request User Input Policy\n\nAsk the user when any of these conditions apply.\n\n- The intent is ambiguous and would change the implementation path.\n- A design, scope, or external behavior change may be required.\n- A risky operation needs a human gate.\n- Required documents or decisions are still unresolved.\n\nWhen the path is clear, continue autonomously and keep the task state current through the \`owox\` CLI.\n`,
-  ".opencode/skills/_shared/document-reference-rules.md": `# Document Reference Rules\n\n- Update the relevant \`index.md\` when you add or rename a project document.\n- Use relative links that resolve from the current document.\n- Reference source-of-truth documents, not generated runtime artifacts.\n- Keep titles stable and descriptive so \`owox validate\` can detect broken references quickly.\n- Treat \`.owox/\` as runtime state; inspect it only through \`owox artifact-read\` or other dedicated \`owox\` commands.\n`,
-  ".opencode/skills/_shared/document-update-checklist.md": `# Document Update Checklist\n\n- Confirm the target document type and canonical location.\n- Check the related requirement, spec, ADR, validation, or team guide before editing.\n- Update the matching \`index.md\` file.\n- Keep wording consistent with the rest of \`docs/project/\`.\n- Run \`owox validate owox.harness.yaml\` after material document changes.\n`,
+  ".opencode/skills/_shared/document-reference-rules.md": `# Document Reference Rules\n\n- Update the relevant \`index.md\` when you add or rename a project document.\n- Use relative links that resolve from the current document.\n- Reference source-of-truth documents, not generated runtime artifacts.\n- Keep titles stable and descriptive so \`owox validate\` can detect broken references quickly.\n- Treat \`.owox/\` and \`docs/project/\` as owox-managed content; inspect or update them only through \`owox read\`, \`owox list\`, \`owox search\`, or \`owox write\`.\n`,
+  ".opencode/skills/_shared/document-update-checklist.md": `# Document Update Checklist\n\n- Confirm the target document type and canonical location.\n- Check the related requirement, spec, ADR, validation, or team guide before editing.\n- Update the matching \`index.md\` file.\n- Keep wording consistent with the rest of the managed docs.\n- Prefer \`owox write --text ...\` or stdin for small edits; use larger inputs only when needed.\n- Run \`owox validate\` after material document changes.\n`,
   ".opencode/skills/_shared/trace-tags.md": `# Trace Tags\n\nUse short inline references when work must point back to source-of-truth material.\n\nExamples:\n\n- \`REQ: REQ-harness-v2-foundation\`\n- \`SPEC: SPEC-generation-pipeline\`\n- \`ADR: ADR-004-intent-governed-agent-control\`\n- \`VAL: validation.md#V-9\`\n\nTrace tags should explain why a change exists, not restate the code.\n`
 };
 
-const BEST_PRACTICES = `# Best Practices\n\n- Start from the canonical source document, not a generated derivative.\n- Keep edits small, explicit, and traceable to the request.\n- Update the matching index file when you add, rename, or archive a document.\n- Run \`owox validate owox.harness.yaml\` after material doc or harness changes.\n- Record unresolved questions instead of guessing.\n`;
+const BEST_PRACTICES = `# Best Practices\n\n- Start from the canonical source document, not a generated derivative.\n- Keep edits small, explicit, and traceable to the request.\n- Update the matching index file when you add, rename, or archive a document.\n- Run \`owox validate\` after material doc or harness changes.\n- Record unresolved questions instead of guessing.\n`;
 
 const TEMPLATE_FILES: Record<string, string> = {
-  ".opencode/skills/harness-create-skill/references/SKILL.example.md": `---\nname: <skill-name>\ndescription: <when to use it>\nargument-hint: "goal=<why> mode=<autonomous|interactive>"\n---\n\n## Purpose\n\n<State the outcome this skill should produce.>\n\n## Read First\n\n- use \`owox artifact-read owox.harness.yaml project.md\` for project runtime context\n- \`docs/project/index.md\`\n- the source documents that define this workflow\n\n## What To Do\n\n1. Run \`owox validate owox.harness.yaml\` before changing managed harness material.\n2. Keep task state current through the \`owox\` CLI.\n3. Define the workflow, constraints, and required checks clearly.\n\n## Rules\n\n- Keep AI-facing Markdown in English.\n- Route workflow control through the \`owox\` CLI.\n- Do not read \`.owox/\` files directly.\n\n## Checks\n\n- The skill scope is explicit.\n- The required \`owox\` commands are named.\n`,
+  ".opencode/skills/harness-create-skill/references/SKILL.example.md": `---\nname: <skill-name>\ndescription: <when to use it>\nargument-hint: "goal=<why> mode=<autonomous|interactive>"\n---\n\n## Purpose\n\n<State the outcome this skill should produce.>\n\n## Read First\n\n- use \`owox read project\` for project runtime context\n- use \`owox read docs/index.md\` for source-of-truth navigation\n- the source documents that define this workflow via \`owox read\` or \`owox search\`\n\n## What To Do\n\n1. Run \`owox validate\` before changing managed harness material.\n2. Keep task state current through the \`owox\` CLI.\n3. Define the workflow, constraints, and required checks clearly.\n\n## Rules\n\n- Keep AI-facing Markdown in English.\n- Route workflow control through the \`owox\` CLI.\n- Do not read managed files directly.\n\n## Checks\n\n- The skill scope is explicit.\n- The required \`owox\` commands are named.\n`,
   ".opencode/skills/harness-init/references/project.template.md": `# Project\n\n## Name\n\n## Description\n\n## Locale\n\n## Profile\n\n## Source Of Truth\n\n- owox.harness.yaml\n- docs/project/\n\n## Managed Outputs\n\n- .owox/\n- AGENTS.md\n- adapter files\n`,
   ".opencode/skills/harness-init/references/init-questionnaire.md": `# Init Questionnaire\n\n1. What is the project name?\n2. Is this a new project or an existing project?\n3. Which visible locale should project documents use?\n4. Which adapters are required?\n5. Which existing documents should remain canonical source-of-truth?\n6. Which managed artifacts should the harness materialize?\n`,
   ".opencode/skills/harness-update-project/references/project.template.md": `# Project\n\n## Name\n\n## Description\n\n## Locale\n\n## Profile\n\n## Source Of Truth\n\n- owox.harness.yaml\n- docs/project/\n\n## Managed Outputs\n\n- .owox/\n- adapter files\n`,
@@ -89,37 +89,31 @@ const SKILLS: SkillDefinition[] = [
 ];
 
 function renderSkill(definition: SkillDefinition): string {
-  const frontmatter = [
-    "---",
-    `name: ${definition.name}`,
-    `description: ${definition.description}`,
-    `argument-hint: ${definition.argumentHint}`,
-    "---",
-    ""
-  ].join("\n");
-
+  const frontmatter = ["---", `name: ${definition.name}`, `description: ${definition.description}`, `argument-hint: ${definition.argumentHint}`, "---", ""].join("\n");
   const body = renderMarkdown("## Purpose", [
     { paragraphs: [definition.objective] },
     {
       heading: "## Read First",
       bullets: [
-        "Use `owox artifact-read owox.harness.yaml project.md` for project runtime context.",
-        "Use `owox artifact-read owox.harness.yaml tasks/task-current.json` when an active task exists.",
-        "Read `docs/project/index.md` and the relevant requirement, spec, ADR, pattern, validation, or team guide for this scope.",
+        "Use `owox read project` for project runtime context.",
+        "Use `owox list` when you need to discover available runtime artifacts or managed docs.",
+        "Use `owox read task` when an active task exists.",
+        "Read the relevant requirement, spec, ADR, pattern, validation, or team guide through `owox read` or `owox search`.",
         "Read code and tests directly only when they are part of the current task scope."
       ]
     },
     {
       heading: "## What To Do",
       ordered: [
-        "Run `owox validate owox.harness.yaml` before substantial work if the harness state may have changed.",
-        "Create or update the task record with `owox task-create`, `owox task-update`, `owox task-set-current`, and `owox task-transition`.",
-        "Run `owox task-check-prerequisites` before moving into planning, execution, or done.",
+        "Run `owox validate` before substantial work if the harness state may have changed.",
+        "Create a task with `owox task new` when needed, then persist normal task changes with `owox task save`.",
+        "Prefer flags or stdin for small inputs instead of creating temporary JSON files.",
+        "Use `owox task show` or `owox task current` when you need to inspect the active task state.",
         "Read the relevant source documents and collect only the facts needed for this scope.",
         "Do the skill-specific work, keeping scope, constraints, and evidence explicit in the task file.",
-        "When intent or decisions change, persist them with `owox intent-save` and `owox decision-record`.",
-        "Run `owox verify` before completion and `owox drift-audit` before closing or handing work back.",
-        "Run `owox sync owox.harness.yaml` after changing managed source material that affects generated artifacts."
+        "When intent, decisions, evidence, or log entries change, persist them through `owox task save`.",
+        "Run `owox verify` before completion when you need a non-closing check, and use `owox task done` when the task is ready to close.",
+        "Run `owox sync` after changing managed source material that affects generated artifacts."
       ]
     },
     {
@@ -128,7 +122,7 @@ function renderSkill(definition: SkillDefinition): string {
         "Keep AI-facing Markdown in English.",
         "Prefer source-of-truth documents over generated artifacts.",
         "Do not skip human gates for risky, architectural, or externally visible changes.",
-        "Do not read files under `.owox/` directly; use `owox artifact-read` or another dedicated `owox` command.",
+        "Do not read files under `.owox/` or `docs/project/` directly; use `owox read`, `owox list`, `owox search`, or `owox write`.",
         "Record assumptions, open questions, and residual risk instead of hiding them."
       ]
     },
@@ -142,7 +136,6 @@ function renderSkill(definition: SkillDefinition): string {
       ]
     }
   ]);
-
   return `${frontmatter}${body}`;
 }
 
@@ -151,22 +144,9 @@ export function renderOpenCodeSkillFiles(): GeneratedFile[] {
     createGeneratedFile(".opencode/.gitignore", ["node_modules", "package.json", "package-lock.json", "bun.lock", ".gitignore", ""].join("\n")),
     createGeneratedFile(".opencode/package.json", `${JSON.stringify({ dependencies: { "@opencode-ai/plugin": "1.4.0" } }, null, 2)}\n`)
   ];
-
-  Object.entries(SHARED_FILES).forEach(([relativePath, content]) => {
-    files.push(createGeneratedFile(relativePath, content));
-  });
-
-  SKILLS.forEach((definition) => {
-    files.push(createGeneratedFile(`.opencode/skills/${definition.name}/SKILL.md`, renderSkill(definition)));
-  });
-
-  Object.entries(TEMPLATE_FILES).forEach(([relativePath, content]) => {
-    files.push(createGeneratedFile(relativePath, content));
-  });
-
-  BEST_PRACTICE_PATHS.forEach((relativePath) => {
-    files.push(createGeneratedFile(relativePath, BEST_PRACTICES));
-  });
-
+  Object.entries(SHARED_FILES).forEach(([relativePath, content]) => files.push(createGeneratedFile(relativePath, content)));
+  SKILLS.forEach((definition) => files.push(createGeneratedFile(`.opencode/skills/${definition.name}/SKILL.md`, renderSkill(definition))));
+  Object.entries(TEMPLATE_FILES).forEach(([relativePath, content]) => files.push(createGeneratedFile(relativePath, content)));
+  BEST_PRACTICE_PATHS.forEach((relativePath) => files.push(createGeneratedFile(relativePath, BEST_PRACTICES)));
   return files;
 }

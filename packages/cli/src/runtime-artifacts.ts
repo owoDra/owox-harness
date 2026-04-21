@@ -83,6 +83,33 @@ export async function readOwoxArtifact(rootDir: string, config: HarnessConfig, a
   return readFile(resolveOwoxArtifactPath(rootDir, config, artifactPath), "utf8");
 }
 
+export async function listOwoxArtifacts(rootDir: string, config: HarnessConfig): Promise<string[]> {
+  const baseDir = getOwoxRoot(rootDir, config);
+
+  async function walk(currentDir: string, relativeDir: string): Promise<string[]> {
+    const entries = await readdir(currentDir, { withFileTypes: true });
+    const results: string[] = [];
+
+    for (const entry of entries) {
+      const relativePath = relativeDir ? `${relativeDir}/${entry.name}` : entry.name;
+      const absolutePath = join(currentDir, entry.name);
+      if (entry.isDirectory()) {
+        results.push(...(await walk(absolutePath, relativePath)));
+      } else if (entry.isFile()) {
+        results.push(relativePath);
+      }
+    }
+
+    return results;
+  }
+
+  try {
+    return (await walk(baseDir, "")).sort();
+  } catch {
+    return [];
+  }
+}
+
 export async function loadIntent(rootDir: string, config: HarnessConfig, intentId: string): Promise<IntentData | undefined> {
   const result = await readJsonIfExists(getIntentPath(rootDir, config, intentId), intentSchema);
   return result as IntentData | undefined;
